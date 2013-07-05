@@ -1,0 +1,20 @@
+﻿<vm:BuildsViewModel
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="clr-namespace:MyTfsMobile.App.ViewModels"
+    BuildSection="My Builds">
+
+    <vm:BuildsViewModel.BuildItems>
+        <vm:BuildViewModel BuildId="1" BuildName="MyTfsMobile.ci" BuildDate="2013/07/05 22:22" BuildStatus="OK" BuildMessages="error error error"/>
+        <vm:BuildViewModel BuildId="2" BuildName="MyTfsMobile.ci" BuildDate="2013/07/05 22:26" BuildStatus="Failed" BuildMessages="error error error2"/>
+        <vm:BuildViewModel BuildId="3" BuildName="MyTfsMobile.ci" BuildDate="2013/07/05 22:27" BuildStatus="Partial" BuildMessages=""/>
+        <vm:BuildViewModel BuildId="4" BuildName="NobbKontrakt.ci" BuildDate="2013/07/05 22:35" BuildStatus="Cancelled" BuildMessages="ent to tre"/>
+        <vm:BuildViewModel BuildId="5" BuildName="MyTfsMobile.Test" BuildDate="2013/07/05 22:22" BuildStatus="Ok" BuildMessages="error error error"/>
+        <vm:BuildViewModel BuildId="6" BuildName="Nobb.no.Prod" BuildDate="2013/07/05 22:26" BuildStatus="Failed" BuildMessages="error error error2"/>
+        <vm:BuildViewModel BuildId="7" BuildName="MyTfsMobile.ci" BuildDate="2013/07/05 22:27" BuildStatus="Ok" BuildMessages=""/>
+        <vm:BuildViewModel BuildId="8" BuildName="NobbKontrakt.Test" BuildDate="2013/07/05 22:35" BuildStatus="Running" BuildMessages="ent to tre"/>
+        <vm:BuildViewModel BuildId="9" BuildName="NobbKontrakt.ci" BuildDate="2013/07/05 22:35" BuildStatus="Ok" BuildMessages=""/>
+        <vm:BuildViewModel BuildId="10" BuildName="NobbKontrakt.ci" BuildDate="2013/07/05 22:35" BuildStatus="Partial" BuildMessages="ent to tre"/>
+    </vm:BuildsViewModel.BuildItems>
+
+</vm:BuildsViewModel>
