@@ -5,7 +5,6 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RestSharp;
 using TfsMobile.Contracts;
 
 namespace TfsMobile.Tests
@@ -19,7 +18,7 @@ namespace TfsMobile.Tests
             string projectName = "Byggtjeneste - Projects";
             int fromDays = 7;
 
-            var client = new TfsClientService("torarnev", "Su1c1dal9");
+            var client = new TfsClientService("username", "password");
             var res = client.GetBuilds(projectName, fromDays);
 
             Assert.IsTrue(res.Any());
@@ -28,7 +27,7 @@ namespace TfsMobile.Tests
     }
 
     public class TfsClientService
-        {
+    {
         private string Username { get; set; }
         private string Password { get; set; }
 
