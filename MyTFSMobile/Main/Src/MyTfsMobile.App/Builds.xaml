@@ -7,6 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:MyTfsMobile.App.Converters"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
@@ -33,24 +34,31 @@
             <TextBlock Name="test" Text="test" ManipulationCompleted="Test_OnManipulationCompleted">
                 
             </TextBlock>
+            <Button Content="test" Command="{Binding QueueBuildCommand}"></Button>
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
-        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+        <Grid x:Name="BuildList" Grid.Row="1" Margin="12,0,12,0">
             <phone:LongListSelector x:Name="MainLongListSelector" Margin="0,0,-12,0" ItemsSource="{Binding BuildItems}">
                 <phone:LongListSelector.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel Orientation="Horizontal" ManipulationCompleted="MainLongListSelector_OnManipulationCompleted">
+                        <StackPanel Orientation="Horizontal">
                             <Image Width="75" Source="{Binding BuildStatus, Converter={StaticResource BuildStatusConverter}}" Name="BuildImage" ></Image>
                             <StackPanel Margin="0,0,0,17">
                                 <TextBlock Text="{Binding BuildName}" TextWrapping="Wrap" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
                                 <TextBlock Text="{Binding BuildDate}" TextWrapping="Wrap" Margin="12,-6,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                                <toolkit:ContextMenuService.ContextMenu>
+                                    <toolkit:ContextMenu IsZoomEnabled="false">
+                                        <toolkit:MenuItem Header="Queue build" Command="{Binding DataContext.QueueBuildCommand, ElementName=BuildList}"  CommandParameter="{Binding}" />
+                                    </toolkit:ContextMenu>
+                                </toolkit:ContextMenuService.ContextMenu>
                             </StackPanel>
                         </StackPanel>
                         
                     </DataTemplate>
                 </phone:LongListSelector.ItemTemplate>
             </phone:LongListSelector>
+            
         </Grid>
 
     </Grid>
