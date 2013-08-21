@@ -6,6 +6,7 @@ using System.Windows.Markup;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
+using Microsoft.Xna.Framework.Input.Touch;
 using MyTfsMobile.App.Resources;
 using MyTfsMobile.App.ViewModels;
 
@@ -73,6 +74,7 @@ namespace MyTfsMobile.App
                 // and consume battery power when the user is not using the phone.
                 PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
             }
+
         }
 
         // Code to execute when the application is launching (eg, from Start)

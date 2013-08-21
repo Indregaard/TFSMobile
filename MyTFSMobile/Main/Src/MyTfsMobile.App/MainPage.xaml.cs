@@ -4,9 +4,11 @@ using System.Linq;
 using System.Net;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
+using Microsoft.Xna.Framework.Input.Touch;
 using MyTfsMobile.App.Resources;
 using MyTfsMobile.App.ViewModels;
 
@@ -24,6 +26,7 @@ namespace MyTfsMobile.App
 
             // Sample code to localize the ApplicationBar
             //BuildLocalizedApplicationBar();
+            TouchPanel.EnabledGestures = GestureType.Flick;
         }
 
         // Load data for the ViewModel Items
@@ -64,5 +67,42 @@ namespace MyTfsMobile.App
         //    ApplicationBarMenuItem appBarMenuItem = new ApplicationBarMenuItem(AppResources.AppBarMenuItemText);
         //    ApplicationBar.MenuItems.Add(appBarMenuItem);
         //}
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/Builds.xaml", UriKind.Relative));
+        }
+
+        private void MainPage_OnManipulationCompleted(object sender, ManipulationCompletedEventArgs e)
+        {
+            while (TouchPanel.IsGestureAvailable)
+            {
+                GestureSample gesture = TouchPanel.ReadGesture();
+                if (gesture.GestureType == GestureType.Flick)
+                {
+                    // determine dir
+                    var modifier = gesture.Delta.X > 0 ? -1 : 1;
+
+                    if (modifier < 0)
+                    {
+                        LoadNextPage();
+
+                    }
+                    else
+                    {
+                        LoadPreviousPage();
+                    }
+                }
+            }
+        }
+
+        private void LoadNextPage()
+        {
+            NavigationService.Navigate(new Uri("/Builds.xaml", UriKind.Relative));
+        }
+
+        private void LoadPreviousPage()
+        {
+            NavigationService.Navigate(new Uri("/Builds.xaml", UriKind.Relative));
+        }
     }
 }
