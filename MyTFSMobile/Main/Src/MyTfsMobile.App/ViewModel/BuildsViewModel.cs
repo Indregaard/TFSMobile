@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using MyTfsMobile.App.enums;
 
@@ -30,7 +31,7 @@ namespace MyTfsMobile.App.ViewModels
             {
                 if (buildSection == value) return;
                 buildSection = value;
-                NotifyPropertyChanged("BuildSection");
+                RaisePropertyChanged("BuildSection");
             }
         }
 

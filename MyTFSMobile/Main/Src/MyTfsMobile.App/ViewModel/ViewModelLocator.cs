@@ -15,6 +15,7 @@
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
+using MyTfsMobile.App.ViewModels;
 
 namespace MyTfsMobile.App.ViewModel
 {
@@ -31,18 +32,19 @@ namespace MyTfsMobile.App.ViewModel
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
-            ////if (ViewModelBase.IsInDesignModeStatic)
-            ////{
-            ////    // Create design time view services and models
-            ////    SimpleIoc.Default.Register<IDataService, DesignDataService>();
-            ////}
-            ////else
-            ////{
-            ////    // Create run time view services and models
-            ////    SimpleIoc.Default.Register<IDataService, DataService>();
-            ////}
+            //if (ViewModelBase.IsInDesignModeStatic)
+            //{
+            //    // Create design time view services and models
+            //    SimpleIoc.Default.Register<IDataService, DesignDataService>();
+            //}
+            //else
+            //{
+            //    // Create run time view services and models
+            //    SimpleIoc.Default.Register<IDataService, DataService>();
+            //}
 
             SimpleIoc.Default.Register<MainViewModel>();
+            SimpleIoc.Default.Register<SettingsViewModel>(true);
         }
 
         public MainViewModel Main
@@ -52,10 +54,19 @@ namespace MyTfsMobile.App.ViewModel
                 return ServiceLocator.Current.GetInstance<MainViewModel>();
             }
         }
+
+        public SettingsViewModel Settings
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<SettingsViewModel>();
+            }
+        }
         
         public static void Cleanup()
         {
             // TODO Clear the ViewModels
+            
         }
     }
 }

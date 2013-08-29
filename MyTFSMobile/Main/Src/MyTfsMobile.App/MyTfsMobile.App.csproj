@@ -115,10 +115,15 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AppResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\BuildsViewModel.cs" />
-    <Compile Include="ViewModels\BuildViewModel.cs" />
-    <Compile Include="ViewModels\ViewModelBase.cs" />
-    <Compile Include="ViewModels\ItemViewModel.cs" />
+    <Compile Include="TfsSettings.xaml.cs">
+      <DependentUpon>TfsSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModel\ActivitiesViewModel.cs" />
+    <Compile Include="ViewModel\ActivitiyViewModel.cs" />
+    <Compile Include="ViewModel\BuildsViewModel.cs" />
+    <Compile Include="ViewModel\BuildViewModel.cs" />
+    <Compile Include="ViewModel\SettingsViewModel.cs" />
+    <Compile Include="ViewModel\ItemViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
@@ -145,6 +150,10 @@
       <SubType>Designer</SubType>
     </DesignData>
     <Page Include="SampleData\BuildsViewModelSampleData.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TfsSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -204,6 +213,7 @@
     <Reference Include="GalaSoft.MvvmLight.WP8">
       <HintPath>..\packages\MvvmLightLibs.4.1.27.0\lib\WindowsPhone8\GalaSoft.MvvmLight.WP8.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Phone.Controls, Version=8.0.0.0, Culture=neutral, PublicKeyToken=24eec0d8c86cda1e, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Phone.Controls.Toolkit">
       <HintPath>..\packages\WPtoolkit.4.2013.08.16\lib\wp8\Microsoft.Phone.Controls.Toolkit.dll</HintPath>
     </Reference>

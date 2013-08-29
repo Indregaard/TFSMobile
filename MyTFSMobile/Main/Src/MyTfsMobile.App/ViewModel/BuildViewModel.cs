@@ -1,4 +1,5 @@
 ﻿using System;
+using GalaSoft.MvvmLight;
 using MyTfsMobile.App.enums;
 
 namespace MyTfsMobile.App.ViewModels
@@ -11,7 +12,7 @@ namespace MyTfsMobile.App.ViewModels
             get { return buildId; } 
             set { if (buildId == value) return;
                 buildId = value;
-                NotifyPropertyChanged("BuildId");
+                RaisePropertyChanged("BuildId");
             }
         }
 
@@ -22,7 +23,7 @@ namespace MyTfsMobile.App.ViewModels
             set { 
                 if (buildName == value) return;
                 buildName = value;
-                NotifyPropertyChanged("BuildName");
+                RaisePropertyChanged("BuildName");
             }
         }
 
@@ -33,7 +34,7 @@ namespace MyTfsMobile.App.ViewModels
             set{
                 if(buildDate==value) return;
                 buildDate = value;
-                NotifyPropertyChanged("BuildDate");
+                RaisePropertyChanged("BuildDate");
             }
         }
 
@@ -44,7 +45,7 @@ namespace MyTfsMobile.App.ViewModels
             set { 
                 if (buildMessages == value) return;
                 buildMessages = value;
-                NotifyPropertyChanged("BuildMessages");
+                RaisePropertyChanged("BuildMessages");
             }
         }
 
@@ -55,7 +56,7 @@ namespace MyTfsMobile.App.ViewModels
             set { 
                 if (buildStatus == value) return;
                 buildStatus = value;
-                NotifyPropertyChanged("BuildStatus");
+                RaisePropertyChanged("BuildStatus");
             }
         }
     }

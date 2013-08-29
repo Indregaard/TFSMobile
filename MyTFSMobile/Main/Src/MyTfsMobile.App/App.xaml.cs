@@ -8,13 +8,15 @@ using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Microsoft.Xna.Framework.Input.Touch;
 using MyTfsMobile.App.Resources;
-using MyTfsMobile.App.ViewModels;
+using MyTfsMobile.App.ViewModel;
+using MainViewModel = MyTfsMobile.App.ViewModels.MainViewModel;
 
 namespace MyTfsMobile.App
 {
     public partial class App : Application
     {
         private static MainViewModel viewModel = null;
+        private static ViewModelLocator viewModelLocator = new ViewModelLocator();
 
         /// <summary>
         /// A static ViewModel used by the views to bind against.
@@ -77,10 +79,16 @@ namespace MyTfsMobile.App
 
         }
 
+
         // Code to execute when the application is launching (eg, from Start)
         // This code will not execute when the application is reactivated
         private void Application_Launching(object sender, LaunchingEventArgs e)
         {
+            if (!viewModelLocator.Settings.IsTfsAuthenticated)
+            {
+                RootFrame.Navigate(new Uri("/TfsSettings.xaml", UriKind.Relative));
+              
+            }
         }
 
         // Code to execute when the application is activated (brought to foreground)
