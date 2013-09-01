@@ -100,7 +100,7 @@ namespace TfsMobileServices
 
         // Constructor is 'protected'
 
-        //protected TfsServer()
+        //protected TfsServerUri()
         //{
 
         //}

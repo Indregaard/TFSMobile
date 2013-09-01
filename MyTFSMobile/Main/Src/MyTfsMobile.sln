@@ -11,9 +11,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TfsMobile.Contracts", "TfsM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TfsMobile.Tests", "TfsMobile.Tests\TfsMobile.Tests.csproj", "{2F6BEBDA-6BAC-47C7-9EFC-4E3956C2B17F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TfsMobile.TestClient", "TfsMobile.TestClient\TfsMobile.TestClient.csproj", "{74FDEF0B-F992-435F-8FDF-4ECB170AB487}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 5
+		SccNumberOfProjects = 6
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://tfs.osiris.no:8080/tfs/labcollection
 		SccLocalPath0 = .
@@ -29,6 +31,9 @@ Global
 		SccProjectUniqueName4 = TfsMobile.Tests\\TfsMobile.Tests.csproj
 		SccProjectName4 = TfsMobile.Tests
 		SccLocalPath4 = TfsMobile.Tests
+		SccProjectUniqueName5 = TfsMobile.TestClient\\TfsMobile.TestClient.csproj
+		SccProjectName5 = TfsMobile.TestClient
+		SccLocalPath5 = TfsMobile.TestClient
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +86,14 @@ Global
 		{2F6BEBDA-6BAC-47C7-9EFC-4E3956C2B17F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2F6BEBDA-6BAC-47C7-9EFC-4E3956C2B17F}.Release|ARM.ActiveCfg = Release|Any CPU
 		{2F6BEBDA-6BAC-47C7-9EFC-4E3956C2B17F}.Release|x86.ActiveCfg = Release|Any CPU
+		{74FDEF0B-F992-435F-8FDF-4ECB170AB487}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74FDEF0B-F992-435F-8FDF-4ECB170AB487}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74FDEF0B-F992-435F-8FDF-4ECB170AB487}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{74FDEF0B-F992-435F-8FDF-4ECB170AB487}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{74FDEF0B-F992-435F-8FDF-4ECB170AB487}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74FDEF0B-F992-435F-8FDF-4ECB170AB487}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74FDEF0B-F992-435F-8FDF-4ECB170AB487}.Release|ARM.ActiveCfg = Release|Any CPU
+		{74FDEF0B-F992-435F-8FDF-4ECB170AB487}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
