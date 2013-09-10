@@ -5,6 +5,7 @@ using System.Net;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
+using GalaSoft.MvvmLight.Messaging;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using MyTfsMobile.App.ViewModels;
@@ -19,13 +20,17 @@ namespace MyTfsMobile.App
             vm = new SettingsViewModel();
 
             DataContext = vm;
+
+            Messenger.Default.Register<Uri>(this, "NavigationRequest", (uri) => App.RootFrame.Navigate(uri));
+
         }
 
         private SettingsViewModel vm;
-        // Load data for the ViewModel Items
+      
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            
         }
+
+       
     }
 }

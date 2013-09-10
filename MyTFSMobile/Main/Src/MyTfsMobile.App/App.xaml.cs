@@ -84,10 +84,15 @@ namespace MyTfsMobile.App
         // This code will not execute when the application is reactivated
         private void Application_Launching(object sender, LaunchingEventArgs e)
         {
+            CheckTfsConnection();
+        }
+
+        private void CheckTfsConnection()
+        {
             if (!viewModelLocator.Settings.IsTfsAuthenticated)
             {
                 RootFrame.Navigate(new Uri("/TfsSettings.xaml", UriKind.Relative));
-              
+
             }
         }
 
@@ -95,6 +100,7 @@ namespace MyTfsMobile.App
         // This code will not execute when the application is first launched
         private void Application_Activated(object sender, ActivatedEventArgs e)
         {
+            CheckTfsConnection();
             // Ensure that application state is restored appropriately
             if (!App.ViewModel.IsDataLoaded)
             {

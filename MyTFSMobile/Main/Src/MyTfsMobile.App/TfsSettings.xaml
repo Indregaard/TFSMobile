@@ -41,13 +41,13 @@
             </Grid.RowDefinitions>
 
             <TextBlock Text="TFS server" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0" Height="27" Margin="0,23,0,22"></TextBlock>
-            <TextBox Grid.Row="0" Grid.Column="1"></TextBox>
+            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding TfsServerAdress, Mode=TwoWay}"></TextBox>
 
             <TextBlock Text="Username" VerticalAlignment="Center" Grid.Row="2" Grid.Column="0"></TextBlock>
-            <TextBox Grid.Row="2" Grid.Column="1"></TextBox>
+            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding TfsServerUsername, Mode=TwoWay}"></TextBox>
 
             <TextBlock Text="Password" VerticalAlignment="Center" Grid.Row="3" Grid.Column="0"></TextBlock>
-            <TextBox Grid.Row="3" Grid.Column="1"></TextBox>
+            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding TfsServerPassword, Mode=TwoWay}"></TextBox>
             
             <Button Grid.Row="4" Grid.Column="1" Content="Connect" Command="{Binding SaveCommand}"></Button>
         </Grid>

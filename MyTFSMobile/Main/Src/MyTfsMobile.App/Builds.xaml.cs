@@ -38,21 +38,21 @@ namespace MyTfsMobile.App
         
         }
 
-        private void Test_OnManipulationCompleted(object sender, ManipulationCompletedEventArgs e)
-        {
+        //private void Test_OnManipulationCompleted(object sender, ManipulationCompletedEventArgs e)
+        //{
             
-            while (TouchPanel.IsGestureAvailable)
-            {
-                GestureSample gesture = TouchPanel.ReadGesture();
-                if (gesture.GestureType == GestureType.Flick)
-                {
-                    // determine dir
-                    var modifier = gesture.Delta.X > 0 ? -1 : 1;
+        //    while (TouchPanel.IsGestureAvailable)
+        //    {
+        //        GestureSample gesture = TouchPanel.ReadGesture();
+        //        if (gesture.GestureType == GestureType.Flick)
+        //        {
+        //            // determine dir
+        //            var modifier = gesture.Delta.X > 0 ? -1 : 1;
 
-                    test.Text = "Flicked";
-                }
-            }
-        }
+        //            test.Text = "Flicked";
+        //        }
+        //    }
+        //}
 
         private void MainLongListSelector_OnManipulationCompleted(object sender, ManipulationCompletedEventArgs e)
         {
@@ -123,6 +123,11 @@ namespace MyTfsMobile.App
         private void LoadPreviousPage()
         {
             NavigationService.Navigate(new Uri("/MainPage.xaml", UriKind.Relative));
+        }
+
+        private void ApplicationBarIconButton_OnClick(object sender, EventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/TfsSettings.xaml", UriKind.Relative));
         }
     }
 }

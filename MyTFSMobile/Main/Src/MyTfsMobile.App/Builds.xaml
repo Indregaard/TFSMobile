@@ -31,11 +31,8 @@
         <StackPanel Grid.Row="0" Margin="12,17,0,28">
             <TextBlock Text="My TFS Mobile" Style="{StaticResource PhoneTextNormalStyle}"/>
             <TextBlock Text="{Binding BuildSection}" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
-            <TextBlock Name="test" Text="test" ManipulationCompleted="Test_OnManipulationCompleted">
-                
-            </TextBlock>
-            <Button Content="test" Command="{Binding QueueBuildCommand}"></Button>
-        </StackPanel>
+          
+               </StackPanel>
 
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="BuildList" Grid.Row="1" Margin="12,0,12,0">
@@ -68,7 +65,7 @@
             <shell:ApplicationBarIconButton IsEnabled="False" IconUri="Images/AppBar/favs.png" Text="My"/>
             <shell:ApplicationBarIconButton IconUri="Images/AppBar/Share.png" Text="Team"/>
             <shell:ApplicationBarIconButton IconUri="Images/AppBar/like.png" Text="Favourite"/>
-            <shell:ApplicationBarIconButton IconUri="Images/AppBar/feature.settings.png" Text="Settings"/>
+            <shell:ApplicationBarIconButton IconUri="Images/AppBar/feature.settings.png" Text="Settings" Click="ApplicationBarIconButton_OnClick"/>
 
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>
