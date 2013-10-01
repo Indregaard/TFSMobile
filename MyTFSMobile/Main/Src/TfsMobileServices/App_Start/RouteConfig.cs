@@ -14,10 +14,18 @@ namespace TfsMobileServices
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
+               name: "Builds",
+               url: "Builds/{action}/{project}/{fromDays}",
+               defaults: new { controller = "Builds", action = "", project = "", fromDays = "" }
+           );
+
+            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
+
+          
         }
     }
 }

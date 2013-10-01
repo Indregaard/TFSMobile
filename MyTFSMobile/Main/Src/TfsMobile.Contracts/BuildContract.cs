@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Runtime.Serialization;
 using System.Text;
 
@@ -39,5 +40,30 @@ namespace TfsMobile.Contracts
         public Guid Id { get; set; }
         [DataMember]
         public Uri LoggedInUser { get; set; }
+    }
+
+
+    public class RequestTfsUserDto
+    {
+        public string Username { get; set; }
+        public string Password { get; set; }
+
+        public Uri TfsUri { get; set; }
+
+        public static RequestTfsUserDto Default()
+        {
+            return new RequestTfsUserDto() { Username = "username", Password = "password", TfsUri = new Uri("http://tfs.osiris.no:8080/tfs") };
+        }
+    }
+
+    public class BuildDetailsDto
+    {
+        public string TfsProject { get; set; }
+        public string FromDays { get; set; }
+
+        public static BuildDetailsDto Default()
+        {
+            return new BuildDetailsDto() {FromDays = "7", TfsProject = "Byggtjeneste - Projects"};
+        }
     }
 }

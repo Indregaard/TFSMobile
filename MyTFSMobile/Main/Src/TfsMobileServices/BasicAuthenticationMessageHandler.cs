@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Diagnostics;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -9,8 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Security;
-using Microsoft.TeamFoundation.Client;
-using Microsoft.TeamFoundation.Common.Internal;
+using TfsMobileServices.Models;
 
 namespace TfsMobileServices
 {
@@ -29,11 +28,14 @@ namespace TfsMobileServices
         {
             if (request.Headers.Authorization != null)
             {
-                var credentials = ExtractCredentials(request.Headers.Authorization);
-                if (credentials != null && ValidateUser(credentials))
+                var headers = request.Headers;
+                var authentication = new AuthenticationHandler(request.Headers);
+                
+
+                if (authentication.ValidateUser())
                 {
 
-                    IPrincipal principal = new GenericPrincipal(new GenericIdentity(credentials.Username, "Basic"), Roles.GetRolesForUser(credentials.Username));
+                    IPrincipal principal = authentication.GetGenericPrincipal();
                     Thread.CurrentPrincipal = principal;
                     HttpContext.Current.User = principal;
 
@@ -43,118 +45,98 @@ namespace TfsMobileServices
             return base.SendAsync(request, cancellationToken);
         }
 
-        private bool ValidateUser(Credentials credentials)
-        {
+        
 
-            TfsServer.Instance().SetCredentials(credentials);
-            TfsServer.Instance().Tfs.EnsureAuthenticated();
-            return TfsServer.Instance().Tfs.HasAuthenticated;
-            //if (!Membership.Provider.ValidateUser(credentials.Username, credentials.Password))
-            //{
-            //    Debug.WriteLine("BasicAuthenticationMessageHandler.ExtractCredentials: Authentication failed for user '{0}'", credentials.Username);
-            //    return false;
-            //}
-            //return true;
-        }
-
-        private Credentials ExtractCredentials(AuthenticationHeaderValue authHeader)
-        {
-            try
-            {
-                if (authHeader == null)
-                {
-                    Debug.WriteLine("BasicAuthenticationMessageHandler.ExtractCredentials: auth header is null, returning null");
-                    return null;
-                }
-
-                if (authHeader.Scheme != "Basic")
-                {
-                    Debug.WriteLine("BasicAuthenticationMessageHandler.ExtractCredentials: unsupported scheme {{0}), returning null", authHeader.Scheme);
-                    return null;
-                }
-
-                var encodedUserPass = authHeader.Parameter.Trim();
-                var encoding = Encoding.GetEncoding("iso-8859-1");
-                var userPass = encoding.GetString(Convert.FromBase64String(encodedUserPass));
-                var parts = userPass.Split(":".ToCharArray());
-                return new Credentials { Username = parts[0], Password = parts[1] };
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex, "BasicAuthenticationMessageHandler.ExtractCredentials: Cannot extract credentials.");
-                return null;
-            }
-        }
+        
 
 
        
     }
 
-
-    public class TfsServer
+    public class AuthenticationHandler
     {
-
-        private static TfsServer _instance;
-        public TfsTeamProjectCollection Tfs { get; private set; }
+        public Uri TfsUri { get; set; }
+        private AuthenticationHeaderValue AuthHeader { get; set; }
         public Credentials Credentials { get; private set; }
-
-        // Constructor is 'protected'
-
-        //protected TfsServerUri()
-        //{
-
-        //}
-
-        public void SetCredentials(Credentials credentials)
+        public NetworkCredential NetCredentials { get; private set; }
+        //public ITfsServer Tfs { get; private set; }
+        private AuthenticationHandler(AuthenticationHeaderValue authHeader)
         {
-            Credentials = credentials;
-            Tfs = TfsTeamProjectCollectionFactory.GetTeamProjectCollection(new Uri("http://tfs.osiris.no:8080/tfs"));
-            Tfs.ClientCredentials = new TfsClientCredentials(new BasicAuthCredential(CredentialsAuth.GetCredentials(credentials)));
+            AuthHeader = authHeader;
+            ExtractCredentials();
+            
         }
 
-        public static TfsServer Instance()
+        public AuthenticationHandler(HttpRequestHeaders authHeader):this(authHeader.Authorization)
         {
+            SetTfsUri(authHeader);
+            SetUseLocalAccount(authHeader);
+            //Tfs = new TfsServiceHandler(Credentials, TfsUri);
+        }
 
-            // Uses lazy initialization.
-
-            // Note: this is not thread safe.
-
-            if (_instance == null)
+        private void SetTfsUri(HttpRequestHeaders authHeader)
+        {
+            var tfsHeader = authHeader.FirstOrDefault(h => h.Key == "tfsuri");
+            if (tfsHeader.Value != null)
             {
-
-                _instance = new TfsServer();
-
+                TfsUri = new Uri(tfsHeader.Value.First());
             }
-
-
-
-            return _instance;
-
+        }
+        private void SetUseLocalAccount(HttpRequestHeaders authHeader)
+        {
+            var uselocaldefault = authHeader.FirstOrDefault(h => h.Key == "uselocaldefault");
+            if (uselocaldefault.Value != null)
+            {
+                Credentials.UseLocalDefault = true;
+            }
         }
 
-    }
+        //public string ErrorMsg { get; private set; }
 
-    public class Credentials
-    {
-        public string Username { get; set; }
-        public string Password { get; set; }
-    }
-    public class CredentialsAuth : ICredentials
-    {
-        private Credentials Cred { get; set; }
-        private CredentialsAuth(Credentials cred)
+        private void ExtractCredentials()
         {
-            Cred = cred;
+            try
+            {
+                if (AuthHeader == null)
+                {
+                    Credentials = new Credentials();
+                }
+                else
+                {
+                    if (AuthHeader.Scheme != "Basic")
+                    {
+                        Credentials = null;
+                    }
+
+                    var encodedUserPass = AuthHeader.Parameter.Trim();
+                    var encoding = Encoding.GetEncoding("iso-8859-1");
+                    var userPass = encoding.GetString(Convert.FromBase64String(encodedUserPass));
+                    var parts = userPass.Split(":".ToCharArray());
+                    Credentials = new Credentials(parts[0],parts[1]);
+                    NetCredentials = new NetworkCredential(Credentials.Username, Credentials.Password,
+                        Credentials.Domain);
+                }
+
+                
+            }
+            catch (Exception)
+            {
+                //ErrorMsg = "BasicAuthenticationMessageHandler.ExtractCredentials: Cannot extract credentials.";
+                Credentials = null;
+            }
         }
 
-        public static ICredentials GetCredentials(Credentials cred)
+        public GenericPrincipal GetGenericPrincipal()
         {
-            return new CredentialsAuth(cred);
+            return new GenericPrincipal(new GenericIdentity(Credentials.Username, "Basic"), Roles.GetRolesForUser(Credentials.Username));
         }
 
-        public NetworkCredential GetCredential(Uri uri, string authType)
+        public bool ValidateUser()
         {
-            return new NetworkCredential(Cred.Username, Cred.Password);
+            using (var tfs = TfsServiceFactory.Get(TfsUri, NetCredentials, Credentials.UseLocalDefault).Connect())
+            {
+                return tfs.HasAuthenticated;
+            }
         }
     }
 }

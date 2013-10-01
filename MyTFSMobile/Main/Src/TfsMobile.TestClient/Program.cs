@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using RestSharp;
 using TfsMobile.Contracts;
+using TfsMobile.Repositories.v1;
 
 namespace TfsMobile.TestClient
 {
@@ -12,36 +13,18 @@ namespace TfsMobile.TestClient
     {
         static void Main(string[] args)
         {
-            var foo = new LoginsRepository();
-            var res = foo.Login("torarnev", "Su1c1dal9");
-            Console.WriteLine(res.Id);
-            Console.WriteLine(res.LoggedInUser);
+            var rep = new BuildsRepository(RequestTfsUserDto.Default(),true);
+            var res =  rep.GetBuilds(BuildDetailsDto.Default());
+            foreach (var buildContract in res)
+            {
+                Console.WriteLine("Name: " + buildContract.Name + " - Status: " + buildContract.Status + " - Finished: " + buildContract.FinishTime);
+            }
+            
             Console.ReadKey();
         }
     }
 
-    public class LoginsRepository
-    {
-        public LoggedInContract Login(string username, string password)
-        {
-            var client = new RestClient("http://localhost:3295/Api/Logins");
-
-            var request = new RestRequest("/Logins", Method.POST);
-            request.RequestFormat = DataFormat.Json;
-            request.AddHeader("Content-type", "application/json");
-            client.Authenticator = new HttpBasicAuthenticator("username","password");
-            
-
-            request.AddBody(request.JsonSerializer.Serialize(new TfsSettingsContract
-            {
-                TfsServerUri = "tfs.osiris.no:8080/tfs",
-                ProjectName = "Byggtjeneste - Projects"
-            }));
 
 
-            var response = client.Execute<LoggedInContract>(request);
-            return response.Data;
-
-        }
-    }
+    
 }

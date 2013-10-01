@@ -59,6 +59,10 @@
       <Project>{0c7a5baf-dfba-4313-884f-baa0a1196d33}</Project>
       <Name>TfsMobile.Contracts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TfsMobile.Repositories.v1\TfsMobile.Repositories.v1.csproj">
+      <Project>{51c656d8-7516-42cb-87df-f7a1b96c9295}</Project>
+      <Name>TfsMobile.Repositories.v1</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
