@@ -21,6 +21,34 @@ namespace TfsMobile.Contracts
     }
 
     [DataContract]
+    public class HistoryItemContract
+    {
+        [DataMember]
+        public int Id { get; set; }
+
+        [DataMember]
+        public string WorkType { get; set; }
+
+        [DataMember]
+        public string HistoryItemType { get; set; }
+        [DataMember]
+        public string Description { get; set; }
+
+        [DataMember]
+        public DateTime HistoryDate { get; set; }
+
+        [DataMember]
+        public Uri TfsItemUri { get; set; }
+        [DataMember]
+        public string AreaPath { get; set; }
+        [DataMember]
+        public string IterationPath { get; set; }
+        [DataMember]
+        public string State { get; set; }
+    }
+
+
+    [DataContract]
     public class TfsSettingsContract
     {
         //[DataMember]
@@ -65,5 +93,11 @@ namespace TfsMobile.Contracts
         {
             return new BuildDetailsDto() {FromDays = "7", TfsProject = "Byggtjeneste - Projects"};
         }
+    }
+
+    public class RequestHistoryDto
+    {
+        public string TfsProject { get; set; }
+        public string FromDays { get; set; }
     }
 }

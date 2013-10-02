@@ -1,0 +1,28 @@
+﻿@model TfsWebClient.Models.BuildsVm
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<h2>title</h2>
+<table><tr>
+    @{
+        foreach (var build in Model.Builds)
+        {
+            <td>Name</td>
+            <td>
+                @build.Name
+            </td>
+        <td>FinishTime</td>
+            <td>
+                @build.FinishTime
+            </td>
+        <td>Status</td>
+            <td>
+                @build.Status
+            </td>
+        }
+    }
+</tr>
+</table>

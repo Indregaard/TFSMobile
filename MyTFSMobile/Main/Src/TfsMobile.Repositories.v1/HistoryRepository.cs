@@ -8,17 +8,20 @@ using TfsMobile.Contracts;
 
 namespace TfsMobile.Repositories.v1
 {
-    public class BuildsRepository : BaseRepository
+    public class HistoryRepository : BaseRepository
     {
-        
-
-
-        public BuildsRepository(RequestTfsUserDto requestTfsUser, bool useLocalDefaultTfs) : base(requestTfsUser,useLocalDefaultTfs)
+        public HistoryRepository(RequestTfsUserDto requestTfsUser, bool useLocalDefaultTfs) : base(requestTfsUser, useLocalDefaultTfs)
         {
-           
         }
 
-        private async Task<string> GetBuildsAsync(BuildDetailsDto buildDetails)
+        public IEnumerable<HistoryItemContract> GetHistory(RequestHistoryDto historyRequest)
+        {
+            var historyResult = GetHistoryAsync(historyRequest).Result;
+            var historyContracts = JsonConvert.DeserializeObject<List<HistoryItemContract>>(historyResult);
+            return historyContracts;
+        }
+
+        private async Task<string> GetHistoryAsync(RequestHistoryDto buildDetails)
         {
 
             using (
@@ -34,7 +37,7 @@ namespace TfsMobile.Repositories.v1
                     {
                         client.DefaultRequestHeaders.Add("uselocaldefault", "true");
                     }
-                    var targetUri = CreateBuildsUri(buildDetails);
+                    var targetUri = CreateHistoryUri(buildDetails);
                     return await client.GetStringAsync(targetUri);
                 }
             }
@@ -42,24 +45,15 @@ namespace TfsMobile.Repositories.v1
 
         }
 
-        private Uri CreateBuildsUri(BuildDetailsDto buildDetails)
+        private Uri CreateHistoryUri(RequestHistoryDto buildDetails)
         {
             var sb = new StringBuilder();
-            sb.Append("http://localhost:3295/api/Builds?project=");
+            sb.Append("http://localhost:3295/api/History?project=");
             //var project = buildDetails.TfsProject.Replace(" ", "%20");
             sb.Append(buildDetails.TfsProject);
             sb.Append("&fromDays=");
             sb.Append(buildDetails.FromDays);
             return new Uri(sb.ToString());
-        }
-
-       
-
-        public IEnumerable<BuildContract> GetBuilds(BuildDetailsDto buildDetails)
-        {
-            var buildsResult = GetBuildsAsync(buildDetails).Result;
-            var buildContracts = JsonConvert.DeserializeObject<List<BuildContract>>(buildsResult);
-            return buildContracts;
         }
     }
 }
