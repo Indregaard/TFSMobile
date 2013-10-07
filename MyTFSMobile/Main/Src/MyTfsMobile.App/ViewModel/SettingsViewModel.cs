@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO.IsolatedStorage;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -10,6 +11,8 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using Microsoft.Phone.Tasks;
+using TfsMobile.Contracts;
+using TfsMobile.Repositories.v1;
 
 namespace MyTfsMobile.App.ViewModels
 {
@@ -19,12 +22,6 @@ namespace MyTfsMobile.App.ViewModels
 
         private const string SettingsFile = "myTfsMobileSettings.mtm";
         private static readonly IsolatedStorageSettings AppSettings = IsolatedStorageSettings.ApplicationSettings;
-        // tfsserver
-        // username
-        //password
-        //isAuthenticated?
-        //isloggedin?
-        //andre??
 
         public string TfsServerAdress
         {
@@ -59,10 +56,32 @@ namespace MyTfsMobile.App.ViewModels
             }
         }
 
-        private static bool Auth { get; set; }
+        private NetworkCredential NetCredentials { get; set; }
+
         public bool IsTfsAuthenticated
         {
-            get { return Auth; }
+            get
+            {
+                if (string.IsNullOrEmpty(TfsServerAdress)) return false;
+
+
+                var cConn = TryConnectToTfs();
+                return cConn.Result;
+            }
+        }
+
+        private async Task<bool> TryConnectToTfs()
+        {
+            var df = new RequestTfsUserDto
+            {
+                Username = TfsServerUsername,
+                Password = TfsServerPassword,
+                TfsUri = new Uri(TfsServerAdress)
+            };
+
+            var rep = new TfsAccountRepository(df, false);
+            var canConnect = await rep.CanConnectToTfs();
+            return canConnect;
         }
 
 
@@ -98,21 +117,22 @@ namespace MyTfsMobile.App.ViewModels
 
         static async private Task<bool> SaveData(Action errorCallback)
         {
+            var settingsSaved = false;
             try
             {
                 AppSettings[SettingsFile] = TfsSettings;
                 var saved = await SaveAppsettings();
                 if (saved){
-                    Auth = true;;
+                    settingsSaved = true; ;
                 }
             }
             catch (IsolatedStorageException)
             {
-                Auth = false;
+                settingsSaved = false;
                 errorCallback();
                 
             }
-            return Auth;
+            return settingsSaved;
         }
 
         private static void NavigateToBuilds()
@@ -136,7 +156,7 @@ namespace MyTfsMobile.App.ViewModels
                     async (retval) =>
                           {
                               var saved = await SaveData(SaveCommandError);
-                              if(saved)
+                              if(saved && IsTfsAuthenticated)
                                   NavigateToBuilds();
                     }));
             }
@@ -144,7 +164,7 @@ namespace MyTfsMobile.App.ViewModels
 
         private void SaveCommandError()
         {
-            // error prosessering?
+            // cannot save data..
         }
 
 

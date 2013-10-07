@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using Microsoft.TeamFoundation;
 using System.Text;
 using Microsoft.TeamFoundation.Build.Client;
 using Microsoft.TeamFoundation.Client;
@@ -54,6 +55,7 @@ namespace TfsMobileServices.Models
                                 Name = b.BuildDefinition.Name,
                                 Status = b.Status.ToString()
                             }).ToList();
+                
                 return builds;
             }
         }
@@ -194,11 +196,18 @@ namespace TfsMobileServices.Models
 
             if (TfsUri != null)
             {
+                try
+                {
                 Tp = !UseLocalAccount ? new TfsTeamProjectCollection(TfsUri, NetCredentials) : new TfsTeamProjectCollection(TfsUri);
                 Tp.Authenticate();
             }
+                catch (TeamFoundationServerUnauthorizedException)
+                {
+                }
+            }
             return Tp;
         }
+
 
         
 

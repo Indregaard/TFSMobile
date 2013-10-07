@@ -224,6 +224,16 @@
       <HintPath>..\packages\MvvmLightLibs.4.1.27.0\lib\WindowsPhone8\System.Windows.Interactivity.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TfsMobile.Contracts\TfsMobile.Contracts.csproj">
+      <Project>{0C7A5BAF-DFBA-4313-884F-BAA0A1196D33}</Project>
+      <Name>TfsMobile.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TfsMobile.Repositories.v1\TfsMobile.Repositories.v1.csproj">
+      <Project>{51C656D8-7516-42CB-87DF-F7A1B96C9295}</Project>
+      <Name>TfsMobile.Repositories.v1</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

@@ -8,7 +8,7 @@ namespace TfsMobileServices.Controllers
 {
     public class BuildsController : ApiController
     {
-        
+        [Authorize]
         public IEnumerable<BuildContract> Get(string project, int fromDays)
         {
             var headers = FixHeaders(Request.Headers);

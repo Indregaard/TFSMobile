@@ -15,34 +15,44 @@ namespace TfsMobileServices
 {
     public class BasicAuthenticationMessageHandler : DelegatingHandler
     {
-        //private readonly ILogger _logger;
-
-       
+        private const string WwwAuthenticateHeader = "WWW-Authenticate";
+        private const string Basic = "Basic";
 
         public BasicAuthenticationMessageHandler()
         {
             //_logger = logger;
         }
 
-        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, System.Threading.CancellationToken cancellationToken)
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             if (request.Headers.Authorization != null)
             {
-                var headers = request.Headers;
                 var authentication = new AuthenticationHandler(request.Headers);
-                
+
 
                 if (authentication.ValidateUser())
                 {
-
                     IPrincipal principal = authentication.GetGenericPrincipal();
                     Thread.CurrentPrincipal = principal;
                     HttpContext.Current.User = principal;
-
-                    //request.Properties.Add(HttpPropertyKeys.UserPrincipalKey, new GenericPrincipal(identity, new string[0]));
                 }
+                //else
+                //{
+                //    return Task<HttpResponseMessage>.Factory.StartNew(CreateUnauthorizedResponse, cancellationToken);
+                //}
             }
             return base.SendAsync(request, cancellationToken);
+        }
+
+        private static HttpResponseMessage CreateUnauthorizedResponse()
+        {
+            var response = new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.Unauthorized,
+                Content = new StringContent("Access Denied.")
+            };
+            response.Headers.WwwAuthenticate.Add(new AuthenticationHeaderValue("Basic"));
+            return response;
         }
 
         
@@ -128,11 +138,12 @@ namespace TfsMobileServices
 
         public GenericPrincipal GetGenericPrincipal()
         {
-            return new GenericPrincipal(new GenericIdentity(Credentials.Username, "Basic"), Roles.GetRolesForUser(Credentials.Username));
+            return new GenericPrincipal(new GenericIdentity(Credentials.Username, "Basic"), null);
         }
 
         public bool ValidateUser()
         {
+
             using (var tfs = TfsServiceFactory.Get(TfsUri, NetCredentials, Credentials.UseLocalDefault).Connect())
             {
                 return tfs.HasAuthenticated;

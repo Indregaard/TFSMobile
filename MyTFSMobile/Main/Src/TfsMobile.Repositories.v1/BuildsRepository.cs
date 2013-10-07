@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using TfsMobile.Contracts;
@@ -34,8 +37,29 @@ namespace TfsMobile.Repositories.v1
                     {
                         client.DefaultRequestHeaders.Add("uselocaldefault", "true");
                     }
+                        client.DefaultRequestHeaders.Authorization =
+                        new AuthenticationHeaderValue(
+                            "Basic",
+                            Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Format("{0}:{1}", RequestTfsUser.Username, RequestTfsUser.Password)))
+                            );
+                   
+
+
+
                     var targetUri = CreateBuildsUri(buildDetails);
-                    return await client.GetStringAsync(targetUri);
+
+                    var taskRes = await client.GetAsync(targetUri).ContinueWith(tt =>
+                    {
+                        if (tt.Result.StatusCode == HttpStatusCode.Unauthorized)
+                        {
+                            return null;
+                        }
+                        tt.Result.EnsureSuccessStatusCode();
+                        return tt.Result;
+                    });
+
+                    return taskRes != null ? taskRes.Content.ToString() : null;
+
                 }
             }
 
@@ -58,8 +82,27 @@ namespace TfsMobile.Repositories.v1
         public IEnumerable<BuildContract> GetBuilds(BuildDetailsDto buildDetails)
         {
             var buildsResult = GetBuildsAsync(buildDetails).Result;
+
             var buildContracts = JsonConvert.DeserializeObject<List<BuildContract>>(buildsResult);
             return buildContracts;
         }
+
+        //private static HttpResponseMessage Get(HttpClient client, string url)
+        //{
+        //    using (var task = client.GetAsync(url))
+        //    {
+        //        task.Wait();
+        //        return task.Result;
+        //    }
+        //}
+
+        //private static string GetContent(HttpResponseMessage response)
+        //{
+        //    using (var contentTask = response.Content.ReadAsStringAsync())
+        //    {
+        //        contentTask.Wait();
+        //        return contentTask.Result;
+        //    }
+        //}
     }
 }

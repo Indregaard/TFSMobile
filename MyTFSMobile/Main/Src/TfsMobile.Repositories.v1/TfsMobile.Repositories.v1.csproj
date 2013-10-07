@@ -45,6 +45,7 @@
     <Compile Include="BuildsRepository.cs" />
     <Compile Include="HistoryRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TfsAccountRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="AdvancedREI.Net.Http.Compression">

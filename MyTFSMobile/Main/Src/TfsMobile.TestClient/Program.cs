@@ -13,12 +13,18 @@ namespace TfsMobile.TestClient
     {
         static void Main(string[] args)
         {
-            var rep = new BuildsRepository(RequestTfsUserDto.Default(),true);
-            var res =  rep.GetBuilds(BuildDetailsDto.Default());
-            foreach (var buildContract in res)
-            {
-                Console.WriteLine("Name: " + buildContract.Name + " - Status: " + buildContract.Status + " - Finished: " + buildContract.FinishTime);
-            }
+            var df = RequestTfsUserDto.Default();
+            //var rep = new BuildsRepository(df,true);
+            df.Username = "tomindre/crayon";
+            df.Password = "Fo4maxi!s";
+            //var rep = new BuildsRepository(df, false);
+            //var res =  rep.GetBuilds(BuildDetailsDto.Default());
+            //foreach (var buildContract in res)
+            //{
+            //    Console.WriteLine("Name: " + buildContract.Name + " - Status: " + buildContract.Status + " - Finished: " + buildContract.FinishTime);
+            //}
+            var rep = new TfsAccountRepository(df, false);
+            var res = rep.CanConnectToTfs();
             
             Console.ReadKey();
         }
