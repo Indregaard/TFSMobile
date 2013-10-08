@@ -22,7 +22,7 @@ namespace MyTfsMobile.App
             DataContext = vm;
 
             Messenger.Default.Register<Uri>(this, "NavigationRequest", (uri) => App.RootFrame.Navigate(uri));
-
+            
         }
 
         private SettingsViewModel vm;

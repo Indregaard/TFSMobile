@@ -15,7 +15,7 @@ namespace TfsMobile.TestClient
         {
             if (CheckLogin())
             {
-                var rep = new BuildsRepository(RequestTfsUserDto.Default(), true);
+                var rep = new BuildsRepository(LoginDetails(), false);
                 var res = rep.GetBuilds(BuildDetailsDto.Default());
                 foreach (var buildContract in res)
                 {
@@ -28,8 +28,17 @@ namespace TfsMobile.TestClient
             
         private static bool CheckLogin()
         {
-            var rep = new LoginRepository(RequestTfsUserDto.Default(), true);
+
+            var rep = new LoginRepository(LoginDetails(), false);
             return rep.TryLogin();
+        }
+
+        private static RequestTfsUserDto LoginDetails()
+        {
+            var userDetails = RequestTfsUserDto.Default();
+            userDetails.Username = "tomindre/crayon";
+            userDetails.Password = "";
+            return userDetails;
         }
     }
 
