@@ -79,8 +79,8 @@ namespace MyTfsMobile.App.ViewModels
                 TfsUri = new Uri(TfsServerAdress)
             };
 
-            var rep = new TfsAccountRepository(df, false);
-            var canConnect = await rep.CanConnectToTfs();
+            var rep = new LoginRepository(df, false);
+            var canConnect = rep.TryLogin();
             return canConnect;
         }
 

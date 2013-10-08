@@ -24,11 +24,7 @@ namespace TfsMobile.Repositories.v1
         private async Task<string> GetHistoryAsync(RequestHistoryDto buildDetails)
         {
 
-            using (
-                var handler = new HttpClientHandler()
-                {
-                    Credentials = GetNetworkCredentials()
-                })
+            using (var handler = GetHttpClientHandler())
             {
                 using (var client = new HttpClient(handler))
                 {

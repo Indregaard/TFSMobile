@@ -22,21 +22,12 @@ namespace TfsMobile.Repositories.v1
             return new NetworkCredential(RequestTfsUser.Username, RequestTfsUser.Password);
         }
 
-        protected HttpClient AddHttpClientAuthHeaders(HttpClient client)
+        protected HttpClientHandler GetHttpClientHandler()
         {
-            client.DefaultRequestHeaders.Add("tfsuri", RequestTfsUser.TfsUri.ToString());
-            if (UseLocalDefaultTfs)
+            return new HttpClientHandler()
             {
-                client.DefaultRequestHeaders.Add("uselocaldefault", "true");
-            }
-            client.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue(
-                    "Basic",
-                    Convert.ToBase64String(
-                        Encoding.UTF8.GetBytes(string.Format("{0}:{1}", RequestTfsUser.Username,
-                            RequestTfsUser.Password)))
-                    );
-            return client;
+                Credentials = GetNetworkCredentials()
+            };
         }
     }
 }

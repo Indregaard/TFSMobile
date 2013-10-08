@@ -65,9 +65,9 @@ namespace TfsMobile.Contracts
     public class LoggedInContract
     {
         [DataMember]
-        public Guid Id { get; set; }
-        [DataMember]
-        public Uri LoggedInUser { get; set; }
+        public bool IsValidUser { get; set; }
+        //[DataMember]
+        //public Uri LoggedInUser { get; set; }
     }
 
 
@@ -99,5 +99,10 @@ namespace TfsMobile.Contracts
     {
         public string TfsProject { get; set; }
         public string FromDays { get; set; }
+    }
+
+    public class RequestLoginContract
+    {
+        public string TfsUri { get; set; }
     }
 }

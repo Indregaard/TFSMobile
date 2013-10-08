@@ -11,7 +11,7 @@ namespace TfsMobileServices.Controllers
         [Authorize]
         public IEnumerable<BuildContract> Get(string project, int fromDays)
         {
-            var headers = FixHeaders(Request.Headers);
+            var headers = HeradersUtil.FixHeaders(Request.Headers);
             var handler = new AuthenticationHandler(headers);
             var tfs = TfsServiceFactory.Get(handler.TfsUri, handler.NetCredentials, handler.Credentials.UseLocalDefault);
 
@@ -20,18 +20,7 @@ namespace TfsMobileServices.Controllers
             return res;
         }
 
-        private HttpRequestHeaders FixHeaders(HttpRequestHeaders headers)
-        {
-            if (!headers.Contains("tfsuri"))
-            {
-                headers.Add("tfsuri", "http://tfs.osiris.no:8080/tfs");
-            }
-            if (headers.Authorization==null)
-            {
-                headers.Add("uselocaldefault","true");
-            }
-            return headers;
-        }
+        
 
         public IEnumerable<BuildContract> Get()
         {
@@ -61,5 +50,21 @@ namespace TfsMobileServices.Controllers
         //public void Delete(int id)
         //{
         //}
+    }
+
+    public class HeradersUtil
+    {
+        public static HttpRequestHeaders FixHeaders(HttpRequestHeaders headers)
+        {
+            if (!headers.Contains("tfsuri"))
+            {
+                headers.Add("tfsuri", "http://tfs.osiris.no:8080/tfs");
+            }
+            if (headers.Authorization == null)
+            {
+                headers.Add("uselocaldefault", "true");
+            }
+            return headers;
+        }
     }
 }
