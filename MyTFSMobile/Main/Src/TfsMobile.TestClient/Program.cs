@@ -29,8 +29,7 @@ namespace TfsMobile.TestClient
         private static bool CheckLogin()
         {
             var rep = new LoginRepository(RequestTfsUserDto.Default(), true);
-            rep.TryLogin();
-            return false;
+            return rep.TryLogin();
         }
     }
 

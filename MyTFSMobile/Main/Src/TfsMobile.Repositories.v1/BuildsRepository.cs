@@ -46,7 +46,7 @@ namespace TfsMobile.Repositories.v1
 
                     var targetUri = CreateBuildsUri(buildDetails);
 
-                    var taskRes = await client.GetAsync(targetUri).ContinueWith(tt =>
+                    var taskRes = client.GetAsync(targetUri).ContinueWith(tt =>
                     {
                         if (tt.Result.StatusCode == HttpStatusCode.Unauthorized)
                         {
@@ -56,7 +56,8 @@ namespace TfsMobile.Repositories.v1
                         return tt.Result;
                     });
 
-                    return taskRes != null ? taskRes.Content.ToString() : null;
+                    var buildRes = await taskRes;
+                    return buildRes != null ? buildRes.Content.ReadAsStringAsync().Result : null;
 
                 }
             }
@@ -158,17 +159,17 @@ namespace TfsMobile.Repositories.v1
           
                     //});
                     var requestUri = CreateTryLoginUri().ToString();
-                    var response = await client.PostAsync(requestUri, requestcontent).ContinueWith(tt =>
+                    var response =  client.PostAsync(requestUri, requestcontent).ContinueWith(tt =>
                     {
-                        if (tt.Result.StatusCode == HttpStatusCode.Accepted)
+                        if (tt.Result.StatusCode == HttpStatusCode.OK)
                         {
                             var foo = tt.Result.Content.ReadAsStringAsync();
-                            var loggedInContract = JsonConvert.DeserializeObject<List<LoggedInContract>>(foo.Result);
-                            return true;
+                            return JsonConvert.DeserializeObject<bool>(foo.Result);
                         }
                         return false;
                     });
-                    return false;
+                    var resultat = await response;
+                    return resultat;
                     //string content = await response.Content.ReadAsStringAsync();
                     //return content;
                     //return Task.Run(() => content);
@@ -203,10 +204,7 @@ namespace TfsMobile.Repositories.v1
 
         public bool TryLogin()
         {
-            var loggedInResult = TryLoginAsync(GetLoggedInContract()).Result;
-
-            //var loggedInContract = JsonConvert.DeserializeObject<List<LoggedInContract>>(loggedInResult);
-            return false;
+            return TryLoginAsync(GetLoggedInContract()).Result;
         }
 
         private RequestLoginContract GetLoggedInContract()
