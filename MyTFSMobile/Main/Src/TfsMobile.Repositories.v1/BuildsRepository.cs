@@ -70,7 +70,7 @@ namespace TfsMobile.Repositories.v1
         private Uri CreateBuildsUri(BuildDetailsDto buildDetails)
         {
             var sb = new StringBuilder();
-            sb.Append("http://localhost:3295/api/Builds?project=");
+            sb.Append("http://192.168.10.193/TfsMobileServices/api/Builds?project=");
             //var project = buildDetails.TfsProject.Replace(" ", "%20");
             sb.Append(buildDetails.TfsProject);
             sb.Append("&fromDays=");
@@ -118,7 +118,7 @@ namespace TfsMobile.Repositories.v1
 
         }
 
-        private async Task<bool> TryLoginAsync(RequestLoginContract requestLoginDetails)
+        public async Task<bool> TryLoginAsync(RequestLoginContract requestLoginDetails)
         {
 
             using (var handler = GetHttpClientHandler())
@@ -136,7 +136,10 @@ namespace TfsMobile.Repositories.v1
                         "Basic",
                         Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Format("{0}:{1}", RequestTfsUser.Username, RequestTfsUser.Password)))
                         );
-                   
+
+                    client.DefaultRequestHeaders.Add("user-agent", "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; WOW64; Trident/6.0)");
+       
+
 
                     var mediaType = new MediaTypeHeaderValue("application/json");
                     var jsonSerializerSettings = new JsonSerializerSettings();
@@ -156,6 +159,7 @@ namespace TfsMobile.Repositories.v1
 
                     requestcontent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                     
+                    
                     //var result = await client.PostAsync(CreateTryLoginUri().ToString(), content).ContinueWith(tt =>
                     //{
                     //    if (tt.Result.StatusCode == HttpStatusCode.Accepted)
@@ -166,6 +170,7 @@ namespace TfsMobile.Repositories.v1
           
                     //});
                     var requestUri = CreateTryLoginUri().ToString();
+                   
                     var response =  client.PostAsync(requestUri, requestcontent).ContinueWith(tt =>
                     {
                         if (tt.Result.StatusCode == HttpStatusCode.OK)
@@ -201,7 +206,8 @@ namespace TfsMobile.Repositories.v1
         private Uri CreateTryLoginUri()
         {
             var sb = new StringBuilder();
-            sb.Append("http://192.168.1.24/TfsMobileServices/api/Login");
+            //sb.Append("http://mytfsmobile-api.azurewebsites.net/api/Login");
+            sb.Append("http://192.168.10.193/TfsMobileServices/api/Login");
             //var project = buildDetails.TfsProject.Replace(" ", "%20");
             //sb.Append(buildDetails.TfsProject);
             //sb.Append("&fromDays=");

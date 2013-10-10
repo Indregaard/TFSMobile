@@ -1,16 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO.IsolatedStorage;
-using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Navigation;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
-using Microsoft.Phone.Tasks;
 using TfsMobile.Contracts;
 using TfsMobile.Repositories.v1;
 
@@ -65,14 +59,28 @@ namespace MyTfsMobile.App.ViewModels
                 if (string.IsNullOrEmpty(TfsServerAdress)) return false;
 
 
-                var cConn = TryConnectToTfs();
-                return cConn.Result;
+                var cConn = checkTfsLogin().Wait(5000);
+                return cConn;
             }
         }
 
-        private async Task<bool> TryConnectToTfs()
+        private bool TryConnectToTfs()
         {
-            var df = new RequestTfsUserDto
+           
+
+            
+            //var canConnect = doHent(new RequestLoginContract { TfsUri = df.TfsUri.ToString() });
+            bool canConnect = false;
+            checkTfsLogin().ContinueWith(s => canConnect = s.Result,
+        TaskScheduler.FromCurrentSynchronizationContext());
+
+            return canConnect;
+        }
+
+        private async Task<bool> checkTfsLogin()
+        {
+
+             var df = new RequestTfsUserDto
             {
                 Username = TfsServerUsername,
                 Password = TfsServerPassword,
@@ -80,9 +88,65 @@ namespace MyTfsMobile.App.ViewModels
             };
 
             var rep = new LoginRepository(df, false);
-            var canConnect = rep.TryLogin();
-            return canConnect;
+            bool canConnect = false;
+
+            var test = rep.TryLoginAsync(new RequestLoginContract { TfsUri = df.TfsUri.ToString() }).ContinueWith(s => canConnect = s.Result,
+        TaskScheduler.FromCurrentSynchronizationContext());
+
+            await test;
+            return test.Result;
+
         }
+
+        //private async Task<bool> doHent(RequestLoginContract contract)
+        //{
+        //    //HttpClientHandler handler = new HttpClientHandler();
+        //    //HttpClient client = new HttpClient(handler);
+        //    //client.Timeout = TimeSpan.FromSeconds(5);
+        //    //client.BaseAddress = new Uri("http://192.168.10.193/TfsMobileServices/api");
+        //    //HttpResponseMessage response = await client.GetAsync("/Values");//<--Hangs
+        //    //var data = await response.Content.ReadAsStringAsync();
+
+        //    //var x = data;
+
+        //    //return true;
+
+        //    //using (var client = new HttpClient())
+        //    //{
+        //    //    client.DefaultRequestHeaders.Add("tfsuri", contract.TfsUri.ToString());
+
+
+        //    //    client.DefaultRequestHeaders.Authorization =
+        //    //    new AuthenticationHeaderValue(
+        //    //        "Basic",
+        //    //        Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Format("{0}:{1}", TfsServerUsername, TfsServerPassword)))
+        //    //        );
+
+        //    //    dynamic s = new ExpandoObject();
+        //    //    s.comeValue = 1;
+        //    //    var d = JsonConvert.SerializeObject(s);
+        //    //    var requestcontent = new StringContent(d, Encoding.UTF8, "application/json");
+
+        //    //    requestcontent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+        //    //    var requestUri = new Uri("http://192.168.10.193/TfsMobileServices/api/Login");
+
+        //    //    var response =  client.PostAsync(requestUri, requestcontent).ContinueWith(tt =>
+        //    //    {
+        //    //        if (tt.Result.StatusCode == HttpStatusCode.OK)
+        //    //        {
+        //    //            var foo = tt.Result.Content.ReadAsStringAsync();
+        //    //            return JsonConvert.DeserializeObject<bool>(foo.Result);
+        //    //        }
+        //    //        return false;
+        //    //    });
+        //    //    var resultat = await response;
+        //    //    return resultat;
+
+
+        //    //}
+
+        //}
 
 
         private static TfsSettings tfsSettings;

@@ -1,4 +1,9 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.IO;
+using System.Security;
+using System.Security.Permissions;
+using System.Web.Http;
+using Microsoft.Win32;
 using TfsMobile.Contracts;
 
 namespace TfsMobileServices.Controllers
@@ -14,6 +19,7 @@ namespace TfsMobileServices.Controllers
             var validated =handler.ValidateUser();
             return validated;
         }
-       
+
+        
     }
 }

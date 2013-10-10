@@ -47,7 +47,7 @@
             <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding TfsServerUsername, Mode=TwoWay}"></TextBox>
 
             <TextBlock Text="Password" VerticalAlignment="Center" Grid.Row="3" Grid.Column="0"></TextBlock>
-            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding TfsServerPassword, Mode=TwoWay}"></TextBox>
+            <PasswordBox  Grid.Row="3" Grid.Column="1" Password="{Binding TfsServerPassword, Mode=TwoWay}"></PasswordBox>
             
             <Button Grid.Row="4" Grid.Column="1" Content="Connect" Command="{Binding SaveCommand}"></Button>
         </Grid>
