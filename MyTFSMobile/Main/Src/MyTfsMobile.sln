@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.20623.1 VSUPREVIEW
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyTfsMobile.App", "MyTfsMobile.App\MyTfsMobile.App.csproj", "{2013034A-1001-42F8-9EA2-E88D5B331FC2}"
 EndProject
@@ -14,6 +14,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TfsMobile.TestClient", "TfsMobile.TestClient\TfsMobile.TestClient.csproj", "{74FDEF0B-F992-435F-8FDF-4ECB170AB487}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TfsMobile.Repositories.v1", "TfsMobile.Repositories.v1\TfsMobile.Repositories.v1.csproj", "{51C656D8-7516-42CB-87DF-F7A1B96C9295}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{DCA2771B-C140-40DA-9436-A3D667BAC1C0}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
