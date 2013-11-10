@@ -138,40 +138,19 @@ namespace TfsMobile.Repositories.v1
                         );
 
                     client.DefaultRequestHeaders.Add("user-agent", "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; WOW64; Trident/6.0)");
-       
 
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.MaxResponseContentBufferSize = 256000;
+                    client.Timeout = TimeSpan.FromSeconds(10);
 
-                    var mediaType = new MediaTypeHeaderValue("application/json");
-                    var jsonSerializerSettings = new JsonSerializerSettings();
-                    //var jsonFormatter = new JsonNetFormatter(jsonSerializerSettings);
-                    //var d = JsonConvert.SerializeObject(s);
-                    dynamic s = new ExpandoObject();
-                    s.comeValue = 1;
-                    var d = JsonConvert.SerializeObject(s);
-                    var requestcontent = new StringContent(d, Encoding.UTF8, "application/json");
-                    //var requestMessage = new HttpRequestMessage<T>(data, mediaType, new MediaTypeFormatter[] { jsonFormatter });
-
-
-                    //HttpContent requestcontent = new FormUrlEncodedContent(new[]
-                    //{
-                    //    new KeyValuePair<string, string>("login", requestMessage.),
-                    //});
-
-                    requestcontent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                    var requestContract = GetLoggedInContract();
+                    var jsonvalue = JsonConvert.SerializeObject(requestContract);
+                    var requestcontent = new StringContent(jsonvalue, Encoding.UTF8, "application/json");
                     
                     
-                    //var result = await client.PostAsync(CreateTryLoginUri().ToString(), content).ContinueWith(tt =>
-                    //{
-                    //    if (tt.Result.StatusCode == HttpStatusCode.Accepted)
-                    //    {
-                    //        return true;
-                    //    }
-                    //    return false;
-          
-                    //});
                     var requestUri = CreateTryLoginUri().ToString();
                    
-                    var response =  client.PostAsync(requestUri, requestcontent).ContinueWith(tt =>
+                    var resultat =  await client.PostAsync(requestUri, requestcontent).ContinueWith(tt =>
                     {
                         if (tt.Result.StatusCode == HttpStatusCode.OK)
                         {
@@ -180,21 +159,7 @@ namespace TfsMobile.Repositories.v1
                         }
                         return false;
                     });
-                    var resultat = await response;
                     return resultat;
-                    //string content = await response.Content.ReadAsStringAsync();
-                    //return content;
-                    //return Task.Run(() => content);
-                    ////return result.Content.ReadAsStringAsync().ToString();
-                    //using (var loginStream = result.Content.ReadAsStreamAsync().)
-                    //{
-
-                    //}
-                    //using (StreamReader responseReader = new StreamReader(result.Content))
-                    //{
-                    //    //String sLine = responseReader.ReadLine();
-                    //    String sResponse = responseReader.ReadToEnd();
-                    //}
 
 
                 }
@@ -206,8 +171,8 @@ namespace TfsMobile.Repositories.v1
         private Uri CreateTryLoginUri()
         {
             var sb = new StringBuilder();
-            //sb.Append("http://mytfsmobile-api.azurewebsites.net/api/Login");
-            sb.Append("http://192.168.10.193/TfsMobileServices/api/Login");
+            sb.Append("http://192.168.1.24/TfsMobileServices/api/Login");
+            //sb.Append("http://192.168.10.193/TfsMobileServices/api/Login");
             //var project = buildDetails.TfsProject.Replace(" ", "%20");
             //sb.Append(buildDetails.TfsProject);
             //sb.Append("&fromDays=");

@@ -89,7 +89,7 @@ namespace MyTfsMobile.App
 
         private void CheckTfsConnection()
         {
-            if (!viewModelLocator.Settings.IsTfsAuthenticated)
+            if (1==2)//(!viewModelLocator.Settings.IsTfsAuthenticated)
             {
                 RootFrame.Navigate(new Uri("/TfsSettings.xaml", UriKind.Relative));
 

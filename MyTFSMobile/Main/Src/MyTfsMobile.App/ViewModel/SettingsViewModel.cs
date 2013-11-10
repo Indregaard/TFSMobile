@@ -59,25 +59,12 @@ namespace MyTfsMobile.App.ViewModels
                 if (string.IsNullOrEmpty(TfsServerAdress)) return false;
 
 
-                var cConn = checkTfsLogin().Wait(5000);
-                return cConn;
+                var cConn = checkTfsLogin();
+                return false;
             }
         }
 
-        private bool TryConnectToTfs()
-        {
-           
-
-            
-            //var canConnect = doHent(new RequestLoginContract { TfsUri = df.TfsUri.ToString() });
-            bool canConnect = false;
-            checkTfsLogin().ContinueWith(s => canConnect = s.Result,
-        TaskScheduler.FromCurrentSynchronizationContext());
-
-            return canConnect;
-        }
-
-        private async Task<bool> checkTfsLogin()
+        public async Task<bool> checkTfsLogin()
         {
 
              var df = new RequestTfsUserDto
@@ -88,13 +75,10 @@ namespace MyTfsMobile.App.ViewModels
             };
 
             var rep = new LoginRepository(df, false);
-            bool canConnect = false;
 
-            var test = rep.TryLoginAsync(new RequestLoginContract { TfsUri = df.TfsUri.ToString() }).ContinueWith(s => canConnect = s.Result,
-        TaskScheduler.FromCurrentSynchronizationContext());
+            var test = await rep.TryLoginAsync(new RequestLoginContract { TfsUri = df.TfsUri.ToString() });
 
-            await test;
-            return test.Result;
+            return test;
 
         }
 
@@ -220,7 +204,7 @@ namespace MyTfsMobile.App.ViewModels
                     async (retval) =>
                           {
                               var saved = await SaveData(SaveCommandError);
-                              if(saved && IsTfsAuthenticated)
+                              if (saved && await checkTfsLogin())
                                   NavigateToBuilds();
                     }));
             }
