@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Navigation;
 using GalaSoft.MvvmLight.Messaging;
 using Microsoft.Phone.Controls;
-using Microsoft.Phone.Shell;
-using MyTfsMobile.App.ViewModels;
+using MyTfsMobile.App.ViewModel;
 
 namespace MyTfsMobile.App
 {
@@ -17,15 +11,22 @@ namespace MyTfsMobile.App
         public Settings()
         {
             InitializeComponent();
-            vm = new SettingsViewModel();
-
-            DataContext = vm;
-
-            Messenger.Default.Register<Uri>(this, "NavigationRequest", (uri) => App.RootFrame.Navigate(uri));
-            
+            SetDataContext();
+            RegisterNavigationRequest();
         }
 
-        private SettingsViewModel vm;
+        private void SetDataContext()
+        {
+            pageViewModel = new SettingsViewModel();
+            DataContext = pageViewModel; 
+        }
+
+        private void RegisterNavigationRequest()
+        {
+            Messenger.Default.Register<Uri>(this, "NavigationRequest", (uri) => App.RootFrame.Navigate(uri)); 
+        }
+
+        private SettingsViewModel pageViewModel;
       
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {

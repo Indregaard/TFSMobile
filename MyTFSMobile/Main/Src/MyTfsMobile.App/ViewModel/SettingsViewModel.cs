@@ -1,14 +1,14 @@
 ﻿using System;
 using System.IO.IsolatedStorage;
-using System.Net;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using TfsMobile.Contracts;
 using TfsMobile.Repositories.v1;
+using TfsMobile.Repositories.v1.Interfaces;
 
-namespace MyTfsMobile.App.ViewModels
+namespace MyTfsMobile.App.ViewModel
 {
 
     public class SettingsViewModel : ViewModelBase
@@ -16,6 +16,14 @@ namespace MyTfsMobile.App.ViewModels
 
         private const string SettingsFile = "myTfsMobileSettings.mtm";
         private static readonly IsolatedStorageSettings AppSettings = IsolatedStorageSettings.ApplicationSettings;
+        private ILoginRepository loginRepository;
+
+        public SettingsViewModel(){}
+
+        public SettingsViewModel(ILoginRepository loginRepo)
+        {
+            loginRepository = loginRepo;
+        }
 
         public string TfsServerAdress
         {
@@ -50,91 +58,35 @@ namespace MyTfsMobile.App.ViewModels
             }
         }
 
-        private NetworkCredential NetCredentials { get; set; }
-
-        public bool IsTfsAuthenticated
+        public async Task<bool> CheckTfsLogin()
         {
-            get
-            {
-                if (string.IsNullOrEmpty(TfsServerAdress)) return false;
-
-
-                var cConn = checkTfsLogin();
+            if (string.IsNullOrEmpty(TfsServerAdress) || string.IsNullOrEmpty(TfsServerUsername) ||
+                string.IsNullOrEmpty(TfsServerPassword))
                 return false;
-            }
+
+            var tfsUserDto = CreateTfsUserDto();
+            CreateLoginRepository(tfsUserDto);
+            var canAccessTfs = await loginRepository.TryLoginAsync(new RequestLoginContract { TfsUri = tfsUserDto.TfsUri.ToString() });
+
+            return canAccessTfs;
         }
 
-        public async Task<bool> checkTfsLogin()
+        private RequestTfsUserDto CreateTfsUserDto()
         {
-
-             var df = new RequestTfsUserDto
+            return new RequestTfsUserDto
             {
                 Username = TfsServerUsername,
                 Password = TfsServerPassword,
                 TfsUri = new Uri(TfsServerAdress)
             };
-
-            var rep = new LoginRepository(df, false);
-
-            var test = await rep.TryLoginAsync(new RequestLoginContract { TfsUri = df.TfsUri.ToString() });
-
-            return test;
-
         }
 
-        //private async Task<bool> doHent(RequestLoginContract contract)
-        //{
-        //    //HttpClientHandler handler = new HttpClientHandler();
-        //    //HttpClient client = new HttpClient(handler);
-        //    //client.Timeout = TimeSpan.FromSeconds(5);
-        //    //client.BaseAddress = new Uri("http://192.168.10.193/TfsMobileServices/api");
-        //    //HttpResponseMessage response = await client.GetAsync("/Values");//<--Hangs
-        //    //var data = await response.Content.ReadAsStringAsync();
-
-        //    //var x = data;
-
-        //    //return true;
-
-        //    //using (var client = new HttpClient())
-        //    //{
-        //    //    client.DefaultRequestHeaders.Add("tfsuri", contract.TfsUri.ToString());
-
-
-        //    //    client.DefaultRequestHeaders.Authorization =
-        //    //    new AuthenticationHeaderValue(
-        //    //        "Basic",
-        //    //        Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Format("{0}:{1}", TfsServerUsername, TfsServerPassword)))
-        //    //        );
-
-        //    //    dynamic s = new ExpandoObject();
-        //    //    s.comeValue = 1;
-        //    //    var d = JsonConvert.SerializeObject(s);
-        //    //    var requestcontent = new StringContent(d, Encoding.UTF8, "application/json");
-
-        //    //    requestcontent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-
-        //    //    var requestUri = new Uri("http://192.168.10.193/TfsMobileServices/api/Login");
-
-        //    //    var response =  client.PostAsync(requestUri, requestcontent).ContinueWith(tt =>
-        //    //    {
-        //    //        if (tt.Result.StatusCode == HttpStatusCode.OK)
-        //    //        {
-        //    //            var foo = tt.Result.Content.ReadAsStringAsync();
-        //    //            return JsonConvert.DeserializeObject<bool>(foo.Result);
-        //    //        }
-        //    //        return false;
-        //    //    });
-        //    //    var resultat = await response;
-        //    //    return resultat;
-
-
-        //    //}
-
-        //}
-
+        private void CreateLoginRepository(RequestTfsUserDto tfsUserDto)
+        {
+            loginRepository = new LoginRepository(tfsUserDto, false);
+        }
 
         private static TfsSettings tfsSettings;
-
         public static TfsSettings TfsSettings
         {
             get
@@ -163,7 +115,7 @@ namespace MyTfsMobile.App.ViewModels
             if (handler != null) handler(null, null);
         }
 
-        static async private Task<bool> SaveData(Action errorCallback)
+        private static async Task<bool> SaveData(Action errorCallback)
         {
             var settingsSaved = false;
             try
@@ -171,7 +123,7 @@ namespace MyTfsMobile.App.ViewModels
                 AppSettings[SettingsFile] = TfsSettings;
                 var saved = await SaveAppsettings();
                 if (saved){
-                    settingsSaved = true; ;
+                    settingsSaved = true;
                 }
             }
             catch (IsolatedStorageException)
@@ -190,7 +142,7 @@ namespace MyTfsMobile.App.ViewModels
 
         private static async Task<bool> SaveAppsettings()
         {
-            AppSettings.Save();
+            await TaskEx.Run(() => AppSettings.Save());
             return true;
         }
 
@@ -201,10 +153,11 @@ namespace MyTfsMobile.App.ViewModels
             get
             {
                 return saveCommand ?? (saveCommand = new RelayCommand<SettingsViewModel>(
-                    async (retval) =>
+                    async retval =>
                           {
                               var saved = await SaveData(SaveCommandError);
-                              if (saved && await checkTfsLogin())
+                              var canLogIn = await CheckTfsLogin();
+                              if (saved && canLogIn)
                                   NavigateToBuilds();
                     }));
             }
