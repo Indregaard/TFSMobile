@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Resources;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Markup;
 using System.Windows.Navigation;
@@ -9,7 +10,7 @@ using Microsoft.Phone.Shell;
 using Microsoft.Xna.Framework.Input.Touch;
 using MyTfsMobile.App.Resources;
 using MyTfsMobile.App.ViewModel;
-using MainViewModel = MyTfsMobile.App.ViewModels.MainViewModel;
+using MainViewModel = MyTfsMobile.App.ViewModel.MainViewModel;
 
 namespace MyTfsMobile.App
 {
@@ -87,12 +88,11 @@ namespace MyTfsMobile.App
             CheckTfsConnection();
         }
 
-        private void CheckTfsConnection()
+        private async void CheckTfsConnection()
         {
-            if (1==2)//(!viewModelLocator.Settings.IsTfsAuthenticated)
+            if (!await viewModelLocator.Settings.CheckTfsLogin())
             {
                 RootFrame.Navigate(new Uri("/TfsSettings.xaml", UriKind.Relative));
-
             }
         }
 

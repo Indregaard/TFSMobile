@@ -8,6 +8,10 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using MyTfsMobile.App.enums;
+using MyTfsMobile.App.ViewModel;
+using Newtonsoft.Json;
+using TfsMobile.Contracts;
+using TfsMobile.Repositories.v1;
 
 namespace MyTfsMobile.App.ViewModels
 {
@@ -36,33 +40,25 @@ namespace MyTfsMobile.App.ViewModels
         }
 
         public bool IsDataLoaded { get; private set; }
-
-        public void LoadData()
+        private static ViewModelLocator viewModelLocator = new ViewModelLocator();
+        public async void LoadData()
         {
-            BuildItems.Add(new BuildViewModel
-                           {
-                               BuildId = 1001,
-                               BuildName = "MyTfsMobile.ci",
-                               BuildDate = new DateTime(2013, 7, 5, 22, 22, 45),
-                               BuildStatus = BuildStatus.Failed,
-                               BuildMessages = @"No such folder c:\Nofolder"
-                           });
-            BuildItems.Add(new BuildViewModel
-                           {
-                               BuildId = 1002,
-                               BuildName = "Master.ci",
-                               BuildDate = new DateTime(2013, 7, 5, 22, 54, 12),
-                               BuildStatus = BuildStatus.Partial,
-                               BuildMessages = @"0/2 unit tests passed...blablabla"
-                           });
-            BuildItems.Add(new BuildViewModel
-                           {
-                               BuildId = 1003,
-                               BuildName = "TFS.ci",
-                               BuildDate = new DateTime(2013, 7, 5, 23, 02, 33),
-                               BuildStatus = BuildStatus.Ok,
-                               BuildMessages = @""
-                           });
+
+            var tfsUserDto = viewModelLocator.Settings.CreateTfsUserDto();
+            var buildsRepo = new BuildsRepository(tfsUserDto, false);
+            var buildsResult = await buildsRepo.GetBuildsAsync(BuildDetailsDto.Default());
+            var buildContracts = JsonConvert.DeserializeObject<List<BuildContract>>(buildsResult);
+            foreach (var build in buildContracts)
+            {
+                BuildItems.Add(new BuildViewModel
+                {
+                    BuildId = 1,
+                    BuildName = build.Name,
+                    BuildDate = build.FinishTime,
+                    BuildStatus = BuildStatusConverter.GetFromString(build.Status),
+                    BuildMessages = @""
+                });
+            }
             IsDataLoaded = true;
         }
 

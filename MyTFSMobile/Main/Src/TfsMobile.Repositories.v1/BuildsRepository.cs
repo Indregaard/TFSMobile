@@ -23,7 +23,7 @@ namespace TfsMobile.Repositories.v1
            
         }
 
-        private async Task<string> GetBuildsAsync(BuildDetailsDto buildDetails)
+        public async Task<string> GetBuildsAsync(BuildDetailsDto buildDetails)
         {
 
             using (var handler = GetHttpClientHandler())
@@ -35,14 +35,12 @@ namespace TfsMobile.Repositories.v1
                     {
                         client.DefaultRequestHeaders.Add("uselocaldefault", "true");
                     }
-                        //client.DefaultRequestHeaders.Authorization =
-                        //new AuthenticationHeaderValue(
-                        //    "Basic",
-                        //    Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Format("{0}:{1}", RequestTfsUser.Username, RequestTfsUser.Password)))
-                        //    );
-                   
 
-
+                    client.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue(
+                        "Basic",
+                        Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Format("{0}:{1}", RequestTfsUser.Username, RequestTfsUser.Password)))
+                        );
 
                     var targetUri = CreateBuildsUri(buildDetails);
 
@@ -65,12 +63,10 @@ namespace TfsMobile.Repositories.v1
 
         }
 
-        
-
         private Uri CreateBuildsUri(BuildDetailsDto buildDetails)
         {
             var sb = new StringBuilder();
-            sb.Append("http://192.168.10.193/TfsMobileServices/api/Builds?project=");
+            sb.Append("http://192.168.1.24/TfsMobileServices/api/Builds?project=");
             //var project = buildDetails.TfsProject.Replace(" ", "%20");
             sb.Append(buildDetails.TfsProject);
             sb.Append("&fromDays=");

@@ -3,6 +3,7 @@ using System.IO.IsolatedStorage;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Ioc;
 using GalaSoft.MvvmLight.Messaging;
 using TfsMobile.Contracts;
 using TfsMobile.Repositories.v1;
@@ -18,6 +19,7 @@ namespace MyTfsMobile.App.ViewModel
         private static readonly IsolatedStorageSettings AppSettings = IsolatedStorageSettings.ApplicationSettings;
         private ILoginRepository loginRepository;
 
+        [PreferredConstructor]
         public SettingsViewModel(){}
 
         public SettingsViewModel(ILoginRepository loginRepo)
@@ -71,7 +73,7 @@ namespace MyTfsMobile.App.ViewModel
             return canAccessTfs;
         }
 
-        private RequestTfsUserDto CreateTfsUserDto()
+        public RequestTfsUserDto CreateTfsUserDto()
         {
             return new RequestTfsUserDto
             {
