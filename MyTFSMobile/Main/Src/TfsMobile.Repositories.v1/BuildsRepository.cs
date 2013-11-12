@@ -63,10 +63,47 @@ namespace TfsMobile.Repositories.v1
 
         }
 
+        public async Task QueueBuild(QueueBuildDto buildDetails)
+        {
+            using (var handler = GetHttpClientHandler())
+            {
+                using (var client = new HttpClient(handler))
+                {
+                    client.DefaultRequestHeaders.Add("tfsuri", RequestTfsUser.TfsUri.ToString());
+                    if (UseLocalDefaultTfs)
+                    {
+                        client.DefaultRequestHeaders.Add("uselocaldefault", "true");
+                    }
+
+                    client.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue(
+                        "Basic",
+                        Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Format("{0}:{1}", RequestTfsUser.Username, RequestTfsUser.Password)))
+                        );
+
+
+                    var requestContract = new { project = buildDetails.TfsProject, buildName  = buildDetails.BuildName};
+                    var jsonvalue = JsonConvert.SerializeObject(requestContract);
+                    var requestcontent = new StringContent(jsonvalue, Encoding.UTF8, "application/json");
+                    var targetUri = CreateQueueBuildsUri();
+
+                    await client.PostAsync(targetUri, requestcontent);
+
+                }
+            }
+        }
+
+        private Uri CreateQueueBuildsUri()
+        {
+            var sb = new StringBuilder();
+            sb.Append("http://192.168.1.27/TfsMobileServices/api/QueueBuild");
+            return new Uri(sb.ToString());
+        }
+
         private Uri CreateBuildsUri(BuildDetailsDto buildDetails)
         {
             var sb = new StringBuilder();
-            sb.Append("http://192.168.1.24/TfsMobileServices/api/Builds?project=");
+            sb.Append("http://192.168.1.27/TfsMobileServices/api/Builds?project=");
             //var project = buildDetails.TfsProject.Replace(" ", "%20");
             sb.Append(buildDetails.TfsProject);
             sb.Append("&fromDays=");

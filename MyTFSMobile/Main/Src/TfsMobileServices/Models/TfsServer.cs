@@ -45,6 +45,7 @@ namespace TfsMobileServices.Models
                 buildSpec.MaxBuildsPerDefinition = 1; //get only one build per build definintion
                 buildSpec.QueryOrder = BuildQueryOrder.FinishTimeDescending; //get the latest build only
                 buildSpec.QueryOptions = QueryOptions.All;
+                
                 var ibuilds = buildServer.QueryBuilds(buildSpec);
                 var builds =
                     ibuilds.Builds.Select(
@@ -58,6 +59,17 @@ namespace TfsMobileServices.Models
                 
                 return builds;
             }
+        }
+
+        public void QueueBuild(TfsService2 tf, string teamProject, string buildName)
+        {
+            using (var tfsInstance = tf.Connect())
+            {
+                var buildServer = (IBuildServer)tfsInstance.GetService(typeof(IBuildServer));
+                var buildDef = buildServer.GetBuildDefinition(teamProject, buildName);
+                buildServer.QueueBuild(buildDef);
+            }
+            
         }
 
     }

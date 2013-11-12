@@ -19,8 +19,6 @@ namespace TfsMobileServices.Controllers
             return res;
         }
 
-        
-
         public IEnumerable<BuildContract> Get()
         {
             
@@ -35,20 +33,16 @@ namespace TfsMobileServices.Controllers
 
         }
 
-        //// POST api/values
-        //public void Post([FromBody]string value)
-        //{
-        //}
+        [HttpPost]
+        public void QueueBuild(string project, string buildName)
+        {
+            var headers = HeradersUtil.FixHeaders(Request.Headers);
+            var handler = new AuthenticationHandler(headers);
+            var tfs = TfsServiceFactory.Get(handler.TfsUri, handler.NetCredentials, handler.Credentials.UseLocalDefault);
 
-        //// PUT api/values/5
-        //public void Put(int id, [FromBody]string value)
-        //{
-        //}
-
-        //// DELETE api/values/5
-        //public void Delete(int id)
-        //{
-        //}
+            var rep = new TfsBuildsRepository();
+            rep.QueueBuild(tfs, project, buildName);
+        }
     }
 
     public class HeradersUtil

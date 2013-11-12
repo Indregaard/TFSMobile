@@ -71,7 +71,7 @@ namespace TfsMobile.Repositories.v1
         private Uri CreateTryLoginUri()
         {
             var sb = new StringBuilder();
-            sb.Append("http://192.168.1.24/TfsMobileServices/api/Login");
+            sb.Append("http://192.168.1.27/TfsMobileServices/api/Login");
             //sb.Append("http://192.168.10.193/TfsMobileServices/api/Login");
             //var project = buildDetails.TfsProject.Replace(" ", "%20");
             //sb.Append(buildDetails.TfsProject);
