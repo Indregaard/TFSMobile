@@ -26,40 +26,68 @@ namespace TfsMobileServices.Models
 
     public class TfsBuildsRepository
     {
-        public IEnumerable<BuildContract> GetBuilds(TfsService2 tf, string project, int fromDays)
+        public IEnumerable<BuildContract> GetMyBuilds(TfsService2 tf, string project, int fromDays)
         {
             using (var instance = tf.Connect())
             {
-                IBuildServer buildServer = (IBuildServer) instance.GetService(typeof (IBuildServer));
-                IBuildDetailSpec buildSpec;
-                buildSpec = buildServer.CreateBuildDetailSpec(project);
+                var buildServer = (IBuildServer) instance.GetService(typeof (IBuildServer));
+                var buildSpec = GetBuildDetailSpec(buildServer, project, fromDays);
+               
                 buildSpec.RequestedFor = (tf.UseLocalAccount)
                     ? instance.AuthorizedIdentity.DisplayName
                     : tf.NetCredentials.UserName;
+                
+                var ibuilds = buildServer.QueryBuilds(buildSpec);
+                return CreateBuildContractsFromBuildResults(ibuilds);
+            }
+        }
+
+        public IEnumerable<BuildContract> GetAllTeamBuilds(TfsService2 tf, string project, int fromDays)
+        {
+            using (var instance = tf.Connect())
+            {
+                var buildServer = (IBuildServer)instance.GetService(typeof(IBuildServer));
+                var buildSpec = GetBuildDetailSpec(buildServer, project, fromDays);
+                var ibuilds = buildServer.QueryBuilds(buildSpec);
+                return CreateBuildContractsFromBuildResults(ibuilds);
+            }
+        }
+
+        private IBuildDetailSpec GetBuildDetailSpec(IBuildServer buildServer, string project, int fromDays)
+        {
+            IBuildDetailSpec buildSpec;
+            buildSpec = buildServer.CreateBuildDetailSpec(project);
                 buildSpec.MinFinishTime = DateTime.Now.AddDays(-fromDays); //DateTime.Now.AddHours(-10);
                 buildSpec.InformationTypes = null; // for speed improvement
                 buildSpec.MaxBuildsPerDefinition = 1; //get only one build per build definintion
                 buildSpec.QueryOrder = BuildQueryOrder.FinishTimeDescending; //get the latest build only
                 buildSpec.QueryOptions = QueryOptions.All;
-                try
-                {
-                    var ibuilds = buildServer.QueryBuilds(buildSpec);
-                    var builds =
-                        ibuilds.Builds.Select(
-                            b =>
-                                new BuildContract
-                                {
-                                    FinishTime = b.FinishTime,
-                                    Name = b.BuildDefinition.Name,
-                                    Status = b.Status.ToString()
-                                }).ToList();
 
-                    return builds;
-                }
-                catch (Exception ex)
-                {
-                    return new List<BuildContract>();
-                }
+            return buildSpec;
+        }
+
+        private IEnumerable<BuildContract> CreateBuildContractsFromBuildResults(IBuildQueryResult builds)
+        {
+            return builds.Builds.Select(
+                        b =>
+                            new BuildContract
+                            {
+                                FinishTime = b.FinishTime,
+                                Name = b.BuildDefinition.Name,
+                                Status = b.Status.ToString(),
+                            }).ToList();
+        }
+                
+        public void QueueBuild(TfsService2 tf, string teamProject, string buildName)
+        {
+            using (var tfsInstance = tf.Connect())
+            {
+                var buildServer = (IBuildServer)tfsInstance.GetService(typeof(IBuildServer));
+                var buildDef = buildServer.GetBuildDefinition(teamProject, buildName);
+                buildServer.QueueBuild(buildDef);
+            }
+            
+        }
             }
         }
 
@@ -199,7 +227,7 @@ namespace TfsMobileServices.Models
                     Tp = new TfsTeamProjectCollection(TfsUri);
                     Tp.Credentials = NetCredentials;
                     Tp.EnsureAuthenticated();
-                }
+            }
                 catch (TeamFoundationServerUnauthorizedException)
                 {
                 }

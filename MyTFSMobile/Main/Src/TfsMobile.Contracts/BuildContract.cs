@@ -95,6 +95,12 @@ namespace TfsMobile.Contracts
         }
     }
 
+    public class QueueBuildDto
+    {
+        public string TfsProject { get; set; }
+        public string BuildName { get; set; }
+    }
+
     public class RequestHistoryDto
     {
         public string TfsProject { get; set; }

@@ -15,40 +15,38 @@ namespace TfsMobileServices.Controllers
             var tfs = TfsServiceFactory.Get(handler.TfsUri, handler.NetCredentials);
 
             var rep = new TfsBuildsRepository();
-            var res = rep.GetBuilds(tfs, project, fromDays);
+            var res = rep.GetMyBuilds(tfs, project, fromDays);
             return res;
         }
 
-        
-
-        public IEnumerable<BuildContract> Get()
+        [HttpGet]
+        public IEnumerable<BuildContract> GetAllTeamBuilds(string project, int fromDays)
         {
+            var headers = HeradersUtil.FixHeaders(Request.Headers);
+            var handler = new AuthenticationHandler(headers);
+            var tfs = TfsServiceFactory.Get(handler.TfsUri, handler.NetCredentials, handler.Credentials.UseLocalDefault);
             
-            Request.Headers.Add("uselocaldefault", "true");
-            Request.Headers.Add("tfsuri", "http://tfs.osiris.no:8080/tfs");
-            var handler = new AuthenticationHandler(Request.Headers);
-            var tfs = TfsServiceFactory.Get(handler.TfsUri, handler.NetCredentials);
+            var rep = new TfsBuildsRepository();
+            var res = rep.GetAllTeamBuilds(tfs, project, fromDays);
+            return res;
+        }
+
+        [HttpPost]
+        public void QueueBuild(QueueBuildDto queueBuildDto)
+        {
+            var headers = HeradersUtil.FixHeaders(Request.Headers);
+            var handler = new AuthenticationHandler(headers);
+            var tfs = TfsServiceFactory.Get(handler.TfsUri, handler.NetCredentials, handler.Credentials.UseLocalDefault);
 
             var rep = new TfsBuildsRepository();
-            var res = rep.GetBuilds(tfs, "Byggtjeneste - Projects", 7);
-            return res;
-
+            rep.QueueBuild(tfs, queueBuildDto.Project, queueBuildDto.BuildName);
         }
+    }
 
-        //// POST api/values
-        //public void Post([FromBody]string value)
-        //{
-        //}
-
-        //// PUT api/values/5
-        //public void Put(int id, [FromBody]string value)
-        //{
-        //}
-
-        //// DELETE api/values/5
-        //public void Delete(int id)
-        //{
-        //}
+    public class QueueBuildDto
+    {
+        public string Project { get; set; }
+        public string BuildName { get; set; }
     }
 
     public class HeradersUtil

@@ -8,6 +8,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:MyTfsMobile.App.Converters"
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+    xmlns:appBarUtils="clr-namespace:AppBarUtils;assembly=AppBarUtils"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
@@ -59,14 +61,20 @@
         </Grid>
 
     </Grid>
+    
     <phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar Mode="Default" Opacity="1.0" IsMenuEnabled="True" IsVisible="True">
 
-            <shell:ApplicationBarIconButton IsEnabled="False" IconUri="Images/AppBar/favs.png" Text="My"/>
+            <shell:ApplicationBarIconButton IconUri="Images/AppBar/like.png" Text="My" />
             <shell:ApplicationBarIconButton IconUri="Images/AppBar/Share.png" Text="Team"/>
-            <shell:ApplicationBarIconButton IconUri="Images/AppBar/like.png" Text="Favourite"/>
+            <!--<shell:ApplicationBarIconButton IconUri="Images/AppBar/favs.png" Text="Favourite"/>-->
             <shell:ApplicationBarIconButton IconUri="Images/AppBar/feature.settings.png" Text="Settings" Click="ApplicationBarIconButton_OnClick"/>
 
         </shell:ApplicationBar>
+        
     </phone:PhoneApplicationPage.ApplicationBar>
+    <i:Interaction.Behaviors>
+        <appBarUtils:AppBarItemCommand Id="My" Command="{Binding MyBuildsCommand}"/>
+        <appBarUtils:AppBarItemCommand Id="Team" Command="{Binding AllTeamBuildsCommand}"/>
+    </i:Interaction.Behaviors>
 </phone:PhoneApplicationPage>
