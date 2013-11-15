@@ -91,7 +91,7 @@ namespace TfsMobileServices.Models
             }
         }
 
-    }
+    
 
     public class TfsHistoryRepository
     {
@@ -249,4 +249,3 @@ namespace TfsMobileServices.Models
 
       
     }
-}

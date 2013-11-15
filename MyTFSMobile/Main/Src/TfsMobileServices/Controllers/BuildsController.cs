@@ -24,7 +24,7 @@ namespace TfsMobileServices.Controllers
         {
             var headers = HeradersUtil.FixHeaders(Request.Headers);
             var handler = new AuthenticationHandler(headers);
-            var tfs = TfsServiceFactory.Get(handler.TfsUri, handler.NetCredentials, handler.Credentials.UseLocalDefault);
+            var tfs = TfsServiceFactory.Get(handler.TfsUri, handler.NetCredentials);
             
             var rep = new TfsBuildsRepository();
             var res = rep.GetAllTeamBuilds(tfs, project, fromDays);
@@ -36,7 +36,7 @@ namespace TfsMobileServices.Controllers
         {
             var headers = HeradersUtil.FixHeaders(Request.Headers);
             var handler = new AuthenticationHandler(headers);
-            var tfs = TfsServiceFactory.Get(handler.TfsUri, handler.NetCredentials, handler.Credentials.UseLocalDefault);
+            var tfs = TfsServiceFactory.Get(handler.TfsUri, handler.NetCredentials);
 
             var rep = new TfsBuildsRepository();
             rep.QueueBuild(tfs, queueBuildDto.Project, queueBuildDto.BuildName);
