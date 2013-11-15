@@ -16,12 +16,8 @@ namespace TfsMobileServices.Models
     public class TfsServiceFactory
     {
 
-        public static TfsService2 Get(Uri tfsUri, NetworkCredential cred, bool uselocaldefault)
+        public static TfsService2 Get(Uri tfsUri, NetworkCredential cred)
         {
-            if (uselocaldefault)
-            {
-                return new TfsService2(tfsUri);
-            }
             return new TfsService2(tfsUri, cred);
         }
 
@@ -45,18 +41,25 @@ namespace TfsMobileServices.Models
                 buildSpec.MaxBuildsPerDefinition = 1; //get only one build per build definintion
                 buildSpec.QueryOrder = BuildQueryOrder.FinishTimeDescending; //get the latest build only
                 buildSpec.QueryOptions = QueryOptions.All;
-                var ibuilds = buildServer.QueryBuilds(buildSpec);
-                var builds =
-                    ibuilds.Builds.Select(
-                        b =>
-                            new BuildContract
-                            {
-                                FinishTime = b.FinishTime,
-                                Name = b.BuildDefinition.Name,
-                                Status = b.Status.ToString()
-                            }).ToList();
-                
-                return builds;
+                try
+                {
+                    var ibuilds = buildServer.QueryBuilds(buildSpec);
+                    var builds =
+                        ibuilds.Builds.Select(
+                            b =>
+                                new BuildContract
+                                {
+                                    FinishTime = b.FinishTime,
+                                    Name = b.BuildDefinition.Name,
+                                    Status = b.Status.ToString()
+                                }).ToList();
+
+                    return builds;
+                }
+                catch (Exception ex)
+                {
+                    return new List<BuildContract>();
+                }
             }
         }
 
@@ -106,8 +109,7 @@ namespace TfsMobileServices.Models
                 {
                     var historyItem = new HistoryItemContract()
                     {
-                        Description = item.Title,Id = item.Id,HistoryDate = GetHistoryDate(item.CreatedDate,item.ChangedDate),TfsItemUri = GetWorkItemTfsUri(item.Id,tfsBaseUri),HistoryItemType = "WI",WorkType = item.Type,State = item.State
-
+                        Description = item.Title,Id = item.Id,HistoryDate = GetHistoryDate(item.CreatedDate,item.ChangedDate),TfsItemUri = GetWorkItemTfsUri(item.Id,tfsBaseUri),HistoryItemType = "WI",WorkType = item.Type,State = item.State,AreaPath = item.AreaPath,IterationPath = item.IterationPath
                     };
                     historyItems.Add(historyItem);
        
@@ -177,11 +179,7 @@ namespace TfsMobileServices.Models
 
         public TfsService2(){}
        
-        public TfsService2(Uri tfsUri)
-        {
-            UseLocalAccount = true;
-            TfsUri = tfsUri;
-        }
+  
 
         public TfsService2(Uri tfsUri, NetworkCredential cred)
         {
@@ -198,9 +196,10 @@ namespace TfsMobileServices.Models
             {
                 try
                 {
-                Tp = !UseLocalAccount ? new TfsTeamProjectCollection(TfsUri, NetCredentials) : new TfsTeamProjectCollection(TfsUri);
-                Tp.Authenticate();
-            }
+                    Tp = new TfsTeamProjectCollection(TfsUri);
+                    Tp.Credentials = NetCredentials;
+                    Tp.EnsureAuthenticated();
+                }
                 catch (TeamFoundationServerUnauthorizedException)
                 {
                 }

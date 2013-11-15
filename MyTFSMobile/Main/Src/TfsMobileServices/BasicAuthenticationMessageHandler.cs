@@ -13,47 +13,47 @@ using TfsMobileServices.Models;
 
 namespace TfsMobileServices
 {
-    public class BasicAuthenticationMessageHandler : DelegatingHandler
-    {
-        private const string WwwAuthenticateHeader = "WWW-Authenticate";
-        private const string Basic = "Basic";
+    //public class BasicAuthenticationMessageHandler : DelegatingHandler
+    //{
+    //    private const string WwwAuthenticateHeader = "WWW-Authenticate";
+    //    private const string Basic = "Basic";
 
-        public BasicAuthenticationMessageHandler()
-        {
-            //_logger = logger;
-        }
+    //    public BasicAuthenticationMessageHandler()
+    //    {
+    //        //_logger = logger;
+    //    }
 
-        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
-        {
-            if (request.Headers.Authorization != null)
-            {
-                var authentication = new AuthenticationHandler(request.Headers);
+    //    protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+    //    {
+    //        if (request.Headers.Authorization != null)
+    //        {
+    //            var authentication = new AuthenticationHandler(request.Headers);
 
 
-                if (authentication.ValidateUser())
-                {
-                    IPrincipal principal = authentication.GetGenericPrincipal();
-                    Thread.CurrentPrincipal = principal;
-                    HttpContext.Current.User = principal;
-                }
-                //else
-                //{
-                //    return Task<HttpResponseMessage>.Factory.StartNew(CreateUnauthorizedResponse, cancellationToken);
-                //}
-            }
-            return base.SendAsync(request, cancellationToken);
-        }
+    //            if (authentication.ValidateUser())
+    //            {
+    //                IPrincipal principal = authentication.GetGenericPrincipal();
+    //                Thread.CurrentPrincipal = principal;
+    //                HttpContext.Current.User = principal;
+    //            }
+    //            //else
+    //            //{
+    //            //    return Task<HttpResponseMessage>.Factory.StartNew(CreateUnauthorizedResponse, cancellationToken);
+    //            //}
+    //        }
+    //        return base.SendAsync(request, cancellationToken);
+    //    }
 
-        private static HttpResponseMessage CreateUnauthorizedResponse()
-        {
-            var response = new HttpResponseMessage
-            {
-                StatusCode = HttpStatusCode.Unauthorized,
-                Content = new StringContent("Access Denied.")
-            };
-            response.Headers.WwwAuthenticate.Add(new AuthenticationHeaderValue("Basic"));
-            return response;
-        }
+    //    private static HttpResponseMessage CreateUnauthorizedResponse()
+    //    {
+    //        var response = new HttpResponseMessage
+    //        {
+    //            StatusCode = HttpStatusCode.Unauthorized,
+    //            Content = new StringContent("Access Denied.")
+    //        };
+    //        response.Headers.WwwAuthenticate.Add(new AuthenticationHeaderValue("Basic"));
+    //        return response;
+    //    }
 
         
 
@@ -61,7 +61,7 @@ namespace TfsMobileServices
 
 
        
-    }
+    //}
 
     public class AuthenticationHandler
     {
@@ -80,7 +80,7 @@ namespace TfsMobileServices
         public AuthenticationHandler(HttpRequestHeaders authHeader):this(authHeader.Authorization)
         {
             SetTfsUri(authHeader);
-            SetUseLocalAccount(authHeader);
+            //SetUseLocalAccount(authHeader);
             //Tfs = new TfsServiceHandler(Credentials, TfsUri);
         }
 
@@ -92,14 +92,14 @@ namespace TfsMobileServices
                 TfsUri = new Uri(tfsHeader.Value.First());
             }
         }
-        private void SetUseLocalAccount(HttpRequestHeaders authHeader)
-        {
-            var uselocaldefault = authHeader.FirstOrDefault(h => h.Key == "uselocaldefault");
-            if (uselocaldefault.Value != null)
-            {
-                Credentials.UseLocalDefault = true;
-            }
-        }
+        //private void SetUseLocalAccount(HttpRequestHeaders authHeader)
+        //{
+        //    var uselocaldefault = authHeader.FirstOrDefault(h => h.Key == "uselocaldefault");
+        //    if (uselocaldefault.Value != null)
+        //    {
+        //        Credentials.UseLocalDefault = true;
+        //    }
+        //}
 
         //public string ErrorMsg { get; private set; }
 
@@ -144,7 +144,7 @@ namespace TfsMobileServices
         public bool ValidateUser()
         {
 
-            using (var tfs = TfsServiceFactory.Get(TfsUri, NetCredentials, Credentials.UseLocalDefault).Connect())
+            using (var tfs = TfsServiceFactory.Get(TfsUri, NetCredentials).Connect())
             {
                 return tfs.HasAuthenticated;
             }

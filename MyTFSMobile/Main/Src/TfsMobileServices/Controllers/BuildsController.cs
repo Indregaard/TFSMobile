@@ -12,7 +12,7 @@ namespace TfsMobileServices.Controllers
         {
             var headers = HeradersUtil.FixHeaders(Request.Headers);
             var handler = new AuthenticationHandler(headers);
-            var tfs = TfsServiceFactory.Get(handler.TfsUri, handler.NetCredentials, handler.Credentials.UseLocalDefault);
+            var tfs = TfsServiceFactory.Get(handler.TfsUri, handler.NetCredentials);
 
             var rep = new TfsBuildsRepository();
             var res = rep.GetBuilds(tfs, project, fromDays);
@@ -27,7 +27,7 @@ namespace TfsMobileServices.Controllers
             Request.Headers.Add("uselocaldefault", "true");
             Request.Headers.Add("tfsuri", "http://tfs.osiris.no:8080/tfs");
             var handler = new AuthenticationHandler(Request.Headers);
-            var tfs = TfsServiceFactory.Get(handler.TfsUri, handler.NetCredentials,handler.Credentials.UseLocalDefault);
+            var tfs = TfsServiceFactory.Get(handler.TfsUri, handler.NetCredentials);
 
             var rep = new TfsBuildsRepository();
             var res = rep.GetBuilds(tfs, "Byggtjeneste - Projects", 7);
@@ -59,10 +59,10 @@ namespace TfsMobileServices.Controllers
             {
                 headers.Add("tfsuri", "http://tfs.osiris.no:8080/tfs");
             }
-            if (headers.Authorization == null)
-            {
-                headers.Add("uselocaldefault", "true");
-            }
+            //if (headers.Authorization == null)
+            //{
+            //    headers.Add("uselocaldefault", "true");
+            //}
             return headers;
         }
     }

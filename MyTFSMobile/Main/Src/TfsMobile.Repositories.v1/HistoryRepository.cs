@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -29,10 +30,11 @@ namespace TfsMobile.Repositories.v1
                 using (var client = new HttpClient(handler))
                 {
                     client.DefaultRequestHeaders.Add("tfsuri", RequestTfsUser.TfsUri.ToString());
-                    if (UseLocalDefaultTfs)
-                    {
-                        client.DefaultRequestHeaders.Add("uselocaldefault", "true");
-                    }
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
+                       "Basic",
+                       Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Format("{0}:{1}", RequestTfsUser.Username, RequestTfsUser.Password)))
+                       );
+
                     var targetUri = CreateHistoryUri(buildDetails);
                     return await client.GetStringAsync(targetUri);
                 }
@@ -44,7 +46,7 @@ namespace TfsMobile.Repositories.v1
         private Uri CreateHistoryUri(RequestHistoryDto buildDetails)
         {
             var sb = new StringBuilder();
-            sb.Append("http://localhost:3295/api/History?project=");
+            sb.Append("http://localhost:3389/api/History?project=");
             //var project = buildDetails.TfsProject.Replace(" ", "%20");
             sb.Append(buildDetails.TfsProject);
             sb.Append("&fromDays=");
