@@ -67,7 +67,7 @@
 
             <shell:ApplicationBarIconButton IconUri="Images/AppBar/like.png" Text="My" />
             <shell:ApplicationBarIconButton IconUri="Images/AppBar/Share.png" Text="Team"/>
-            <!--<shell:ApplicationBarIconButton IconUri="Images/AppBar/favs.png" Text="Favourite"/>-->
+            <shell:ApplicationBarIconButton IconUri="Images/AppBar/favs.png" Text="Favourite"/>
             <shell:ApplicationBarIconButton IconUri="Images/AppBar/feature.settings.png" Text="Settings" Click="ApplicationBarIconButton_OnClick"/>
 
         </shell:ApplicationBar>
@@ -75,6 +75,8 @@
     </phone:PhoneApplicationPage.ApplicationBar>
     <i:Interaction.Behaviors>
         <appBarUtils:AppBarItemCommand Id="My" Command="{Binding MyBuildsCommand}"/>
-        <appBarUtils:AppBarItemCommand Id="Team" Command="{Binding AllTeamBuildsCommand}"/>
+        <appBarUtils:AppBarItemCommand Id="Team" Command="{Binding TeamBuildsCommand}"/>
+        <appBarUtils:AppBarItemCommand Id="Favourite" Command="{Binding BuildDefintionsCommand}"/>
+        
     </i:Interaction.Behaviors>
 </phone:PhoneApplicationPage>

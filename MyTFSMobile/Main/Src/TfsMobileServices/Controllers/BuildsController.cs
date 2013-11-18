@@ -8,26 +8,25 @@ namespace TfsMobileServices.Controllers
 {
     public class BuildsController : ApiController
     {
-        public IEnumerable<BuildContract> Get(string project, int fromDays)
+        public IEnumerable<BuildContract> Get(string project, int fromDays, bool myBuilds)
         {
             var headers = HeradersUtil.FixHeaders(Request.Headers);
             var handler = new AuthenticationHandler(headers);
             var tfs = TfsServiceFactory.Get(handler.TfsUri, handler.NetCredentials);
 
             var rep = new TfsBuildsRepository();
-            var res = rep.GetMyBuilds(tfs, project, fromDays);
+            var res = myBuilds ? rep.GetMyBuilds(tfs, project, fromDays) : rep.GetTeamBuilds(tfs, project, fromDays);
             return res;
         }
 
-        [HttpGet]
-        public IEnumerable<BuildContract> GetAllTeamBuilds(string project, int fromDays)
+        public IEnumerable<BuildContract> Get(string project)
         {
             var headers = HeradersUtil.FixHeaders(Request.Headers);
             var handler = new AuthenticationHandler(headers);
             var tfs = TfsServiceFactory.Get(handler.TfsUri, handler.NetCredentials);
             
             var rep = new TfsBuildsRepository();
-            var res = rep.GetAllTeamBuilds(tfs, project, fromDays);
+            var res = rep.GetBuildDefinitions(tfs, project);
             return res;
         }
 

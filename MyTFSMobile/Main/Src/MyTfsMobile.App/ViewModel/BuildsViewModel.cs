@@ -69,14 +69,38 @@ namespace MyTfsMobile.App.ViewModels
             IsDataLoaded = true;
         }
 
-        private async Task GetAllTeamBuilds()
+        private async Task GetTeamBuilds()
         {
 
             BuildSection = "Team Builds";
             BuildItems.Clear();
             var tfsUserDto = viewModelLocator.Settings.CreateTfsUserDto();
             var buildsRepo = new BuildsRepository(tfsUserDto, false);
-            var buildsResult = await buildsRepo.GetAllTeamBuildsAsync(BuildDetailsDto.Default());
+            var buildsResult = await buildsRepo.GetTeamBuildsAsync(BuildDetailsDto.Default());
+            var buildContracts = JsonConvert.DeserializeObject<List<BuildContract>>(buildsResult);
+            foreach (var build in buildContracts)
+            {
+                BuildItems.Add(new BuildViewModel
+                {
+                    BuildId = 1,
+                    BuildName = build.Name,
+                    BuildDate = build.FinishTime,
+                    BuildStatus = BuildStatusConverter.GetFromString(build.Status),
+                    BuildMessages = @""
+                });
+            }
+            IsDataLoaded = true;
+        }
+
+
+        private async Task GetBuildDefinitions()
+        {
+
+            BuildSection = "Build definitions";
+            BuildItems.Clear();
+            var tfsUserDto = viewModelLocator.Settings.CreateTfsUserDto();
+            var buildsRepo = new BuildsRepository(tfsUserDto, false);
+            var buildsResult = await buildsRepo.GetBuildDefinitionsAsync(BuildDetailsDto.Default());
             var buildContracts = JsonConvert.DeserializeObject<List<BuildContract>>(buildsResult);
             foreach (var build in buildContracts)
             {
@@ -118,15 +142,28 @@ namespace MyTfsMobile.App.ViewModels
             }
         }
 
-        private RelayCommand<BuildViewModel> allTeamBuildsCommand;
-        public RelayCommand<BuildViewModel> AllTeamBuildsCommand
+        private RelayCommand<BuildViewModel> teamBuildsCommand;
+        public RelayCommand<BuildViewModel> TeamBuildsCommand
         {
             get
             {
-                return allTeamBuildsCommand ?? (allTeamBuildsCommand = new RelayCommand<BuildViewModel>(
+                return teamBuildsCommand ?? (teamBuildsCommand = new RelayCommand<BuildViewModel>(
                    async (build) =>
                    {
-                       await GetAllTeamBuilds();
+                       await GetTeamBuilds();
+                   }));
+            }
+        }
+
+        private RelayCommand<BuildViewModel> buildDefintionsCommand;
+        public RelayCommand<BuildViewModel> BuildDefintionsCommand
+        {
+            get
+            {
+                return buildDefintionsCommand ?? (buildDefintionsCommand = new RelayCommand<BuildViewModel>(
+                   async (build) =>
+                   {
+                       await GetBuildDefinitions();
                    }));
             }
         }

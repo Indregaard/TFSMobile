@@ -42,7 +42,17 @@ namespace TfsMobileServices.Models
             }
         }
 
-        public IEnumerable<BuildContract> GetAllTeamBuilds(TfsService2 tf, string project, int fromDays)
+        public IEnumerable<BuildContract> GetBuildDefinitions(TfsService2 tf, string project)
+        {
+            using (var instance = tf.Connect())
+            {
+                var buildServer = (IBuildServer)instance.GetService(typeof(IBuildServer));
+                var ibuilds = buildServer.QueryBuildDefinitions(project);
+                return CreateBuildContractsFromBuildResults(ibuilds);
+            }
+        }
+
+        public IEnumerable<BuildContract> GetTeamBuilds(TfsService2 tf, string project, int fromDays)
         {
             using (var instance = tf.Connect())
             {
@@ -66,7 +76,7 @@ namespace TfsMobileServices.Models
             return buildSpec;
         }
 
-        private IEnumerable<BuildContract> CreateBuildContractsFromBuildResults(IBuildQueryResult builds)
+        private static IEnumerable<BuildContract> CreateBuildContractsFromBuildResults(IBuildQueryResult builds)
         {
             return builds.Builds.Select(
                         b =>
@@ -75,6 +85,18 @@ namespace TfsMobileServices.Models
                                 FinishTime = b.FinishTime,
                                 Name = b.BuildDefinition.Name,
                                 Status = b.Status.ToString(),
+                            }).ToList();
+        }
+
+        private static IEnumerable<BuildContract> CreateBuildContractsFromBuildResults(IEnumerable<IBuildDefinition> builds)
+        {
+            return builds.OrderBy(c=>c.Name).Select(
+                        b =>
+                            new BuildContract
+                            {
+                                FinishTime = b.DateCreated,
+                                Name = b.Name,
+                                Status = "BuildDefinition",
                             }).ToList();
         }
                 

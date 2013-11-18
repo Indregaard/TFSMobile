@@ -31,10 +31,6 @@ namespace TfsMobile.Repositories.v1
                 using (var client = new HttpClient(handler))
                 {
                     client.DefaultRequestHeaders.Add("tfsuri", RequestTfsUser.TfsUri.ToString());
-                    //if (UseLocalDefaultTfs)
-                    //{
-                    //    client.DefaultRequestHeaders.Add("uselocaldefault", "true");
-                    //}
 
                     client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue(
@@ -61,7 +57,7 @@ namespace TfsMobile.Repositories.v1
             }
         }
 
-        public async Task<string> GetAllTeamBuildsAsync(BuildDetailsDto buildDetails)
+        public async Task<string> GetTeamBuildsAsync(BuildDetailsDto buildDetails)
         {
 
             using (var handler = GetHttpClientHandler())
@@ -69,10 +65,6 @@ namespace TfsMobile.Repositories.v1
                 using (var client = new HttpClient(handler))
                 {
                     client.DefaultRequestHeaders.Add("tfsuri", RequestTfsUser.TfsUri.ToString());
-                    if (UseLocalDefaultTfs)
-                    {
-                        client.DefaultRequestHeaders.Add("uselocaldefault", "true");
-                    }
 
                     client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue(
@@ -81,6 +73,40 @@ namespace TfsMobile.Repositories.v1
                         );
 
                     var targetUri = CreateBuildsUriForAllTeamBuilds(buildDetails);
+
+                    var taskRes = client.GetAsync(targetUri).ContinueWith(tt =>
+                    {
+                        if (tt.Result.StatusCode == HttpStatusCode.Unauthorized)
+                        {
+                            return null;
+                        }
+                        tt.Result.EnsureSuccessStatusCode();
+                        return tt.Result;
+                    });
+
+                    var buildRes = await taskRes;
+                    return buildRes != null ? buildRes.Content.ReadAsStringAsync().Result : null;
+
+                }
+            }
+        }
+
+        public async Task<string> GetBuildDefinitionsAsync(BuildDetailsDto buildDetails)
+        {
+
+            using (var handler = GetHttpClientHandler())
+            {
+                using (var client = new HttpClient(handler))
+                {
+                    client.DefaultRequestHeaders.Add("tfsuri", RequestTfsUser.TfsUri.ToString());
+
+                    client.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue(
+                        "Basic",
+                        Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Format("{0}:{1}", RequestTfsUser.Username, RequestTfsUser.Password)))
+                        );
+
+                    var targetUri = CreateBuildsDefinitionUri(buildDetails);
 
                     var taskRes = client.GetAsync(targetUri).ContinueWith(tt =>
                     {
@@ -132,29 +158,37 @@ namespace TfsMobile.Repositories.v1
         private static Uri CreateQueueBuildsUri()
         {
             var sb = new StringBuilder();
-            sb.Append("http://192.168.1.27/TfsMobileServices/api/Builds/QueueBuild");
+            sb.Append("http://192.168.1.23/TfsMobileServices/api/Builds/QueueBuild");
             return new Uri(sb.ToString());
         }
 
         private static Uri CreateBuildsUri(BuildDetailsDto buildDetails)
         {
             var sb = new StringBuilder();
-            sb.Append("http://192.168.1.27/TfsMobileServices/api/Builds/GetMyBuilds?project=");
-            //var project = buildDetails.TfsProject.Replace(" ", "%20");
+            sb.Append("http://192.168.1.23/TfsMobileServices/api/Builds?project=");
             sb.Append(buildDetails.TfsProject);
             sb.Append("&fromDays=");
             sb.Append(buildDetails.FromDays);
+            sb.Append("&myBuilds=true");
             return new Uri(sb.ToString());
         }
 
         private static Uri CreateBuildsUriForAllTeamBuilds(BuildDetailsDto buildDetails)
         {
             var sb = new StringBuilder();
-            sb.Append("http://localhost:3389/api/Builds?project=");
-            //var project = buildDetails.TfsProject.Replace(" ", "%20");
+            sb.Append("http://192.168.1.23/TfsMobileServices/api/Builds?project=");
             sb.Append(buildDetails.TfsProject);
             sb.Append("&fromDays=");
             sb.Append(buildDetails.FromDays);
+            sb.Append("&myBuilds=false");
+            return new Uri(sb.ToString());
+        }
+
+        private static Uri CreateBuildsDefinitionUri(BuildDetailsDto buildDetails)
+        {
+            var sb = new StringBuilder();
+            sb.Append("http://192.168.1.23/TfsMobileServices/api/Builds?project=");
+            sb.Append(buildDetails.TfsProject);
             return new Uri(sb.ToString());
         }
 
