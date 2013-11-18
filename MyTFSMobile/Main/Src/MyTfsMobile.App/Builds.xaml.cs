@@ -117,12 +117,12 @@ namespace MyTfsMobile.App
 
         private void LoadNextPage()
         {
-            NavigationService.Navigate(new Uri("/MainPage.xaml", UriKind.Relative));
+            NavigationService.Navigate(new Uri("/History.xaml", UriKind.Relative));
         }
 
         private void LoadPreviousPage()
         {
-            NavigationService.Navigate(new Uri("/MainPage.xaml", UriKind.Relative));
+            NavigationService.Navigate(new Uri("/History.xaml", UriKind.Relative));
         }
 
         private void ApplicationBarIconButton_OnClick(object sender, EventArgs e)

@@ -99,6 +99,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="History.xaml.cs">
+      <DependentUpon>History.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Builds.xaml.cs">
       <DependentUpon>Builds.xaml</DependentUpon>
     </Compile>
@@ -120,8 +123,8 @@
     <Compile Include="TfsSettings.xaml.cs">
       <DependentUpon>TfsSettings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModel\ActivitiesViewModel.cs" />
-    <Compile Include="ViewModel\ActivitiyViewModel.cs" />
+    <Compile Include="ViewModel\HistoryViewModel.cs" />
+    <Compile Include="ViewModel\HistoryItemViewModel.cs" />
     <Compile Include="ViewModel\BuildsViewModel.cs" />
     <Compile Include="ViewModel\BuildViewModel.cs" />
     <Compile Include="ViewModel\SettingsViewModel.cs" />
@@ -134,6 +137,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
+    <Page Include="History.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Builds.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

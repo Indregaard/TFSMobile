@@ -15,14 +15,14 @@ namespace TfsMobile.Repositories.v1
         {
         }
 
-        public IEnumerable<HistoryItemContract> GetHistory(RequestHistoryDto historyRequest)
+        public async Task<IEnumerable<HistoryItemContract>> GetHistoryAsync(RequestHistoryDto historyRequest)
         {
-            var historyResult = GetHistoryAsync(historyRequest).Result;
+            var historyResult = await GetHistory(historyRequest);
             var historyContracts = JsonConvert.DeserializeObject<List<HistoryItemContract>>(historyResult);
             return historyContracts;
         }
 
-        private async Task<string> GetHistoryAsync(RequestHistoryDto buildDetails)
+        private async Task<string> GetHistory(RequestHistoryDto buildDetails)
         {
 
             using (var handler = GetHttpClientHandler())
@@ -46,7 +46,7 @@ namespace TfsMobile.Repositories.v1
         private Uri CreateHistoryUri(RequestHistoryDto buildDetails)
         {
             var sb = new StringBuilder();
-            sb.Append("http://localhost:3389/api/History?project=");
+            sb.Append("http://192.168.1.23/TfsMobileServices/api/History?project=");
             //var project = buildDetails.TfsProject.Replace(" ", "%20");
             sb.Append(buildDetails.TfsProject);
             sb.Append("&fromDays=");
