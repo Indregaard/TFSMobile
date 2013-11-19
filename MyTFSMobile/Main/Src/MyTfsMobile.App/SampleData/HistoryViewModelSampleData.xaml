@@ -1,0 +1,13 @@
+﻿<vm:HistoryViewModel
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="clr-namespace:MyTfsMobile.App.ViewModel">
+
+    <vm:HistoryViewModel.HistoryItems>
+        <vm:HistoryItemViewModel HistoryId="1" Description="History Item 1" TfsItemUri="Http://www.inmeta.no" HistoryDate="2013/07/05 22:26"/>
+        <vm:HistoryItemViewModel HistoryId="1" Description="History Item 2" TfsItemUri="Http://www.inmeta.no" HistoryDate="2013/07/06 22:27"/>
+        <vm:HistoryItemViewModel HistoryId="1" Description="History Item 3" TfsItemUri="Http://www.inmeta.no" HistoryDate="2013/07/07 22:28"/>
+        <vm:HistoryItemViewModel HistoryId="1" Description="History Item 4" TfsItemUri="Http://www.inmeta.no" HistoryDate="2013/07/08 22:29"/>
+    </vm:HistoryViewModel.HistoryItems>
+
+</vm:HistoryViewModel>

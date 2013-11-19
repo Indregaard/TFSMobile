@@ -31,7 +31,7 @@ namespace MyTfsMobile.App
         }
      
 
-        private void Builds_OnManipulationCompleted(object sender, ManipulationCompletedEventArgs e)
+        private void History_OnManipulationCompleted(object sender, ManipulationCompletedEventArgs e)
         {
             while (TouchPanel.IsGestureAvailable)
             {
