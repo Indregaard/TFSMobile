@@ -8,7 +8,8 @@ namespace MyTfsMobile.App.enums
         Partial,
         Running,
         Ok,
-        Cancelled
+        Cancelled,
+        BuildDefinition
     }
 
     public static class BuildStatusConverter
@@ -25,6 +26,8 @@ namespace MyTfsMobile.App.enums
                     return BuildStatus.Failed;
                 case "running":
                     return BuildStatus.Running;
+                case "builddefinition":
+                    return BuildStatus.BuildDefinition;
                 default:
                     return BuildStatus.Cancelled;
             }

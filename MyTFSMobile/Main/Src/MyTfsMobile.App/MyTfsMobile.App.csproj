@@ -197,6 +197,7 @@
     <Content Include="Images\AppBar\feature.settings.png" />
     <Content Include="Images\AppBar\like.png" />
     <Content Include="Images\AppBar\share.png" />
+    <Content Include="Images\build_def.png" />
     <Content Include="Images\cancel.png" />
     <Content Include="Images\failed.png" />
     <Content Include="Images\ok.png" />

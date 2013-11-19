@@ -41,12 +41,23 @@ namespace MyTfsMobile.App.ViewModel
 
         private async Task GetMyBuilds()
         {
-            BuildSection = "My Builds";
-            BuildItems.Clear();
+            PrepareBuildSection("My Builds");
+            
             var tfsUserDto = viewModelLocator.Settings.CreateTfsUserDto();
             var buildsRepo = new BuildsRepository(tfsUserDto, false);
             var buildsResult = await buildsRepo.GetBuildsAsync(BuildDetailsDto.Default());
             var buildContracts = JsonConvert.DeserializeObject<List<BuildContract>>(buildsResult);
+            FillBuildSection(buildContracts);
+        }
+
+        private void PrepareBuildSection(string section)
+        {
+            BuildSection = section;
+            BuildItems.Clear();
+        }
+
+        private void FillBuildSection(IEnumerable<BuildContract> buildContracts)
+        {
             foreach (var build in buildContracts)
             {
                 BuildItems.Add(new BuildViewModel
@@ -63,49 +74,24 @@ namespace MyTfsMobile.App.ViewModel
 
         private async Task GetTeamBuilds()
         {
-
-            BuildSection = "Team Builds";
-            BuildItems.Clear();
+            PrepareBuildSection("Team Builds");
             var tfsUserDto = viewModelLocator.Settings.CreateTfsUserDto();
             var buildsRepo = new BuildsRepository(tfsUserDto, false);
             var buildsResult = await buildsRepo.GetTeamBuildsAsync(BuildDetailsDto.Default());
             var buildContracts = JsonConvert.DeserializeObject<List<BuildContract>>(buildsResult);
-            foreach (var build in buildContracts)
-            {
-                BuildItems.Add(new BuildViewModel
-                {
-                    BuildId = 1,
-                    BuildName = build.Name,
-                    BuildDate = build.FinishTime,
-                    BuildStatus = BuildStatusConverter.GetFromString(build.Status),
-                    BuildMessages = @""
-                });
-            }
-            IsDataLoaded = true;
+            FillBuildSection(buildContracts);
         }
 
 
         private async Task GetBuildDefinitions()
         {
 
-            BuildSection = "Build definitions";
-            BuildItems.Clear();
+            PrepareBuildSection("Build definitions");
             var tfsUserDto = viewModelLocator.Settings.CreateTfsUserDto();
             var buildsRepo = new BuildsRepository(tfsUserDto, false);
             var buildsResult = await buildsRepo.GetBuildDefinitionsAsync(BuildDetailsDto.Default());
             var buildContracts = JsonConvert.DeserializeObject<List<BuildContract>>(buildsResult);
-            foreach (var build in buildContracts)
-            {
-                BuildItems.Add(new BuildViewModel
-                {
-                    BuildId = 1,
-                    BuildName = build.Name,
-                    BuildDate = build.FinishTime,
-                    BuildStatus = BuildStatusConverter.GetFromString(build.Status),
-                    BuildMessages = @""
-                });
-            }
-            IsDataLoaded = true;
+            FillBuildSection(buildContracts);
         }
 
         private RelayCommand<BuildViewModel> queueBuildCommand;

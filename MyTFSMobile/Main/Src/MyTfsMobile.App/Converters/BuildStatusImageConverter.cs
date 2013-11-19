@@ -26,6 +26,8 @@ namespace MyTfsMobile.App.Converters
                     return "../Images/running.png";
                 if (convertFrom == BuildStatus.Cancelled)
                     return "../Images/cancel.png";
+                if (convertFrom == BuildStatus.BuildDefinition)
+                    return "../Images/build_def.png";
             }
 
             return null;
