@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using MyTfsMobile.App.enums;
-using MyTfsMobile.App.ViewModel;
 using Newtonsoft.Json;
 using TfsMobile.Contracts;
 using TfsMobile.Repositories.v1;
 
-namespace MyTfsMobile.App.ViewModels
+namespace MyTfsMobile.App.ViewModel
 {
     internal class BuildsViewModel : ViewModelBase
     {
@@ -24,10 +19,7 @@ namespace MyTfsMobile.App.ViewModels
 
         public ObservableCollection<BuildViewModel> BuildItems { get; private set; }
 
-
-        // my/favourite/all team buils
         private string buildSection = "Builds";
-
         public string BuildSection
         {
             get { return buildSection; }

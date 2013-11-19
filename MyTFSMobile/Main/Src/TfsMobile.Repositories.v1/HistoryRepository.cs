@@ -46,8 +46,8 @@ namespace TfsMobile.Repositories.v1
         private Uri CreateHistoryUri(RequestHistoryDto buildDetails)
         {
             var sb = new StringBuilder();
-            sb.Append("http://192.168.1.23/TfsMobileServices/api/History?project=");
-            //var project = buildDetails.TfsProject.Replace(" ", "%20");
+            sb.Append(RequestTfsUser.TfsMobileApiUri);
+            sb.Append("/History?project=");
             sb.Append(buildDetails.TfsProject);
             sb.Append("&fromDays=");
             sb.Append(buildDetails.FromDays);

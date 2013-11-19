@@ -2,7 +2,7 @@
 using GalaSoft.MvvmLight;
 using MyTfsMobile.App.enums;
 
-namespace MyTfsMobile.App.ViewModels
+namespace MyTfsMobile.App.ViewModel
 {
     internal class BuildViewModel : ViewModelBase
     {

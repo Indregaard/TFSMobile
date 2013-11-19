@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
-using MyTfsMobile.App.ViewModels;
-using Newtonsoft.Json;
 using TfsMobile.Contracts;
 using TfsMobile.Repositories.v1;
 
@@ -36,7 +30,7 @@ namespace MyTfsMobile.App.ViewModel
 
             var tfsUserDto = viewModelLocator.Settings.CreateTfsUserDto();
             var buildsRepo = new HistoryRepository(tfsUserDto, false);
-            var buildsResult = await buildsRepo.GetHistoryAsync(new RequestHistoryDto() { FromDays = "7", TfsProject = "Byggtjeneste - Projects" });
+            var buildsResult = await buildsRepo.GetHistoryAsync(new RequestHistoryDto() { FromDays = "20", TfsProject = "Byggtjeneste - Projects" });
 
             foreach (var historyItem in buildsResult)
             {

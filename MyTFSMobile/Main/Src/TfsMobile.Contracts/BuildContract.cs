@@ -77,10 +77,11 @@ namespace TfsMobile.Contracts
         public string Password { get; set; }
 
         public Uri TfsUri { get; set; }
+        public Uri TfsMobileApiUri { get; set; }
 
         public static RequestTfsUserDto Default()
         {
-            return new RequestTfsUserDto() { Username = "username", Password = "password", TfsUri = new Uri("http://tfs.osiris.no:8080/tfs") };
+            return new RequestTfsUserDto() { Username = "username", Password = "password", TfsUri = new Uri("http://tfs.osiris.no:8080/tfs"), TfsMobileApiUri = new Uri("http://localhost/TfsMobileServices/api/") };
         }
     }
 

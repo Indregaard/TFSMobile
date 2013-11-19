@@ -162,10 +162,11 @@ namespace TfsMobile.Repositories.v1
             return new Uri(sb.ToString());
         }
 
-        private static Uri CreateBuildsUri(BuildDetailsDto buildDetails)
+        private Uri CreateBuildsUri(BuildDetailsDto buildDetails)
         {
             var sb = new StringBuilder();
-            sb.Append("http://192.168.1.23/TfsMobileServices/api/Builds?project=");
+            sb.Append(RequestTfsUser.TfsMobileApiUri);
+            sb.Append("/Builds?project=");
             sb.Append(buildDetails.TfsProject);
             sb.Append("&fromDays=");
             sb.Append(buildDetails.FromDays);
@@ -173,10 +174,11 @@ namespace TfsMobile.Repositories.v1
             return new Uri(sb.ToString());
         }
 
-        private static Uri CreateBuildsUriForAllTeamBuilds(BuildDetailsDto buildDetails)
+        private Uri CreateBuildsUriForAllTeamBuilds(BuildDetailsDto buildDetails)
         {
             var sb = new StringBuilder();
-            sb.Append("http://192.168.1.23/TfsMobileServices/api/Builds?project=");
+            sb.Append(RequestTfsUser.TfsMobileApiUri);
+            sb.Append("/Builds?project=");
             sb.Append(buildDetails.TfsProject);
             sb.Append("&fromDays=");
             sb.Append(buildDetails.FromDays);
@@ -184,10 +186,11 @@ namespace TfsMobile.Repositories.v1
             return new Uri(sb.ToString());
         }
 
-        private static Uri CreateBuildsDefinitionUri(BuildDetailsDto buildDetails)
+        private Uri CreateBuildsDefinitionUri(BuildDetailsDto buildDetails)
         {
             var sb = new StringBuilder();
-            sb.Append("http://192.168.1.23/TfsMobileServices/api/Builds?project=");
+            sb.Append(RequestTfsUser.TfsMobileApiUri);
+            sb.Append("/Builds?project=");
             sb.Append(buildDetails.TfsProject);
             return new Uri(sb.ToString());
         }

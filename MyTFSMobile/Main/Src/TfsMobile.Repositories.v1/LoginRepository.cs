@@ -26,10 +26,6 @@ namespace TfsMobile.Repositories.v1
                 using (var client = new HttpClient(handler))
                 {
                     client.DefaultRequestHeaders.Add("tfsuri", RequestTfsUser.TfsUri.ToString());
-                    //if (UseLocalDefaultTfs)
-                    //{
-                    //    client.DefaultRequestHeaders.Add("uselocaldefault", "true");
-                    //}
 
                     client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue(
@@ -47,7 +43,6 @@ namespace TfsMobile.Repositories.v1
                     var jsonvalue = JsonConvert.SerializeObject(requestContract);
                     var requestcontent = new StringContent(jsonvalue, Encoding.UTF8, "application/json");
 
-
                     var requestUri = CreateTryLoginUri().ToString();
 
                     var resultat = await client.PostAsync(requestUri, requestcontent).ContinueWith(tt =>
@@ -60,18 +55,15 @@ namespace TfsMobile.Repositories.v1
                         return false;
                     });
                     return resultat;
-
-
                 }
             }
-
-
         }
 
         private Uri CreateTryLoginUri()
         {
             var sb = new StringBuilder();
-            sb.Append("http://192.168.1.23/TfsMobileServices/api/Login");
+            sb.Append(RequestTfsUser.TfsMobileApiUri);
+            sb.Append("/Login");
             return new Uri(sb.ToString());
         }
 
