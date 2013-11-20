@@ -155,10 +155,11 @@ namespace TfsMobile.Repositories.v1
             }
         }
 
-        private static Uri CreateQueueBuildsUri()
+        private Uri CreateQueueBuildsUri()
         {
             var sb = new StringBuilder();
-            sb.Append("http://192.168.1.23/TfsMobileServices/api/Builds/QueueBuild");
+            sb.Append(RequestTfsUser.TfsMobileApiUri);
+            sb.Append("/Builds/QueueBuild");
             return new Uri(sb.ToString());
         }
 

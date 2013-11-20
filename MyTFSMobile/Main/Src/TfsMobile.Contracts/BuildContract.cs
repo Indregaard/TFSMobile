@@ -92,7 +92,7 @@ namespace TfsMobile.Contracts
 
         public static BuildDetailsDto Default()
         {
-            return new BuildDetailsDto() {FromDays = "7", TfsProject = "Byggtjeneste - Projects"};
+            return new BuildDetailsDto() {FromDays = "15", TfsProject = "Byggtjeneste - Projects"};
         }
     }
 

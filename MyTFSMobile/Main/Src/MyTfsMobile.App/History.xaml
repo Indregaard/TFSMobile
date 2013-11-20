@@ -43,9 +43,13 @@
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
                              <StackPanel Margin="0,0,0,17">
-                                <TextBlock Text="{Binding Description}" TextWrapping="Wrap" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="#" Style="{StaticResource PhoneTextExtraLargeStyle}"></TextBlock>
+                                    <TextBlock Text="{Binding HistoryId}" TextWrapping="Wrap" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
+                                </StackPanel>
+                                <TextBlock Text="{Binding Description}" TextWrapping="Wrap" Style="{StaticResource PhoneTextNormalStyle}"/>
                                 <TextBlock Text="{Binding HistoryDate}" TextWrapping="Wrap" Margin="12,-6,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
-                                <HyperlinkButton Content="View details" NavigateUri="{Binding TfsItemUri}" TargetName="_blank" />
+                                <!--<HyperlinkButton Content="View details on Tfs web" NavigateUri="{Binding TfsItemUri}" TargetName="_blank" HorizontalContentAlignment="Left" />-->
                             </StackPanel>
                         </StackPanel>
                         

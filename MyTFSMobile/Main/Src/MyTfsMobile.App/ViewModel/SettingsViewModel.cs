@@ -80,7 +80,7 @@ namespace MyTfsMobile.App.ViewModel
                 Username = TfsServerUsername,
                 Password = TfsServerPassword,
                 TfsUri = new Uri(TfsServerAdress),
-                TfsMobileApiUri = new Uri("http://192.168.1.27/TfsMobileServices/api")
+                TfsMobileApiUri = new Uri("http://172.16.5.129/TfsMobileServices/api")
             };
         }
 
