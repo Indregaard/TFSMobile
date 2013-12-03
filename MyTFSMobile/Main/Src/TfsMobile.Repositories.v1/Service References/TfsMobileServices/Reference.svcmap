@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="4ea0b4ee-e939-4819-9931-4540f3ee466d" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>true</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings>
+      <CollectionMapping TypeName="System.Collections.ObjectModel.ObservableCollection`1" Category="List" />
+    </CollectionMappings>
+    <GenerateSerializableTypes>false</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:49802/TfsMobile.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="TfsMobile.xsd" MetadataType="Schema" ID="4bd4b268-d0ed-4585-af2d-85141d8f3961" SourceId="1" SourceUrl="http://localhost:49802/TfsMobile.svc?xsd=xsd1" />
+    <MetadataFile FileName="Service1.wsdl" MetadataType="Wsdl" ID="59d4d0dd-1446-470a-9438-a6dea3590bb0" SourceId="1" SourceUrl="http://localhost:49802/TfsMobile.svc?wsdl" />
+    <MetadataFile FileName="TfsMobile.disco" MetadataType="Disco" ID="e6e31297-1778-4b45-bc35-ce7a779bc886" SourceId="1" SourceUrl="http://localhost:49802/TfsMobile.svc?disco" />
+    <MetadataFile FileName="TfsMobile1.xsd" MetadataType="Schema" ID="c61cd50c-b622-43f0-816b-6af73259e421" SourceId="1" SourceUrl="http://localhost:49802/TfsMobile.svc?xsd=xsd2" />
+    <MetadataFile FileName="TfsMobile2.xsd" MetadataType="Schema" ID="8e3a04dc-92ab-4c8e-94ef-9856257cdd2d" SourceId="1" SourceUrl="http://localhost:49802/TfsMobile.svc?xsd=xsd0" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

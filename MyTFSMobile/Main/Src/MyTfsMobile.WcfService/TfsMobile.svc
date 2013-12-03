@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="MyTfsMobile.WcfService.Service1" CodeBehind="TfsMobile.svc.cs" %>

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using TfsMobile.Contracts;
 using TfsMobile.Repositories.v1.Interfaces;
+using TfsMobile.Repositories.v1.TfsMobileServices;
 
 namespace TfsMobile.Repositories.v1
 {
@@ -75,6 +76,69 @@ namespace TfsMobile.Repositories.v1
         private RequestLoginContract GetLoggedInContract()
         {
             return new RequestLoginContract { TfsUri = RequestTfsUser.TfsUri.ToString() };
+        }
+
+        public string GetDataFromTfsMobileWfcService(int inValue)
+        {
+            return "";
+        }
+
+        private void ServiceOnGetDataCompleted(object sender, GetDataCompletedEventArgs getDataCompletedEventArgs)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<string> GetData(int inValue)
+        {
+           // var service = new TfsMobileClient(TfsMobileClient.EndpointConfiguration.BasicHttpBinding_ITfsMobile, "http://tfsmobileservices.azurewebsites.net/TfsMobile.svc");
+
+           // var task = new Task<string>((state) =>
+           // {
+           //     service.GetDataAsync(inValue);
+
+           //     return new string() { PayloadOriginal = req.Payload, PayloadResponse = "Response was " + Guid.NewGuid().ToString() };
+           // }
+           //, asyncState);
+
+           // //When the task completes notify the callback
+           // task.ContinueWith((t) => { ServiceOnGetDataCompleted(t); });
+           // task.Start();
+
+           // return task;
+
+
+            //var task = Task.Run(() =>
+            //{
+            //    var t = new TaskCompletionSource<string>();
+
+                
+
+              
+
+            //    service.GetDataAsync(inValue);
+
+            //    return t.Task;
+            //}).ContinueWith(service.GetDataCompleted);
+            return null;
+        }
+
+        public Task<string> GetDataTest(int val)
+        {
+            var tcs = new TaskCompletionSource<string>();
+
+            var service = new TfsMobileClient(TfsMobileClient.EndpointConfiguration.BasicHttpBinding_ITfsMobile, "http://tfsmobileservices.azurewebsites.net/TfsMobile.svc");
+
+
+            service.GetDataCompleted += (s, e) => { tcs.SetResult( e.Result);};
+
+            service.GetDataAsync(val);
+            
+
+            return tcs.Task;
+        }
+
+        public void GetDataCompleted()
+        {
         }
     }
 }
