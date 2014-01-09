@@ -149,7 +149,7 @@ namespace MyTfsMobile.App.ViewModel
 
         static async private Task<bool> QueueBuild(BuildViewModel build)
         {
-            var queueBuildDto = new QueueBuildDto { TfsProject = "Byggtjeneste - Projects", BuildName = build.BuildName };
+            var queueBuildDto = new QueueBuildDto { TfsProject = "Main", BuildName = build.BuildName };
             var tfsUserDto = viewModelLocator.Settings.CreateTfsUserDto();
             var buildsRepo = new BuildsRepository(tfsUserDto, false);
             await buildsRepo.QueueBuild(queueBuildDto);

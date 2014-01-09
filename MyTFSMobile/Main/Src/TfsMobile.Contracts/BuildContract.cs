@@ -81,7 +81,7 @@ namespace TfsMobile.Contracts
 
         public static RequestTfsUserDto Default()
         {
-            return new RequestTfsUserDto() { Username = "username", Password = "password", TfsUri = new Uri("http://tfs.osiris.no:8080/tfs"), TfsMobileApiUri = new Uri("http://localhost/TfsMobileServices/api/") };
+            return new RequestTfsUserDto() { Username = "username", Password = "password", TfsUri = new Uri("http://tfs.byggtjeneste.no:8080/tfs"), TfsMobileApiUri = new Uri("http://localhost/TfsMobileServices/api/") };
         }
     }
 
@@ -92,7 +92,7 @@ namespace TfsMobile.Contracts
 
         public static BuildDetailsDto Default()
         {
-            return new BuildDetailsDto() {FromDays = "15", TfsProject = "Byggtjeneste - Projects"};
+            return new BuildDetailsDto() {FromDays = "15", TfsProject = "Main"};
         }
     }
 

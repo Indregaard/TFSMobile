@@ -121,9 +121,11 @@ namespace TfsMobileServices.Models
         {
             using (var tfs = tf.Connect())
             {
-                VersionControlServer sourceControl = (VersionControlServer)tfs.GetService(typeof(VersionControlServer));
-                var tp = sourceControl.GetTeamProject(project);
-                var tfsBaseUri = GetTfsBaseUri(tp, project);
+                //VersionControlServer sourceControl = (VersionControlServer)tfs.GetService(typeof(VersionControlServer));
+                //var tp = sourceControl.GetTeamProject(project);
+                
+                var sourceControl = tfs.GetService<VersionControlServer>();
+                //string tfsBaseUri = GetTfsBaseUri(project, sourceControl);
                 //tp.TeamProjectCollection.CatalogNode.Dump();
                 var workItemStore = tfs.GetService<WorkItemStore>();
                 // 
@@ -159,7 +161,7 @@ namespace TfsMobileServices.Models
                 {
                     var historyItem = new HistoryItemContract()
                     {
-                        Description = item.Title,Id = item.Id,HistoryDate = GetHistoryDate(item.CreatedDate,item.ChangedDate),TfsItemUri = GetWorkItemTfsUri(item.Id,tfsBaseUri),HistoryItemType = "WI",WorkType = item.Type,State = item.State,AreaPath = item.AreaPath,IterationPath = item.IterationPath
+                        Description = item.Title,Id = item.Id,HistoryDate = GetHistoryDate(item.CreatedDate,item.ChangedDate),/*TfsItemUri = GetWorkItemTfsUri(item.Id,tfsBaseUri),*/HistoryItemType = "WI",WorkType = item.Type,State = item.State,AreaPath = item.AreaPath,IterationPath = item.IterationPath
                     };
                     historyItems.Add(historyItem);
        
@@ -175,7 +177,7 @@ namespace TfsMobileServices.Models
                         Id = changeset.ChangesetId,
                         Description = changeset.Comment,
                         HistoryDate = changeset.CreationDate,
-                        TfsItemUri = GetChangeSetTfsUri(changeset.ChangesetId, tfsBaseUri)
+                        //TfsItemUri = GetChangeSetTfsUri(changeset.ChangesetId, tfsBaseUri)
                         //WorkItems = changeset.WorkItems
                     };
                     historyItems.Add(item);
@@ -194,6 +196,23 @@ namespace TfsMobileServices.Models
 ////foreach (Changeset change in changesets)
             }
             
+        }
+
+        private string GetTfsBaseUri(string project, VersionControlServer sourceControl)
+        {
+            string tfsBaseUri = null;
+            TeamProject teamProject = null;
+            var tfsTps = sourceControl.GetAllTeamProjects(false);
+            if (tfsTps != null && tfsTps.Any())
+            {
+                teamProject = tfsTps.FirstOrDefault(tp => tp.Name == project);
+            }
+
+            if (teamProject != null)
+            {
+                tfsBaseUri = GetTfsBaseUri(teamProject, project);
+            }
+            return tfsBaseUri;
         }
 
         private DateTime GetHistoryDate(DateTime created, DateTime changed)

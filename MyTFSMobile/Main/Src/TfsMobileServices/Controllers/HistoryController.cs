@@ -14,7 +14,7 @@ namespace TfsMobileServices.Controllers
             var tfs = TfsServiceFactory.Get(handler.TfsUri, handler.NetCredentials);
 
             var rep = new TfsHistoryRepository();
-            var res = rep.GetHistory(tfs, "Byggtjeneste - Projects", fromDays);
+            var res = rep.GetHistory(tfs, "Main", fromDays);
             return res;
         }
 
@@ -26,7 +26,7 @@ namespace TfsMobileServices.Controllers
             var tfs = TfsServiceFactory.Get(handler.TfsUri, handler.NetCredentials);
 
             var rep = new TfsHistoryRepository();
-            var res = rep.GetHistory(tfs, "Byggtjeneste - Projects", 7);
+            var res = rep.GetHistory(tfs, "Main", 7);
             return res;
         }
     }

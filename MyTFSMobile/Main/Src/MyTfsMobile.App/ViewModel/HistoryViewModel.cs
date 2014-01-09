@@ -30,7 +30,7 @@ namespace MyTfsMobile.App.ViewModel
 
             var tfsUserDto = viewModelLocator.Settings.CreateTfsUserDto();
             var buildsRepo = new HistoryRepository(tfsUserDto, false);
-            var buildsResult = await buildsRepo.GetHistoryAsync(new RequestHistoryDto() { FromDays = "20", TfsProject = "Byggtjeneste - Projects" });
+            var buildsResult = await buildsRepo.GetHistoryAsync(new RequestHistoryDto() { FromDays = "20", TfsProject = "Main" });
 
             foreach (var historyItem in buildsResult)
             {

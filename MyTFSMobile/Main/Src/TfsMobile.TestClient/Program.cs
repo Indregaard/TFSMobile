@@ -26,22 +26,22 @@ namespace TfsMobile.TestClient
                                       " - Finished: " + buildContract.FinishTime);
                 }
 
-                Console.WriteLine("History last 7 days;");
-                var historyRep = new HistoryRepository(LoginDetails(),false);
-                var hist =
-                    historyRep.GetHistoryAsync(new RequestHistoryDto() { FromDays = "20", TfsProject = "Byggtjeneste - Projects" }).Result;
-                foreach (var h in hist)
-                {
-                    Console.WriteLine("-------------------------------------------------------");
-                    Console.WriteLine("Id: " + h.Id + " - AreaPath: " + h.AreaPath);
-                    Console.WriteLine("- Description: " + h.Description);
-                    Console.WriteLine("- HistoryDate:" + h.HistoryDate + "- HistoryItemType:" + h.HistoryItemType +
-                                      "- State:" + h.State);
-                    Console.WriteLine("- IterationPath" + h.IterationPath);
-                    Console.WriteLine("- ItemUrl" + h.TfsItemUri);
-                    Console.WriteLine("- WorkType" + h.WorkType);
-                    Console.WriteLine("-------------------------------------------------------");
-                }
+                //Console.WriteLine("History last 7 days;");
+                //var historyRep = new HistoryRepository(LoginDetails(),false);
+                //var hist =
+                //    historyRep.GetHistoryAsync(new RequestHistoryDto() { FromDays = "20", TfsProject = "Main" }).Result;
+                //foreach (var h in hist)
+                //{
+                //    Console.WriteLine("-------------------------------------------------------");
+                //    Console.WriteLine("Id: " + h.Id + " - AreaPath: " + h.AreaPath);
+                //    Console.WriteLine("- Description: " + h.Description);
+                //    Console.WriteLine("- HistoryDate:" + h.HistoryDate + "- HistoryItemType:" + h.HistoryItemType +
+                //                      "- State:" + h.State);
+                //    Console.WriteLine("- IterationPath" + h.IterationPath);
+                //    Console.WriteLine("- ItemUrl" + h.TfsItemUri);
+                //    Console.WriteLine("- WorkType" + h.WorkType);
+                //    Console.WriteLine("-------------------------------------------------------");
+                //}
             }
             Console.ReadKey();
         }
@@ -55,8 +55,10 @@ namespace TfsMobile.TestClient
 
         private static RequestTfsUserDto LoginDetails()
         {
-            var userDetails = RequestTfsUserDto.Default();
-            userDetails.Username = "tomindre/crayon";
+            var userDetails = new RequestTfsUserDto();
+            userDetails.TfsMobileApiUri = new Uri("http://localhost/TfsMobileServices/api/");
+            userDetails.TfsUri = new Uri("http://tfs.byggtjeneste.no:8080/tfs");
+            userDetails.Username = "InmTav/nbtoda";
             userDetails.Password = "pwd";
             return userDetails;
         }
