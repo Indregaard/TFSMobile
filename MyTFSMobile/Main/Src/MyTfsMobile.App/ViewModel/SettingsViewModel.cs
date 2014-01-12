@@ -16,24 +16,24 @@ namespace MyTfsMobile.App.ViewModel
     {
 
         private const string SettingsFile = "myTfsMobileSettings.mtm";
-        private static readonly IsolatedStorageSettings AppSettings = IsolatedStorageSettings.ApplicationSettings;
-        private ILoginRepository loginRepository;
+        private static IsolatedStorageSettings _appSettings;
 
         [PreferredConstructor]
-        public SettingsViewModel(){}
-
-        public SettingsViewModel(ILoginRepository loginRepo)
+        public SettingsViewModel()
         {
-            loginRepository = loginRepo;
+            if (!System.ComponentModel.DesignerProperties.IsInDesignTool)
+            {
+                _appSettings = IsolatedStorageSettings.ApplicationSettings;
+            }
         }
 
         public string TfsServerAdress
         {
-            get { return TfsSettings.TfsServer != null ? TfsSettings.TfsServer.AbsoluteUri : ""; }
+            get { return TfsSettings.TfsServer; }
             set
             {
-                if ((TfsSettings.TfsServer != null && TfsSettings.TfsServer.AbsoluteUri == value) || value == null) return;
-                TfsSettings.TfsServer = new Uri(value);
+                if (TfsSettings.TfsServer == value) return;
+                TfsSettings.TfsServer = value;
                 RaisePropertyChanged("TfsServerAdress");
             }
         }
@@ -60,46 +60,23 @@ namespace MyTfsMobile.App.ViewModel
             }
         }
 
-        public async Task<bool> CheckTfsLogin()
-        {
-            if (string.IsNullOrEmpty(TfsServerAdress) || string.IsNullOrEmpty(TfsServerUsername) ||
-                string.IsNullOrEmpty(TfsServerPassword))
-                return false;
+        
 
-            var tfsUserDto = CreateTfsUserDto();
-            CreateLoginRepository(tfsUserDto);
-            var canAccessTfs = await loginRepository.TryLoginAsync(new RequestLoginContract { TfsUri = tfsUserDto.TfsUri.ToString() });
+        
 
-            return canAccessTfs;
-        }
+        
 
-        public RequestTfsUserDto CreateTfsUserDto()
-        {
-            return new RequestTfsUserDto
-            {
-                Username = TfsServerUsername,
-                Password = TfsServerPassword,
-                TfsUri = new Uri(TfsServerAdress),
-                TfsMobileApiUri = new Uri("http://172.16.5.129/TfsMobileServices/api")
-            };
-        }
-
-        private void CreateLoginRepository(RequestTfsUserDto tfsUserDto)
-        {
-            loginRepository = new LoginRepository(tfsUserDto, false);
-        }
-
-        private static TfsSettings tfsSettings;
-        public static TfsSettings TfsSettings
+        private static TfsUserSettings tfsSettings;
+        public static TfsUserSettings TfsSettings
         {
             get
             {
                 if (tfsSettings == null)
                 {
-                    tfsSettings = new TfsSettings();
-                    if (AppSettings.Contains(SettingsFile))
+                    tfsSettings = new TfsUserSettings();
+                    if (_appSettings.Contains(SettingsFile))
                     {
-                        tfsSettings = (TfsSettings)AppSettings[SettingsFile];
+                        tfsSettings = (TfsUserSettings)_appSettings[SettingsFile];
                     }
                 }
                 return tfsSettings;
@@ -123,7 +100,7 @@ namespace MyTfsMobile.App.ViewModel
             var settingsSaved = false;
             try
             {
-                AppSettings[SettingsFile] = TfsSettings;
+                _appSettings[SettingsFile] = TfsSettings;
                 var saved = await SaveAppsettings();
                 if (saved){
                     settingsSaved = true;
@@ -145,7 +122,7 @@ namespace MyTfsMobile.App.ViewModel
 
         private static async Task<bool> SaveAppsettings()
         {
-            await TaskEx.Run(() => AppSettings.Save());
+            await TaskEx.Run(() => _appSettings.Save());
             return true;
         }
 
@@ -159,7 +136,7 @@ namespace MyTfsMobile.App.ViewModel
                     async retval =>
                           {
                               var saved = await SaveData(SaveCommandError);
-                              var canLogIn = await CheckTfsLogin();
+                              var canLogIn = await SimpleIoc.Default.GetInstance<ITfsAuthenticationService>().CheckTfsLogin(TfsSettings);
                               if (saved && canLogIn)
                                   NavigateToBuilds();
                     }));
@@ -172,6 +149,14 @@ namespace MyTfsMobile.App.ViewModel
             
         }
 
+
+    }
+
+    public class TfsUserSettings
+    {
+        public string TfsServer { get; set; }
+        public string TfsUsername { get; set; }
+        public string TfsPassword { get; set; }
 
     }
 

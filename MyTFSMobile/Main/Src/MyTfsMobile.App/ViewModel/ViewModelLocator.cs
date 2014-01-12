@@ -16,6 +16,9 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
 using MyTfsMobile.App.ViewModels;
+using TfsMobile.Contracts;
+using TfsMobile.Repositories.v1;
+using TfsMobile.Repositories.v1.Interfaces;
 
 namespace MyTfsMobile.App.ViewModel
 {
@@ -32,28 +35,22 @@ namespace MyTfsMobile.App.ViewModel
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
-            //if (ViewModelBase.IsInDesignModeStatic)
-            //{
-            //    // Create design time view services and models
-            //    SimpleIoc.Default.Register<IDataService, DesignDataService>();
-            //}
-            //else
-            //{
-            //    // Create run time view services and models
-            //    SimpleIoc.Default.Register<IDataService, DataService>();
-            //}
-
-            SimpleIoc.Default.Register<MainViewModel>();
-            SimpleIoc.Default.Register<SettingsViewModel>(true);
-        }
-
-        public MainViewModel Main
-        {
-            get
+            if (ViewModelBase.IsInDesignModeStatic)
             {
-                return ServiceLocator.Current.GetInstance<MainViewModel>();
+                // Create design time view services and models
+                //SimpleIoc.Default.Register<IDataService, DesignDataService>();
             }
+            else
+            {
+                // Create run time view services and models
+                //SimpleIoc.Default.Register<ILoginRepository, LoginRepository>();
+                SimpleIoc.Default.Register<ITfsAuthenticationService, TfsAuthenticationService>();
+            }
+
+            SimpleIoc.Default.Register<SettingsViewModel>();
+
         }
+
 
         public SettingsViewModel Settings
         {

@@ -1,108 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+﻿using System.ComponentModel;
+using System.Threading;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Navigation;
+using System.Windows.Controls.Primitives;
 using Microsoft.Phone.Controls;
-using Microsoft.Phone.Shell;
-using Microsoft.Xna.Framework.Input.Touch;
-using MyTfsMobile.App.Resources;
-using MyTfsMobile.App.ViewModels;
+using MyTfsMobile.App.UserControls;
 
 namespace MyTfsMobile.App
 {
-    public partial class MainPage : PhoneApplicationPage
+    public partial class MainPage
     {
-        // Constructor
+        private Popup popup;
         public MainPage()
         {
             InitializeComponent();
 
-            // Set the data context of the LongListSelector control to the sample data
-            DataContext = App.ViewModel;
-
-            // Sample code to localize the ApplicationBar
-            //BuildLocalizedApplicationBar();
-            TouchPanel.EnabledGestures = GestureType.Flick;
+            this.popup = new Popup();
         }
 
-        // Load data for the ViewModel Items
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        private void BtnStart_Click(object sender, RoutedEventArgs e)
         {
-            if (!App.ViewModel.IsDataLoaded)
+            this.LayoutRoot.Opacity = 0.2;
+            OverLay ovr = new OverLay();
+            this.popup.Child = ovr;
+            this.popup.IsOpen = true;
+            BackgroundWorker worker = new BackgroundWorker();
+            worker.DoWork += (s, a) =>
             {
-                App.ViewModel.LoadData();
-            }
-        }
-
-        // Handle selection changed on LongListSelector
-        private void MainLongListSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            // If selected item is null (no selection) do nothing
-            if (MainLongListSelector.SelectedItem == null)
-                return;
-
-            // Navigate to the new page
-            NavigationService.Navigate(new Uri("/DetailsPage.xaml?selectedItem=" + (MainLongListSelector.SelectedItem as ItemViewModel).ID, UriKind.Relative));
-
-            // Reset selected item to null (no selection)
-            MainLongListSelector.SelectedItem = null;
-        }
-
-        // Sample code for building a localized ApplicationBar
-        //private void BuildLocalizedApplicationBar()
-        //{
-        //    // Set the page's ApplicationBar to a new instance of ApplicationBar.
-        //    ApplicationBar = new ApplicationBar();
-
-        //    // Create a new button and set the text value to the localized string from AppResources.
-        //    ApplicationBarIconButton appBarButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.add.rest.png", UriKind.Relative));
-        //    appBarButton.Text = AppResources.AppBarButtonText;
-        //    ApplicationBar.Buttons.Add(appBarButton);
-
-        //    // Create a new menu item with the localized string from AppResources.
-        //    ApplicationBarMenuItem appBarMenuItem = new ApplicationBarMenuItem(AppResources.AppBarMenuItemText);
-        //    ApplicationBar.MenuItems.Add(appBarMenuItem);
-        //}
-        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
-        {
-            NavigationService.Navigate(new Uri("/Builds.xaml", UriKind.Relative));
-        }
-
-        private void MainPage_OnManipulationCompleted(object sender, ManipulationCompletedEventArgs e)
-        {
-            while (TouchPanel.IsGestureAvailable)
+                Thread.Sleep(5000);
+            };
+            worker.RunWorkerCompleted += (s, a) =>
             {
-                GestureSample gesture = TouchPanel.ReadGesture();
-                if (gesture.GestureType == GestureType.Flick)
-                {
-                    // determine dir
-                    var modifier = gesture.Delta.X > 0 ? -1 : 1;
-
-                    if (modifier < 0)
-                    {
-                        LoadNextPage();
-
-                    }
-                    else
-                    {
-                        LoadPreviousPage();
-                    }
-                }
-            }
+                popup.IsOpen = false;
+                this.LayoutRoot.Opacity = 1.0;
+            };
+            worker.RunWorkerAsync();
         }
 
-        private void LoadNextPage()
+        protected override void OnBackKeyPress(System.ComponentModel.CancelEventArgs e)
         {
-            NavigationService.Navigate(new Uri("/Builds.xaml", UriKind.Relative));
-        }
-
-        private void LoadPreviousPage()
-        {
-            NavigationService.Navigate(new Uri("/Builds.xaml", UriKind.Relative));
+            this.popup.IsOpen = false;
         }
     }
 }

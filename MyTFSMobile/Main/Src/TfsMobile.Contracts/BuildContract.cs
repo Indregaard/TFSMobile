@@ -79,10 +79,10 @@ namespace TfsMobile.Contracts
         public Uri TfsUri { get; set; }
         public Uri TfsMobileApiUri { get; set; }
 
-        public static RequestTfsUserDto Default()
-        {
-            return new RequestTfsUserDto() { Username = "username", Password = "password", TfsUri = new Uri("http://tfs.byggtjeneste.no:8080/tfs"), TfsMobileApiUri = new Uri("http://localhost/TfsMobileServices/api/") };
-        }
+        //public static RequestTfsUserDto Default()
+        //{
+        //    return new RequestTfsUserDto() { Username = "username", Password = "password", TfsUri = new Uri("http://tfs.byggtjeneste.no:8080/tfs"), TfsMobileApiUri = new Uri("http://localhost/TfsMobileServices/api/") };
+        //}
     }
 
     public class BuildDetailsDto

@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Ioc;
 using MyTfsMobile.App.enums;
 using Newtonsoft.Json;
 using TfsMobile.Contracts;
@@ -32,7 +33,6 @@ namespace MyTfsMobile.App.ViewModel
         }
 
         public bool IsDataLoaded { get; private set; }
-        private static ViewModelLocator viewModelLocator = new ViewModelLocator();
         public async void LoadData()
         {
             await GetMyBuilds();
@@ -42,12 +42,13 @@ namespace MyTfsMobile.App.ViewModel
         private async Task GetMyBuilds()
         {
             PrepareBuildSection("My Builds");
-            
-            var tfsUserDto = viewModelLocator.Settings.CreateTfsUserDto();
-            var buildsRepo = new BuildsRepository(tfsUserDto, false);
-            var buildsResult = await buildsRepo.GetBuildsAsync(BuildDetailsDto.Default());
-            var buildContracts = JsonConvert.DeserializeObject<List<BuildContract>>(buildsResult);
-            FillBuildSection(buildContracts);
+
+            var tfsUserDto = SimpleIoc.Default.GetInstance<ITfsAuthenticationService>().CreateTfsUserDto();
+            var c = "";
+            //var buildsRepo = new BuildsRepository(tfsUserDto, false);
+            //var buildsResult = await buildsRepo.GetBuildsAsync(BuildDetailsDto.Default());
+            //var buildContracts = JsonConvert.DeserializeObject<List<BuildContract>>(buildsResult);
+            //FillBuildSection(buildContracts);
         }
 
         private void PrepareBuildSection(string section)
@@ -75,11 +76,11 @@ namespace MyTfsMobile.App.ViewModel
         private async Task GetTeamBuilds()
         {
             PrepareBuildSection("Team Builds");
-            var tfsUserDto = viewModelLocator.Settings.CreateTfsUserDto();
-            var buildsRepo = new BuildsRepository(tfsUserDto, false);
-            var buildsResult = await buildsRepo.GetTeamBuildsAsync(BuildDetailsDto.Default());
-            var buildContracts = JsonConvert.DeserializeObject<List<BuildContract>>(buildsResult);
-            FillBuildSection(buildContracts);
+            //var tfsUserDto = viewModelLocator.Settings.CreateTfsUserDto();
+            //var buildsRepo = new BuildsRepository(tfsUserDto, false);
+            //var buildsResult = await buildsRepo.GetTeamBuildsAsync(BuildDetailsDto.Default());
+            //var buildContracts = JsonConvert.DeserializeObject<List<BuildContract>>(buildsResult);
+            //FillBuildSection(buildContracts);
         }
 
 
@@ -87,11 +88,11 @@ namespace MyTfsMobile.App.ViewModel
         {
 
             PrepareBuildSection("Build definitions");
-            var tfsUserDto = viewModelLocator.Settings.CreateTfsUserDto();
-            var buildsRepo = new BuildsRepository(tfsUserDto, false);
-            var buildsResult = await buildsRepo.GetBuildDefinitionsAsync(BuildDetailsDto.Default());
-            var buildContracts = JsonConvert.DeserializeObject<List<BuildContract>>(buildsResult);
-            FillBuildSection(buildContracts);
+            //var tfsUserDto = viewModelLocator.Settings.CreateTfsUserDto();
+            //var buildsRepo = new BuildsRepository(tfsUserDto, false);
+            //var buildsResult = await buildsRepo.GetBuildDefinitionsAsync(BuildDetailsDto.Default());
+            //var buildContracts = JsonConvert.DeserializeObject<List<BuildContract>>(buildsResult);
+            //FillBuildSection(buildContracts);
         }
 
         private RelayCommand<BuildViewModel> queueBuildCommand;
@@ -150,9 +151,9 @@ namespace MyTfsMobile.App.ViewModel
         static async private Task<bool> QueueBuild(BuildViewModel build)
         {
             var queueBuildDto = new QueueBuildDto { TfsProject = "Main", BuildName = build.BuildName };
-            var tfsUserDto = viewModelLocator.Settings.CreateTfsUserDto();
-            var buildsRepo = new BuildsRepository(tfsUserDto, false);
-            await buildsRepo.QueueBuild(queueBuildDto);
+            //var tfsUserDto = viewModelLocator.Settings.CreateTfsUserDto();
+            //var buildsRepo = new BuildsRepository(tfsUserDto, false);
+            //await buildsRepo.QueueBuild(queueBuildDto);
             
             return true;
         }

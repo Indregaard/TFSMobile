@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Ioc;
 using TfsMobile.Contracts;
 using TfsMobile.Repositories.v1;
 
@@ -17,7 +18,6 @@ namespace MyTfsMobile.App.ViewModel
         public ObservableCollection<HistoryItemViewModel> HistoryItems { get; private set; }
 
         public bool IsDataLoaded { get; private set; }
-        private static readonly ViewModelLocator viewModelLocator = new ViewModelLocator();
         public async void LoadData()
         {
             await GetMyHistory();
@@ -28,7 +28,7 @@ namespace MyTfsMobile.App.ViewModel
         {
             HistoryItems.Clear();
 
-            var tfsUserDto = viewModelLocator.Settings.CreateTfsUserDto();
+            var tfsUserDto = SimpleIoc.Default.GetInstance<ITfsAuthenticationService>().CreateTfsUserDto();
             var buildsRepo = new HistoryRepository(tfsUserDto, false);
             var buildsResult = await buildsRepo.GetHistoryAsync(new RequestHistoryDto() { FromDays = "20", TfsProject = "Main" });
 

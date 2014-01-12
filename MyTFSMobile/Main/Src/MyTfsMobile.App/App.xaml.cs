@@ -17,7 +17,6 @@ namespace MyTfsMobile.App
     public partial class App : Application
     {
         private static MainViewModel viewModel = null;
-        private static ViewModelLocator viewModelLocator = new ViewModelLocator();
 
         /// <summary>
         /// A static ViewModel used by the views to bind against.
@@ -85,22 +84,22 @@ namespace MyTfsMobile.App
         // This code will not execute when the application is reactivated
         private void Application_Launching(object sender, LaunchingEventArgs e)
         {
-            CheckTfsConnection();
+            //CheckTfsConnection();
         }
 
         private async void CheckTfsConnection()
         {
-            if (!await viewModelLocator.Settings.CheckTfsLogin())
-            {
-                RootFrame.Navigate(new Uri("/TfsSettings.xaml", UriKind.Relative));
-            }
+            //if (!await viewModelLocator.Settings.CheckTfsLogin())
+            //{
+            //    RootFrame.Navigate(new Uri("/TfsSettings.xaml", UriKind.Relative));
+            //}
         }
 
         // Code to execute when the application is activated (brought to foreground)
         // This code will not execute when the application is first launched
         private void Application_Activated(object sender, ActivatedEventArgs e)
         {
-            CheckTfsConnection();
+            //CheckTfsConnection();
             // Ensure that application state is restored appropriately
             if (!App.ViewModel.IsDataLoaded)
             {
