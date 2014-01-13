@@ -13,6 +13,8 @@ namespace MyTfsMobile.App.UserControls
 {
     public partial class BuildsUc : UserControl
     {
+        private BuildsViewModel vm;
+
         public BuildsUc()
         {
             InitializeComponent();
@@ -26,15 +28,5 @@ namespace MyTfsMobile.App.UserControls
             }
         }
 
-        private BuildsViewModel vm;
-
-        protected override void OnGotFocus(RoutedEventArgs e)
-        {
-            if (!vm.IsDataLoaded)
-            {
-                vm.LoadData();
-            }
-            base.OnGotFocus(e);
-        }
     }
 }

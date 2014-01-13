@@ -50,15 +50,15 @@ namespace MyTfsMobile.App
 
         public RequestTfsUserDto CreateTfsUserDto()
         {
-            var a = "";
-            return null;
-            //return new RequestTfsUserDto
-            //{
-            //    Username = TfsSettings.TfsUsername,
-            //    Password = TfsSettings.TfsPassword,
-            //    TfsUri = Uri.IsWellFormedUriString(TfsSettings.TfsServer, UriKind.Absolute) ? new Uri(TfsSettings.TfsServer) : null,
-            //    TfsMobileApiUri = new Uri("http://localhost/TfsMobileServices/api/")
-            //};
+            if (TfsSettings == null) return null;
+
+            return new RequestTfsUserDto
+            {
+                Username = TfsSettings.TfsUsername,
+                Password = TfsSettings.TfsPassword,
+                TfsUri = Uri.IsWellFormedUriString(TfsSettings.TfsServer, UriKind.Absolute) ? new Uri(TfsSettings.TfsServer) : null,
+                TfsMobileApiUri = new Uri("http://localhost/TfsMobileServices/api/")
+            };
         }
 
         private void CreateLoginRepository(RequestTfsUserDto tfsUserDto)

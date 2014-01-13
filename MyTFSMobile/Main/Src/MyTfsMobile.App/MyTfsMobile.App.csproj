@@ -130,6 +130,9 @@
     <Compile Include="UserControls\OverLay.xaml.cs">
       <DependentUpon>OverLay.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\SettingsUc.xaml.cs">
+      <DependentUpon>SettingsUc.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModel\HistoryViewModel.cs" />
     <Compile Include="ViewModel\HistoryItemViewModel.cs" />
     <Compile Include="ViewModel\BuildsViewModel.cs" />
@@ -177,6 +180,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\OverLay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\SettingsUc.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -230,6 +237,7 @@
     <EmbeddedResource Include="Resources\AppResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>AppResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

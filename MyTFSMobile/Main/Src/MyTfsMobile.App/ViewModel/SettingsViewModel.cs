@@ -115,9 +115,9 @@ namespace MyTfsMobile.App.ViewModel
             return settingsSaved;
         }
 
-        private static void NavigateToBuilds()
+        private static void CloseSettings()
         {
-            Messenger.Default.Send(new Uri("/Builds.xaml", UriKind.Relative), "NavigationRequest");
+            Messenger.Default.Send(false, "CloseSettingsPopup");
         }
 
         private static async Task<bool> SaveAppsettings()
@@ -137,8 +137,9 @@ namespace MyTfsMobile.App.ViewModel
                           {
                               var saved = await SaveData(SaveCommandError);
                               var canLogIn = await SimpleIoc.Default.GetInstance<ITfsAuthenticationService>().CheckTfsLogin(TfsSettings);
-                              if (saved && canLogIn)
-                                  NavigateToBuilds();
+                              //if (saved && canLogIn)
+                                 
+                              CloseSettings();
                     }));
             }
         }
@@ -157,7 +158,7 @@ namespace MyTfsMobile.App.ViewModel
         public string TfsServer { get; set; }
         public string TfsUsername { get; set; }
         public string TfsPassword { get; set; }
-
+        public int RefreshInterval { get; set; }
     }
 
     public class TfsSettings

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Ioc;
+using GalaSoft.MvvmLight.Messaging;
 using MyTfsMobile.App.enums;
 using Newtonsoft.Json;
 using TfsMobile.Contracts;
@@ -13,6 +14,7 @@ namespace MyTfsMobile.App.ViewModel
 {
     internal class BuildsViewModel : ViewModelBase
     {
+
         public BuildsViewModel()
         {
             BuildItems = new ObservableCollection<BuildViewModel>();
