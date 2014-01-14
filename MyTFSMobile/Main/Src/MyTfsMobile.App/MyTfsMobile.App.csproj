@@ -133,6 +133,7 @@
     <Compile Include="UserControls\SettingsUc.xaml.cs">
       <DependentUpon>SettingsUc.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="ViewModel\HistoryViewModel.cs" />
     <Compile Include="ViewModel\HistoryItemViewModel.cs" />
     <Compile Include="ViewModel\BuildsViewModel.cs" />

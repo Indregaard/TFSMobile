@@ -47,10 +47,18 @@ namespace MyTfsMobile.App.ViewModel
                 SimpleIoc.Default.Register<ITfsAuthenticationService, TfsAuthenticationService>();
             }
 
+            SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<SettingsViewModel>();
 
         }
 
+        public MainViewModel Main
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<MainViewModel>();
+            }
+        }
 
         public SettingsViewModel Settings
         {
@@ -58,6 +66,11 @@ namespace MyTfsMobile.App.ViewModel
             {
                 return ServiceLocator.Current.GetInstance<SettingsViewModel>();
             }
+        }
+
+        public ITfsAuthenticationService TfsAuthenticationService
+        {
+            get { return ServiceLocator.Current.GetInstance<ITfsAuthenticationService>(); }
         }
         
         public static void Cleanup()

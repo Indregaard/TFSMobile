@@ -29,12 +29,9 @@
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
-        <Grid x:Name="BuildList" Grid.Row="1" Margin="12,0,12,0">
-            <phone:LongListSelector x:Name="MainLongListSelector" Margin="0,0,-12,0" ItemsSource="{Binding BuildItems}">
-                <phone:LongListSelector.ListHeader>
-                    <TextBlock Text="test" Margin="0,-25,0,0"></TextBlock>
-                </phone:LongListSelector.ListHeader>
-                <phone:LongListSelector.ItemTemplate>
+        <Grid x:Name="BuildListGrid" Grid.Row="1" Margin="12,0,12,0">
+            <phone:LongListSelector x:Name="BuildList" Margin="0,0,-12,0" ItemsSource="{Binding BuildItems}">
+            <phone:LongListSelector.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
                             <Image Width="75" Source="{Binding BuildStatus, Converter={StaticResource BuildStatusConverter}}" Name="BuildImage" ></Image>

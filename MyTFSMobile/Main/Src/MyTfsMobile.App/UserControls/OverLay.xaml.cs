@@ -10,7 +10,7 @@ namespace MyTfsMobile.App.UserControls
             InitializeComponent();
             LayoutRoot.Height = Application.Current.Host.Content.ActualHeight;
             LayoutRoot.Width = Application.Current.Host.Content.ActualWidth;
-            SystemTray.IsVisible = false; //to hide system tray
+            //SystemTray.IsVisible = false; //to hide system tray
         }
     }
 }

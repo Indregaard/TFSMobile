@@ -12,7 +12,7 @@ using TfsMobile.Repositories.v1;
 
 namespace MyTfsMobile.App.ViewModel
 {
-    internal class BuildsViewModel : ViewModelBase
+    internal class BuildsViewModel : BaseViewModel
     {
 
         public BuildsViewModel()
@@ -45,16 +45,22 @@ namespace MyTfsMobile.App.ViewModel
         {
             PrepareBuildSection("My Builds");
 
+            var serviceAccessw = Locator.TfsAuthenticationService.CheckTfsLogin(Locator.Settings.TfsSettings);
+
+            var access = await serviceAccessw;
+            if (!access) return;
+
+
             var tfsUserDto = SimpleIoc.Default.GetInstance<ITfsAuthenticationService>().CreateTfsUserDto();
-            var c = "";
-            //var buildsRepo = new BuildsRepository(tfsUserDto, false);
-            //var buildsResult = await buildsRepo.GetBuildsAsync(BuildDetailsDto.Default());
-            //var buildContracts = JsonConvert.DeserializeObject<List<BuildContract>>(buildsResult);
-            //FillBuildSection(buildContracts);
+            var buildsRepo = new BuildsRepository(tfsUserDto, false);
+            var buildsResult = await buildsRepo.GetBuildsAsync(BuildDetailsDto.Default());
+            var buildContracts = JsonConvert.DeserializeObject<List<BuildContract>>(buildsResult);
+            FillBuildSection(buildContracts);
         }
 
         private void PrepareBuildSection(string section)
         {
+            Messenger.Default.Send(true, "ShowLoadPopup");
             BuildSection = section;
             BuildItems.Clear();
         }
@@ -73,6 +79,8 @@ namespace MyTfsMobile.App.ViewModel
                 });
             }
             IsDataLoaded = true;
+
+            Messenger.Default.Send(true, "CloseLoadPopup");
         }
 
         private async Task GetTeamBuilds()

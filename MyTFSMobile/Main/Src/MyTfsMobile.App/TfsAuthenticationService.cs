@@ -19,7 +19,7 @@ namespace MyTfsMobile.App
 
     public class TfsAuthenticationService : ITfsAuthenticationService
     {
-
+        public ViewModelLocator Locator = new ViewModelLocator();
         private ILoginRepository loginRepository;
         private TfsUserSettings TfsSettings;
 
@@ -35,17 +35,25 @@ namespace MyTfsMobile.App
 
         public async Task<bool> CheckTfsLogin(TfsUserSettings settings)
         {
-            if (string.IsNullOrEmpty(settings.TfsServer) || string.IsNullOrEmpty(settings.TfsUsername) ||
-                string.IsNullOrEmpty(settings.TfsPassword))
-                return false;
+            var canLogIn = !string.IsNullOrEmpty(settings.TfsServer) && !string.IsNullOrEmpty(settings.TfsUsername) && !string.IsNullOrEmpty(settings.TfsPassword);
 
             TfsSettings = settings;
 
-            var tfsUserDto = CreateTfsUserDto();
-            CreateLoginRepository(tfsUserDto);
-            var canAccessTfs = await loginRepository.TryLoginAsync(new RequestLoginContract { TfsUri = tfsUserDto.TfsUri.ToString() });
+            if(canLogIn){
+                var tfsUserDto = CreateTfsUserDto();
+                CreateLoginRepository(tfsUserDto);
+                var canAccessTfs = await loginRepository.TryLoginAsync(new RequestLoginContract { TfsUri = tfsUserDto.TfsUri.ToString() });
+                canLogIn = canAccessTfs;
+            }
 
-            return canAccessTfs;
+
+            if (!canLogIn)
+            {
+                Locator.Settings.ShowSettings();
+            }
+
+
+            return canLogIn;
         }
 
         public RequestTfsUserDto CreateTfsUserDto()
@@ -57,7 +65,7 @@ namespace MyTfsMobile.App
                 Username = TfsSettings.TfsUsername,
                 Password = TfsSettings.TfsPassword,
                 TfsUri = Uri.IsWellFormedUriString(TfsSettings.TfsServer, UriKind.Absolute) ? new Uri(TfsSettings.TfsServer) : null,
-                TfsMobileApiUri = new Uri("http://localhost/TfsMobileServices/api/")
+                TfsMobileApiUri = new Uri("http://192.168.10.60/TfsMobileServices/api/")
             };
         }
 

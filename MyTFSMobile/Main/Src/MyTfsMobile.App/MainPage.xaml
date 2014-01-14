@@ -21,10 +21,8 @@
             <!--Panorama item one-->
             <phone:PanoramaItem Header="Builds">
                 <Grid>
-                    <StackPanel Orientation="Vertical">
-                        <Button Content="test" Click="BtnStart_Click"></Button>
-                        <userControls:BuildsUc></userControls:BuildsUc>
-                    </StackPanel>
+                        <userControls:BuildsUc Name="BuildUserControl" VerticalContentAlignment="Stretch"></userControls:BuildsUc>
+                   
                 </Grid>
             </phone:PanoramaItem>
 

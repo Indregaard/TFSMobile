@@ -12,11 +12,11 @@ using TfsMobile.Repositories.v1.Interfaces;
 namespace MyTfsMobile.App.ViewModel
 {
 
-    public class SettingsViewModel : ViewModelBase
+    public class SettingsViewModel : BaseViewModel
     {
 
         private const string SettingsFile = "myTfsMobileSettings.mtm";
-        private static IsolatedStorageSettings _appSettings;
+        private IsolatedStorageSettings _appSettings;
 
         [PreferredConstructor]
         public SettingsViewModel()
@@ -60,24 +60,14 @@ namespace MyTfsMobile.App.ViewModel
             }
         }
 
-        
-
-        
-
-        
-
-        private static TfsUserSettings tfsSettings;
-        public static TfsUserSettings TfsSettings
+        private TfsUserSettings tfsSettings;
+        public TfsUserSettings TfsSettings
         {
             get
             {
                 if (tfsSettings == null)
                 {
-                    tfsSettings = new TfsUserSettings();
-                    if (_appSettings.Contains(SettingsFile))
-                    {
-                        tfsSettings = (TfsUserSettings)_appSettings[SettingsFile];
-                    }
+                    tfsSettings = LoadTfsUserSettings();
                 }
                 return tfsSettings;
             }
@@ -88,6 +78,16 @@ namespace MyTfsMobile.App.ViewModel
             }
         }
 
+        private TfsUserSettings LoadTfsUserSettings()
+        {
+            tfsSettings = new TfsUserSettings();
+            if (_appSettings.Contains(SettingsFile))
+            {
+                tfsSettings = (TfsUserSettings)_appSettings[SettingsFile];
+            }
+            return tfsSettings;
+        }
+
         public static event EventHandler TfsSettingsUpdated;
         private static void NotifyTfsSettingsUpdated()
         {
@@ -95,7 +95,7 @@ namespace MyTfsMobile.App.ViewModel
             if (handler != null) handler(null, null);
         }
 
-        private static async Task<bool> SaveData(Action errorCallback)
+        private async Task<bool> SaveData(Action errorCallback)
         {
             var settingsSaved = false;
             try
@@ -115,12 +115,7 @@ namespace MyTfsMobile.App.ViewModel
             return settingsSaved;
         }
 
-        private static void CloseSettings()
-        {
-            Messenger.Default.Send(false, "CloseSettingsPopup");
-        }
-
-        private static async Task<bool> SaveAppsettings()
+        private async Task<bool> SaveAppsettings()
         {
             await TaskEx.Run(() => _appSettings.Save());
             return true;
@@ -136,10 +131,9 @@ namespace MyTfsMobile.App.ViewModel
                     async retval =>
                           {
                               var saved = await SaveData(SaveCommandError);
-                              var canLogIn = await SimpleIoc.Default.GetInstance<ITfsAuthenticationService>().CheckTfsLogin(TfsSettings);
-                              //if (saved && canLogIn)
-                                 
-                              CloseSettings();
+                              var canLogIn = await Locator.TfsAuthenticationService.CheckTfsLogin(TfsSettings);
+                              if (saved && canLogIn)
+                                 CloseSettings();
                     }));
             }
         }
@@ -150,7 +144,15 @@ namespace MyTfsMobile.App.ViewModel
             
         }
 
+        public void ShowSettings()
+        {
+            Messenger.Default.Send(true, "ShowSettingsPopup");
+        }
 
+        private static void CloseSettings()
+        {
+            Messenger.Default.Send(false, "CloseSettingsPopup");
+        }
     }
 
     public class TfsUserSettings

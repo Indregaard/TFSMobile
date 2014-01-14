@@ -22,10 +22,6 @@ namespace MyTfsMobile.App.UserControls
 
             DataContext = vm;
 
-            if (!vm.IsDataLoaded)
-            {
-                vm.LoadData();
-            }
         }
 
     }
