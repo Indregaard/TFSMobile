@@ -14,31 +14,45 @@ namespace MyTfsMobile.App.ViewModel
 {
     internal class BuildsViewModel : BaseViewModel
     {
-
+        private readonly BuildSection section;
         public BuildsViewModel()
+            : this(BuildSection.MyBuilds)
+        {
+        }
+
+        public BuildsViewModel(BuildSection section)
         {
             BuildItems = new ObservableCollection<BuildViewModel>();
+            this.section = section;
+
         }
 
         public ObservableCollection<BuildViewModel> BuildItems { get; private set; }
 
-        private string buildSection = "Builds";
-        public string BuildSection
+        private string buildSectionHeader = "Builds";
+        public string BuildSectionHeader
         {
-            get { return buildSection; }
+            get { return buildSectionHeader; }
             set
             {
-                if (buildSection == value) return;
-                buildSection = value;
+                if (buildSectionHeader == value) return;
+                buildSectionHeader = value;
                 RaisePropertyChanged("BuildSection");
             }
         }
 
         public bool IsDataLoaded { get; private set; }
-        public async void LoadData()
+        public override async void LoadData()
         {
-            await GetMyBuilds();
-
+            switch (section)
+            {
+                case BuildSection.MyBuilds:
+                    await GetMyBuilds();
+                    break;
+                case BuildSection.TeamBuilds:
+                    await GetTeamBuilds();
+                    break;
+            }
         }
 
         private async Task GetMyBuilds()
@@ -51,17 +65,19 @@ namespace MyTfsMobile.App.ViewModel
             if (!access) return;
 
 
-            var tfsUserDto = SimpleIoc.Default.GetInstance<ITfsAuthenticationService>().CreateTfsUserDto();
+            Messenger.Default.Send(true, "ShowLoadPopup");
+
+            var tfsUserDto = Locator.TfsAuthenticationService.CreateTfsUserDto();
             var buildsRepo = new BuildsRepository(tfsUserDto, false);
             var buildsResult = await buildsRepo.GetBuildsAsync(BuildDetailsDto.Default());
             var buildContracts = JsonConvert.DeserializeObject<List<BuildContract>>(buildsResult);
             FillBuildSection(buildContracts);
         }
 
-        private void PrepareBuildSection(string section)
+        private void PrepareBuildSection(string sectionName)
         {
-            Messenger.Default.Send(true, "ShowLoadPopup");
-            BuildSection = section;
+            IsDataLoaded = false;
+            BuildSectionHeader = sectionName;
             BuildItems.Clear();
         }
 
@@ -86,11 +102,17 @@ namespace MyTfsMobile.App.ViewModel
         private async Task GetTeamBuilds()
         {
             PrepareBuildSection("Team Builds");
-            //var tfsUserDto = viewModelLocator.Settings.CreateTfsUserDto();
-            //var buildsRepo = new BuildsRepository(tfsUserDto, false);
-            //var buildsResult = await buildsRepo.GetTeamBuildsAsync(BuildDetailsDto.Default());
-            //var buildContracts = JsonConvert.DeserializeObject<List<BuildContract>>(buildsResult);
-            //FillBuildSection(buildContracts);
+
+            var serviceAccessw = Locator.TfsAuthenticationService.CheckTfsLogin(Locator.Settings.TfsSettings);
+
+            var access = await serviceAccessw;
+            if (!access) return;
+
+            var tfsUserDto = Locator.TfsAuthenticationService.CreateTfsUserDto();
+            var buildsRepo = new BuildsRepository(tfsUserDto, false);
+            var buildsResult = await buildsRepo.GetTeamBuildsAsync(BuildDetailsDto.Default());
+            var buildContracts = JsonConvert.DeserializeObject<List<BuildContract>>(buildsResult);
+            FillBuildSection(buildContracts);
         }
 
 

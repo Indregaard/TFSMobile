@@ -7,28 +7,70 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControls="clr-namespace:MyTfsMobile.App.UserControls"
+    xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+    xmlns:appBarUtils="clr-namespace:AppBarUtils;assembly=AppBarUtils"
+    xmlns:viewModel="clr-namespace:MyTfsMobile.App.ViewModel"
     mc:Ignorable="d"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Portrait"  Orientation="Portrait"
-    shell:SystemTray.IsVisible="False">
-
+    shell:SystemTray.IsVisible="False" Loaded="MainPage_OnLoaded">
+    <phone:PhoneApplicationPage.DataContext>
+        <viewModel:MainViewModel/>
+    </phone:PhoneApplicationPage.DataContext>
     <!--LayoutRoot contains the root grid where all other page content is placed-->
     <Grid x:Name="LayoutRoot">
-        <phone:Panorama Title="My TfsMobile">
+        <phone:Panorama Title="My TfsMobile" SelectionChanged="Panorama_OnSelectionChanged" 
+                        >
 
-            <!--Panorama item one-->
-            <phone:PanoramaItem Header="Builds">
+            <phone:PanoramaItem Header="My Builds">
                 <Grid>
-                        <userControls:BuildsUc Name="BuildUserControl" VerticalContentAlignment="Stretch"></userControls:BuildsUc>
-                   
+                    <userControls:BuildsUc Name="BuildUserControl" BuildSection="MyBuilds" VerticalContentAlignment="Stretch"></userControls:BuildsUc>
                 </Grid>
             </phone:PanoramaItem>
+            <phone:PanoramaItem Header="Team Builds">
+                <Grid>
+                    <userControls:BuildsUc Name="TeamBuildUserControl" BuildSection="TeamBuilds"  VerticalContentAlignment="Stretch"></userControls:BuildsUc>
 
-            <!--Panorama item two-->
-            <phone:PanoramaItem Header="item2">
+                </Grid>
+            </phone:PanoramaItem>
+            <phone:PanoramaItem Header="History">
                 <Grid/>
+            </phone:PanoramaItem>
+            <phone:PanoramaItem Header="About">
+                <ScrollViewer>
+                    <StackPanel Margin="0,-12,0,24">
+                        <TextBlock 
+                            Style="{StaticResource PhoneTextExtraLargeStyle}"
+                            Text="My TfsMobile"
+                            Foreground="{StaticResource PhoneAccentBrush}" />
+                        <TextBlock
+                            Style="{StaticResource PhoneTextLargeStyle}"
+                            Text="by T.A. Vinslid / T. Indregaard" />
+
+                        <HyperlinkButton
+                NavigateUri="http://www.inmeta.no/"
+                TargetName="_new"
+                HorizontalAlignment="Left"
+                Content="www.inmeta.no" />
+
+                        <StackPanel Orientation="Horizontal" Margin="0,18,0,0">
+                            <TextBlock
+                    Style="{StaticResource PhoneTextNormalStyle}"
+                    Text="Version:" />
+                            <TextBlock
+                    Margin="0"
+                    Style="{StaticResource PhoneTextNormalStyle}"
+                    x:Name="_versionText" />
+                        </StackPanel>
+                        <Button
+                  HorizontalAlignment="Left"
+                  Tag="Review"
+                  Click="HyperlinkButton_Click"
+                  Content="Review this app"/>
+                    </StackPanel>
+                </ScrollViewer>
             </phone:PanoramaItem>
         </phone:Panorama>
     </Grid>
@@ -36,13 +78,17 @@
 
     <phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar Mode="Default" Opacity="1.0" IsMenuEnabled="True" IsVisible="True">
-
-            <shell:ApplicationBarIconButton IconUri="Images/AppBar/like.png" Text="My" />
-            <shell:ApplicationBarIconButton IconUri="Images/AppBar/Share.png" Text="Team"/>
-            <shell:ApplicationBarIconButton IconUri="Images/AppBar/favs.png" Text="Favourite"/>
-            <shell:ApplicationBarIconButton IconUri="Images/AppBar/feature.settings.png" Text="Settings" />
+            <shell:ApplicationBar.MenuItems>
+                <shell:ApplicationBarMenuItem Text="Settings"  />
+            </shell:ApplicationBar.MenuItems>
+            <shell:ApplicationBarIconButton IconUri="Images/AppBar/refresh.png" Text="Refresh"/>
 
         </shell:ApplicationBar>
 
     </phone:PhoneApplicationPage.ApplicationBar>
+    <i:Interaction.Behaviors>
+        <appBarUtils:AppBarItemCommand Id="Refresh" Command="{Binding RefreshCommand}"/>
+        <appBarUtils:AppBarItemCommand Id="Settings" Command="{Binding SettingsCommand}"/>
+
+    </i:Interaction.Behaviors>
 </phone:PhoneApplicationPage>
