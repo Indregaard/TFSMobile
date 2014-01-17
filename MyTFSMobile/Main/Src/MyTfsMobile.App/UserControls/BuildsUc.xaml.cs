@@ -19,10 +19,7 @@ namespace MyTfsMobile.App.UserControls
         public BuildsUc()
         {
             InitializeComponent();
-            vm = new BuildsViewModel(BuildSection);
-
-            DataContext = vm;
-
+            
         }
 
 
@@ -37,5 +34,13 @@ namespace MyTfsMobile.App.UserControls
             set { SetValue(BuildSectionProperty, value); }
         }
 
+        private void BuildsUc_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            vm = new BuildsViewModel(BuildSection);
+
+            DataContext = vm;
+            if(!vm.IsDataLoaded)
+                vm.LoadData();
+        }
     }
 }

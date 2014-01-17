@@ -42,6 +42,11 @@ namespace MyTfsMobile.App
             }
         }
 
+        private void GetCurrentPanoPage()
+        {
+            
+        }
+
         private void CreateLoadPopup()
         {
             loadingPopup = new Popup();
@@ -67,7 +72,11 @@ namespace MyTfsMobile.App
 
         private void RefreshButtonClick()
         {
-            throw new NotImplementedException();
+            var selectedpanoItem = panoPage.SelectedItem;
+            if (selectedpanoItem == MyBuilds)
+                ((BuildsViewModel)MyBuildsUserControl.DataContext).LoadData();
+            else if (selectedpanoItem == TeamBuilds)
+                ((BuildsViewModel)TeamBuildUserControl.DataContext).LoadData();
         }
 
         public void ShowLoadPopup()
@@ -109,18 +118,14 @@ namespace MyTfsMobile.App
             }
         }
 
-        private void MainPage_OnLoaded(object sender, RoutedEventArgs e)
-        {
-            var builds = (BuildsViewModel)BuildUserControl.DataContext;
-            if (!builds.IsDataLoaded)
-            {
-                builds.LoadData();
-            }
-        }
-
         private void Panorama_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // få tak i uc, last data..
+            //var selectedpanoItem = panoPage.SelectedItem;
+            //if (selectedpanoItem == MyBuilds)
+            //    ((BuildsViewModel) MyBuildsUserControl.DataContext).LoadData();
+            //else if (selectedpanoItem == TeamBuilds)
+            //    ((BuildsViewModel)TeamBuildUserControl.DataContext).LoadData();
         }
 
     }

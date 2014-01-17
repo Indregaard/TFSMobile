@@ -15,21 +15,21 @@
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Portrait"  Orientation="Portrait"
-    shell:SystemTray.IsVisible="False" Loaded="MainPage_OnLoaded">
+    shell:SystemTray.IsVisible="False">
     <phone:PhoneApplicationPage.DataContext>
         <viewModel:MainViewModel/>
     </phone:PhoneApplicationPage.DataContext>
     <!--LayoutRoot contains the root grid where all other page content is placed-->
     <Grid x:Name="LayoutRoot">
         <phone:Panorama Title="My TfsMobile" SelectionChanged="Panorama_OnSelectionChanged" 
-                        >
+                       Name="panoPage" >
 
-            <phone:PanoramaItem Header="My Builds">
+            <phone:PanoramaItem Header="My Builds" Name="MyBuilds">
                 <Grid>
-                    <userControls:BuildsUc Name="BuildUserControl" BuildSection="MyBuilds" VerticalContentAlignment="Stretch"></userControls:BuildsUc>
+                    <userControls:BuildsUc Name="MyBuildsUserControl" BuildSection="MyBuilds" VerticalContentAlignment="Stretch"></userControls:BuildsUc>
                 </Grid>
             </phone:PanoramaItem>
-            <phone:PanoramaItem Header="Team Builds">
+            <phone:PanoramaItem Header="Team Builds" Name="TeamBuilds">
                 <Grid>
                     <userControls:BuildsUc Name="TeamBuildUserControl" BuildSection="TeamBuilds"  VerticalContentAlignment="Stretch"></userControls:BuildsUc>
 

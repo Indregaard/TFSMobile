@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight.Ioc;
+using GalaSoft.MvvmLight.Messaging;
 using MyTfsMobile.App.ViewModel;
 using TfsMobile.Contracts;
 using TfsMobile.Repositories.v1;
@@ -35,6 +36,7 @@ namespace MyTfsMobile.App
 
         public async Task<bool> CheckTfsLogin(TfsUserSettings settings)
         {
+            Messenger.Default.Send(true, "ShowLoadPopup");
             var canLogIn = !string.IsNullOrEmpty(settings.TfsServer) && !string.IsNullOrEmpty(settings.TfsUsername) && !string.IsNullOrEmpty(settings.TfsPassword);
 
             TfsSettings = settings;
@@ -52,6 +54,7 @@ namespace MyTfsMobile.App
                 Locator.Settings.ShowSettings();
             }
 
+            Messenger.Default.Send(true, "CloseLoadPopup");
 
             return canLogIn;
         }
@@ -65,7 +68,7 @@ namespace MyTfsMobile.App
                 Username = TfsSettings.TfsUsername,
                 Password = TfsSettings.TfsPassword,
                 TfsUri = Uri.IsWellFormedUriString(TfsSettings.TfsServer, UriKind.Absolute) ? new Uri(TfsSettings.TfsServer) : null,
-                TfsMobileApiUri = new Uri("http://192.168.10.60/TfsMobileServices/api/")
+                TfsMobileApiUri = new Uri("http://192.168.1.17/TfsMobileServices/api/")
             };
         }
 

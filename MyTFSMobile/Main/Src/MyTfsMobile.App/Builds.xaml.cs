@@ -6,6 +6,7 @@ using System.Windows.Media;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Xna.Framework.Input.Touch;
+using MyTfsMobile.App.enums;
 using MyTfsMobile.App.ViewModel;
 
 namespace MyTfsMobile.App
@@ -25,7 +26,7 @@ namespace MyTfsMobile.App
         public Builds()
         {
             InitializeComponent();
-            vm = new BuildsViewModel();
+            vm = new BuildsViewModel(BuildSection.MyBuilds);
 
             DataContext = vm;
 

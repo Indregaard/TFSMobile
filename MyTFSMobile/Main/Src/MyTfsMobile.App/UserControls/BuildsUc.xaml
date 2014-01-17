@@ -11,7 +11,7 @@
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     d:DataContext="{d:DesignData ../SampleData/BuildsViewModelSampleData.xaml}"
-    d:DesignHeight="480" d:DesignWidth="480">
+    d:DesignHeight="480" d:DesignWidth="480" Loaded="BuildsUc_OnLoaded">
     
     <Grid x:Name="LayoutRoot">
         <Grid.Resources>
