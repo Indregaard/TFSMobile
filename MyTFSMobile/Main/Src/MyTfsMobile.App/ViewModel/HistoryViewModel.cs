@@ -29,23 +29,12 @@ namespace MyTfsMobile.App.ViewModel
             HistoryItems.Clear();
 
             var tfsUserDto = SimpleIoc.Default.GetInstance<ITfsAuthenticationService>().CreateTfsUserDto();
-            var buildsRepo = new HistoryRepository(tfsUserDto, false);
-            var buildsResult = await buildsRepo.GetHistoryAsync(new RequestHistoryDto() { FromDays = "20", TfsProject = "Main" });
+            var historyRepository = new HistoryRepository(tfsUserDto, false);
+            var historyResult = await historyRepository.GetHistoryAsync(new RequestHistoryDto() { FromDays = "20", TfsProject = "Main" });
 
-            foreach (var historyItem in buildsResult)
+            foreach (var historyItem in historyResult)
             {
-                HistoryItems.Add(new HistoryItemViewModel
-                {
-                    HistoryId = historyItem.Id,
-                    HistoryItemType = historyItem.HistoryItemType,
-                    HistoryDate = historyItem.HistoryDate,
-                    AreaPath = historyItem.AreaPath,
-                    Description = historyItem.Description,
-                    IterationPath = historyItem.IterationPath,
-                    State = historyItem.State,
-                    TfsItemUri = historyItem.TfsItemUri,
-                    WorkType = historyItem.WorkType
-                });
+                HistoryItems.Add(new HistoryItemViewModel(historyItem));
             }
 
             IsDataLoaded = true;

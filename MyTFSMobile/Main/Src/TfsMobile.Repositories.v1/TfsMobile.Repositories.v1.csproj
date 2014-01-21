@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="BaseRepository.cs" />
     <Compile Include="BuildsRepository.cs" />
+    <Compile Include="Dtos\HistoryItemDto.cs" />
     <Compile Include="HistoryRepository.cs" />
     <Compile Include="Interfaces\ILoginRepository.cs" />
     <Compile Include="LoginRepository.cs" />
@@ -73,6 +74,9 @@
   <ItemGroup>
     <Reference Include="AdvancedREI.Net.Http.Compression">
       <HintPath>..\packages\HttpClient.Compression.1.1.0\lib\portable-net4+sl4+wp7+win8\AdvancedREI.Net.Http.Compression.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoMapper">
+      <HintPath>..\packages\AutoMapper.3.1.1\lib\portable-windows8+net40+wp8+sl5+MonoAndroid+MonoTouch\AutoMapper.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Threading.Tasks">
       <HintPath>..\packages\Microsoft.Bcl.Async.1.0.16\lib\portable-net45+win8+wp8\Microsoft.Threading.Tasks.dll</HintPath>

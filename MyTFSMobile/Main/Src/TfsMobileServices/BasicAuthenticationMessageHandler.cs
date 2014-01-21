@@ -80,8 +80,6 @@ namespace TfsMobileServices
         public AuthenticationHandler(HttpRequestHeaders authHeader):this(authHeader.Authorization)
         {
             SetTfsUri(authHeader);
-            //SetUseLocalAccount(authHeader);
-            //Tfs = new TfsServiceHandler(Credentials, TfsUri);
         }
 
         private void SetTfsUri(HttpRequestHeaders authHeader)
@@ -92,16 +90,7 @@ namespace TfsMobileServices
                 TfsUri = new Uri(tfsHeader.Value.First());
             }
         }
-        //private void SetUseLocalAccount(HttpRequestHeaders authHeader)
-        //{
-        //    var uselocaldefault = authHeader.FirstOrDefault(h => h.Key == "uselocaldefault");
-        //    if (uselocaldefault.Value != null)
-        //    {
-        //        Credentials.UseLocalDefault = true;
-        //    }
-        //}
-
-        //public string ErrorMsg { get; private set; }
+      
 
         private void ExtractCredentials()
         {

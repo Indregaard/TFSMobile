@@ -30,7 +30,8 @@ namespace TfsMobile.Contracts
         public string WorkType { get; set; }
 
         [DataMember]
-        public string HistoryItemType { get; set; }
+        public string Title { get; set; }
+
         [DataMember]
         public string Description { get; set; }
 
@@ -39,12 +40,16 @@ namespace TfsMobile.Contracts
 
         [DataMember]
         public Uri TfsItemUri { get; set; }
+
         [DataMember]
         public string AreaPath { get; set; }
+
         [DataMember]
         public string IterationPath { get; set; }
+
         [DataMember]
         public string State { get; set; }
+
     }
 
 

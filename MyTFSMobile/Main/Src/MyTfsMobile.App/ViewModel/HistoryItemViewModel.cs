@@ -1,115 +1,118 @@
 ﻿using System;
 using GalaSoft.MvvmLight;
+using TfsMobile.Repositories.v1.Dtos;
 
 namespace MyTfsMobile.App.ViewModel
 {
     public class HistoryItemViewModel : ViewModelBase
     {
-
-        private int historyId;
+        public HistoryItemDto Item { get; set; }
+    
         public int HistoryId
         {
-            get { return historyId; }
+            get { return Item.Id; }
             set
             {
-                if (historyId == value) return;
-                historyId = value;
+                if (Item.Id == value) return;
+                Item.Id = value;
                 RaisePropertyChanged("HistoryId");
             }
         }
 
-        private string workType;
+
         public string WorkType
         {
-            get { return workType; }
+            get { return Item.WorkType; }
             set
             {
-                if (workType == value) return;
-                workType = value;
+                if (Item.WorkType == value) return;
+                Item.WorkType = value;
                 RaisePropertyChanged("WorkType");
             }
         }
 
-        private string historyItemType;
+
         public string HistoryItemType
         {
-            get { return historyItemType; }
+            get { return Item.Title; }
             set
             {
-                if (historyItemType == value) return;
-                historyItemType = value;
+                if (Item.Title == value) return;
+                Item.Title = value;
                 RaisePropertyChanged("HistoryItemType");
             }
         }
 
-        private string description;
         public string Description
         {
-            get { return description; }
+            get { return Item.Description; }
             set
             {
-                if (description == value) return;
-                description = value;
+                if (Item.Description == value) return;
+                Item.Description = value;
                 RaisePropertyChanged("Description");
             }
         }
 
-        private DateTime historyDate;
+  
         public DateTime HistoryDate
         {
-            get { return historyDate; }
+            get { return Item.HistoryDate; }
             set
             {
-                if (historyDate == value) return;
-                historyDate = value;
+                if (Item.HistoryDate == value) return;
+                Item.HistoryDate = value;
                 RaisePropertyChanged("HistoryDate");
             }
         }
 
-        private Uri tfsItemUri;
         public Uri TfsItemUri
         {
-            get { return tfsItemUri; }
+            get { return Item.TfsItemUri; }
             set
             {
-                if (tfsItemUri == value) return;
-                tfsItemUri = value;
+                if (Item.TfsItemUri == value) return;
+                Item.TfsItemUri = value;
                 RaisePropertyChanged("TfsItemUri");
             }
         }
 
-        private string areaPath;
+     
         public string AreaPath
         {
-            get { return areaPath; }
+            get { return Item.AreaPath; }
             set
             {
-                if (areaPath == value) return;
-                areaPath = value;
+                if (Item.AreaPath == value) return;
+                Item.AreaPath = value;
                 RaisePropertyChanged("AreaPath");
             }
         }
 
-        private string iterationPath;
+        
         public string IterationPath
         {
-            get { return iterationPath; }
+            get { return Item.IterationPath; }
             set
             {
-                if (iterationPath == value) return;
-                iterationPath = value;
+                if (Item.IterationPath == value) return;
+                Item.IterationPath = value;
                 RaisePropertyChanged("IterationPath");
             }
         }
 
-        private string state;
+        public HistoryItemViewModel(HistoryItemDto historyItem)
+        {
+            Item = historyItem;
+        }
+
         public string State
         {
-            get { return state; }
+            get { return Item.State; }
             set
             {
-                if (state == value) return;
-                state = value;
+                if (Item.State == value) return;
+                Item.State = value;
                 RaisePropertyChanged("State");
             }
         }

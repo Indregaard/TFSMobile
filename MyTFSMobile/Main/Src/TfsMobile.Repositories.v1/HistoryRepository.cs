@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using Newtonsoft.Json;
 using TfsMobile.Contracts;
+using TfsMobile.Repositories.v1.Dtos;
 
 namespace TfsMobile.Repositories.v1
 {
@@ -15,12 +18,14 @@ namespace TfsMobile.Repositories.v1
         {
         }
 
-        public async Task<IEnumerable<HistoryItemContract>> GetHistoryAsync(RequestHistoryDto historyRequest)
+        public async Task<IEnumerable<HistoryItemDto>> GetHistoryAsync(RequestHistoryDto historyRequest)
         {
             var historyResult = await GetHistory(historyRequest);
             var historyContracts = JsonConvert.DeserializeObject<List<HistoryItemContract>>(historyResult);
-            return historyContracts;
+            
+            return historyContracts.Select(Mapper.Map<HistoryItemContract, HistoryItemDto>);
         }
+
 
         private async Task<string> GetHistory(RequestHistoryDto buildDetails)
         {
@@ -52,6 +57,12 @@ namespace TfsMobile.Repositories.v1
             sb.Append("&fromDays=");
             sb.Append(buildDetails.FromDays);
             return new Uri(sb.ToString());
+        }
+
+
+        public static void Configure()
+        {
+            AutoMapperBootstrapper.Configure();
         }
     }
 }

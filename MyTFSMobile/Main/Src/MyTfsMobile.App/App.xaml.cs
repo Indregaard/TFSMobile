@@ -10,6 +10,7 @@ using Microsoft.Phone.Shell;
 using Microsoft.Xna.Framework.Input.Touch;
 using MyTfsMobile.App.Resources;
 using MyTfsMobile.App.ViewModel;
+using TfsMobile.Repositories.v1;
 using MainViewModel = MyTfsMobile.App.ViewModel.MainViewModel;
 
 namespace MyTfsMobile.App
@@ -76,7 +77,7 @@ namespace MyTfsMobile.App
                 // and consume battery power when the user is not using the phone.
                 PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
             }
-
+            HistoryRepository.Configure();
         }
 
 
