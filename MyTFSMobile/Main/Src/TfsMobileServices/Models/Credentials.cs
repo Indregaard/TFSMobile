@@ -22,10 +22,11 @@
             var userNameAndDomain = tempString.Split(':');
             if (userNameAndDomain.Length > 0)
             {
-                Username = userNameAndDomain[0]; 
+                Username = userNameAndDomain[0];
                 if (userNameAndDomain.Length > 1)
                 {
-                    Domain = userNameAndDomain[1]; 
+                    Domain = userNameAndDomain[0];
+                    Username = userNameAndDomain[1];
                 }
             }
 
