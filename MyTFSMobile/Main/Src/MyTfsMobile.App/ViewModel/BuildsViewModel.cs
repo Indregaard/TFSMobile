@@ -59,7 +59,7 @@ namespace MyTfsMobile.App.ViewModel
         {
             PrepareBuildSection("My Builds");
 
-            var serviceAccessw = Locator.TfsAuthenticationService.CheckTfsLogin(Locator.Settings.TfsSettings);
+            var serviceAccessw = Locator.TfsAuthenticationService.CheckTfsLogin(Locator.MyTfsMobileSettings.TfsSettings);
 
             var access = await serviceAccessw;
             if (!access) return;
@@ -103,7 +103,7 @@ namespace MyTfsMobile.App.ViewModel
         {
             PrepareBuildSection("Team Builds");
 
-            var serviceAccessw = Locator.TfsAuthenticationService.CheckTfsLogin(Locator.Settings.TfsSettings);
+            var serviceAccessw = Locator.TfsAuthenticationService.CheckTfsLogin(Locator.MyTfsMobileSettings.TfsSettings);
 
             var access = await serviceAccessw;
             if (!access) return;

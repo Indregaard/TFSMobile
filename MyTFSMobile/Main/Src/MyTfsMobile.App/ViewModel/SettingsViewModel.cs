@@ -1,125 +1,67 @@
 ﻿using System;
-using System.IO.IsolatedStorage;
 using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Ioc;
 using GalaSoft.MvvmLight.Messaging;
-using TfsMobile.Contracts;
-using TfsMobile.Repositories.v1;
-using TfsMobile.Repositories.v1.Interfaces;
 
 namespace MyTfsMobile.App.ViewModel
 {
 
     public class SettingsViewModel : BaseViewModel
     {
-
-        private const string SettingsFile = "myTfsMobileSettings.mtm";
-        private IsolatedStorageSettings _appSettings;
-
         [PreferredConstructor]
         public SettingsViewModel()
         {
-            if (!System.ComponentModel.DesignerProperties.IsInDesignTool)
-            {
-                _appSettings = IsolatedStorageSettings.ApplicationSettings;
-            }
+            LoadTfsUserSettings();
         }
 
         public string TfsServerAdress
         {
-            get { return TfsSettings.TfsServer; }
+            get { return tfsSettings.TfsServer; }
             set
             {
-                if (TfsSettings.TfsServer == value) return;
-                TfsSettings.TfsServer = value;
+                if (tfsSettings.TfsServer == value) return;
+                tfsSettings.TfsServer = value;
                 RaisePropertyChanged("TfsServerAdress");
             }
         }
 
+
         public string TfsServerUsername
         {
-            get { return TfsSettings.TfsUsername; }
+            get { return tfsSettings.TfsUsername; }
             set
             {
-                if (TfsSettings.TfsUsername == value) return;
-                TfsSettings.TfsUsername = value;
+                if (tfsSettings.TfsUsername == value) return;
+                tfsSettings.TfsUsername = value;
                 RaisePropertyChanged("TfsServerUsername");
             }
         }
 
         public string TfsServerPassword
         {
-            get { return TfsSettings.TfsPassword; }
+            get { return tfsSettings.TfsPassword; }
             set
             {
-                if (TfsSettings.TfsPassword == value) return;
-                TfsSettings.TfsPassword = value;
+                if (tfsSettings.TfsPassword == value) return;
+                tfsSettings.TfsPassword = value;
                 RaisePropertyChanged("TfsServerPassword");
             }
         }
 
         private TfsUserSettings tfsSettings;
-        public TfsUserSettings TfsSettings
+        private void LoadTfsUserSettings()
         {
-            get
-            {
-                if (tfsSettings == null)
-                {
-                    tfsSettings = LoadTfsUserSettings();
-                }
-                return tfsSettings;
-            }
-            set
-            {
-                tfsSettings = value;
-                NotifyTfsSettingsUpdated();
-            }
+            tfsSettings = Locator.MyTfsMobileSettings.TfsSettings;
         }
 
-        private TfsUserSettings LoadTfsUserSettings()
-        {
-            tfsSettings = new TfsUserSettings();
-            if (_appSettings.Contains(SettingsFile))
-            {
-                tfsSettings = (TfsUserSettings)_appSettings[SettingsFile];
-            }
-            return tfsSettings;
-        }
 
-        public static event EventHandler TfsSettingsUpdated;
-        private static void NotifyTfsSettingsUpdated()
+        private async Task<bool> SaveSettings()
         {
-            var handler = TfsSettingsUpdated;
-            if (handler != null) handler(null, null);
-        }
-
-        private async Task<bool> SaveData(Action errorCallback)
-        {
-            var settingsSaved = false;
-            try
-            {
-                _appSettings[SettingsFile] = TfsSettings;
-                var saved = await SaveAppsettings();
-                if (saved){
-                    settingsSaved = true;
-                }
-            }
-            catch (IsolatedStorageException)
-            {
-                settingsSaved = false;
-                errorCallback();
-                
-            }
+            var settingsSaved = await Locator.MyTfsMobileSettings.SaveTfsSettings(tfsSettings);
             return settingsSaved;
         }
 
-        private async Task<bool> SaveAppsettings()
-        {
-            await TaskEx.Run(() => _appSettings.Save());
-            return true;
-        }
 
 
         private RelayCommand<SettingsViewModel> saveCommand;
@@ -130,18 +72,12 @@ namespace MyTfsMobile.App.ViewModel
                 return saveCommand ?? (saveCommand = new RelayCommand<SettingsViewModel>(
                     async retval =>
                           {
-                              var saved = await SaveData(SaveCommandError);
-                              var canLogIn = await Locator.TfsAuthenticationService.CheckTfsLogin(TfsSettings);
+                              var saved = await SaveSettings();
+                              var canLogIn = await Locator.TfsAuthenticationService.CheckTfsLogin(tfsSettings);
                               if (saved && canLogIn)
                                  CloseSettings();
                     }));
             }
-        }
-
-        private void SaveCommandError()
-        {
-            // cannot save data..
-            
         }
 
         public void ShowSettings()

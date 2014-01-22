@@ -26,7 +26,7 @@ namespace MyTfsMobile.App.ViewModel
             get
             {
                 return settingsCommand ?? (settingsCommand = new RelayCommand<MainViewModel>(
-                   (data) => Locator.Settings.ShowSettings()));
+                   (data) => Messenger.Default.Send(true, "ShowSettingsPopup")));
             }
         }
     }

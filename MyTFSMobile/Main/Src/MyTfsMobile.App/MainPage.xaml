@@ -21,7 +21,7 @@
     </phone:PhoneApplicationPage.DataContext>
     <!--LayoutRoot contains the root grid where all other page content is placed-->
     <Grid x:Name="LayoutRoot">
-        <phone:Panorama Title="My TfsMobile" SelectionChanged="Panorama_OnSelectionChanged" 
+        <phone:Panorama Title="My TfsMobile" 
                        Name="panoPage" >
 
             <phone:PanoramaItem Header="My Builds" Name="MyBuilds">
@@ -35,8 +35,10 @@
 
                 </Grid>
             </phone:PanoramaItem>
-            <phone:PanoramaItem Header="History">
-                <Grid/>
+            <phone:PanoramaItem Header="History" Name="HistoryItems">
+                <Grid>
+                    <userControls:HistoryUc Name="HistoryUserControl" VerticalContentAlignment="Stretch"></userControls:HistoryUc>
+                </Grid>
             </phone:PanoramaItem>
             <phone:PanoramaItem Header="About">
                 <ScrollViewer>
@@ -79,7 +81,7 @@
     <phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar Mode="Default" Opacity="1.0" IsMenuEnabled="True" IsVisible="True">
             <shell:ApplicationBar.MenuItems>
-                <shell:ApplicationBarMenuItem Text="Settings"  />
+                <shell:ApplicationBarMenuItem Text="Settings" Click="ApplicationBarMenuItem_OnClick"  />
             </shell:ApplicationBar.MenuItems>
             <shell:ApplicationBarIconButton IconUri="Images/AppBar/refresh.png" Text="Refresh"/>
 
@@ -88,7 +90,5 @@
     </phone:PhoneApplicationPage.ApplicationBar>
     <i:Interaction.Behaviors>
         <appBarUtils:AppBarItemCommand Id="Refresh" Command="{Binding RefreshCommand}"/>
-        <appBarUtils:AppBarItemCommand Id="Settings" Command="{Binding SettingsCommand}"/>
-
     </i:Interaction.Behaviors>
 </phone:PhoneApplicationPage>

@@ -1,14 +1,8 @@
 ﻿using System;
-using System.ComponentModel;
-using System.IO;
-using System.Threading;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Input;
 using System.Xml.Linq;
 using GalaSoft.MvvmLight.Messaging;
-using Microsoft.Phone.Controls;
 using Microsoft.Phone.Tasks;
 using MyTfsMobile.App.UserControls;
 using MyTfsMobile.App.ViewModel;
@@ -42,11 +36,6 @@ namespace MyTfsMobile.App
             }
         }
 
-        private void GetCurrentPanoPage()
-        {
-            
-        }
-
         private void CreateLoadPopup()
         {
             loadingPopup = new Popup();
@@ -77,6 +66,8 @@ namespace MyTfsMobile.App
                 ((BuildsViewModel)MyBuildsUserControl.DataContext).LoadData();
             else if (selectedpanoItem == TeamBuilds)
                 ((BuildsViewModel)TeamBuildUserControl.DataContext).LoadData();
+            else if (selectedpanoItem == HistoryItems)
+                ((HistoryViewModel)HistoryUserControl.DataContext).LoadData();
         }
 
         public void ShowLoadPopup()
@@ -118,15 +109,13 @@ namespace MyTfsMobile.App
             }
         }
 
-        private void Panorama_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ApplicationBarMenuItem_OnClick(object sender, EventArgs e)
         {
-            // få tak i uc, last data..
-            //var selectedpanoItem = panoPage.SelectedItem;
-            //if (selectedpanoItem == MyBuilds)
-            //    ((BuildsViewModel) MyBuildsUserControl.DataContext).LoadData();
-            //else if (selectedpanoItem == TeamBuilds)
-            //    ((BuildsViewModel)TeamBuildUserControl.DataContext).LoadData();
+            var vm = DataContext as MainViewModel;
+            if (vm != null)
+            {
+                vm.SettingsCommand.Execute(null);
+            }
         }
-
     }
 }

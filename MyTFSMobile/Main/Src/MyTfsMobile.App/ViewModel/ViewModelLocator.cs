@@ -45,6 +45,7 @@ namespace MyTfsMobile.App.ViewModel
                 // Create run time view services and models
                 //SimpleIoc.Default.Register<ILoginRepository, LoginRepository>();
                 SimpleIoc.Default.Register<ITfsAuthenticationService, TfsAuthenticationService>();
+                SimpleIoc.Default.Register<MyTfsMobileSettings>();
             }
 
             SimpleIoc.Default.Register<MainViewModel>();
@@ -71,6 +72,11 @@ namespace MyTfsMobile.App.ViewModel
         public ITfsAuthenticationService TfsAuthenticationService
         {
             get { return ServiceLocator.Current.GetInstance<ITfsAuthenticationService>(); }
+        }
+
+        public MyTfsMobileSettings MyTfsMobileSettings
+        {
+            get { return ServiceLocator.Current.GetInstance<MyTfsMobileSettings>(); }
         }
         
         public static void Cleanup()

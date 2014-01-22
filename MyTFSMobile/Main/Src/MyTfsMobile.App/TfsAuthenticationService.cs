@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight.Ioc;
 using GalaSoft.MvvmLight.Messaging;
+using Microsoft.Practices.ServiceLocation;
 using MyTfsMobile.App.ViewModel;
 using TfsMobile.Contracts;
 using TfsMobile.Repositories.v1;
@@ -20,7 +21,6 @@ namespace MyTfsMobile.App
 
     public class TfsAuthenticationService : ITfsAuthenticationService
     {
-        public ViewModelLocator Locator = new ViewModelLocator();
         private ILoginRepository loginRepository;
         private TfsUserSettings TfsSettings;
 
@@ -51,7 +51,7 @@ namespace MyTfsMobile.App
 
             if (!canLogIn)
             {
-                Locator.Settings.ShowSettings();
+                ServiceLocator.Current.GetInstance<SettingsViewModel>().ShowSettings();
             }
 
             Messenger.Default.Send(true, "CloseLoadPopup");

@@ -2,6 +2,7 @@
 using System.Windows.Navigation;
 using GalaSoft.MvvmLight.Messaging;
 using Microsoft.Phone.Controls;
+using Microsoft.Practices.ServiceLocation;
 using MyTfsMobile.App.ViewModel;
 
 namespace MyTfsMobile.App
@@ -17,7 +18,7 @@ namespace MyTfsMobile.App
 
         private void SetDataContext()
         {
-            pageViewModel = new SettingsViewModel();
+            pageViewModel = ServiceLocator.Current.GetInstance<SettingsViewModel>();
             DataContext = pageViewModel; 
         }
 
