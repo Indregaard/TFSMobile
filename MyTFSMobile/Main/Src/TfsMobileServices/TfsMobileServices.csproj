@@ -178,7 +178,10 @@
     <Compile Include="Models\Credentials.cs" />
     <Compile Include="Models\CredentialsAuth.cs" />
     <Compile Include="Models\ITfsServer.cs" />
-    <Compile Include="Models\TfsServer.cs" />
+    <Compile Include="Models\TfsBuildsRepository.cs" />
+    <Compile Include="Models\TfsHistoryRepository.cs" />
+    <Compile Include="Models\TfsServiceFactory.cs" />
+    <Compile Include="Models\TfsService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

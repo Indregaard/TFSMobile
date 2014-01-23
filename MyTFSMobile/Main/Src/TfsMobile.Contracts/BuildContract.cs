@@ -15,9 +15,17 @@ namespace TfsMobile.Contracts
         [DataMember]
         public string Status { get; set; }
         [DataMember]
-        public DateTime FinishTime { get; set; }
+        public DateTime? FinishTime { get; set; }
+        [DataMember]
+        public string TeamProject { get; set; }
 
-       
+        [DataMember]
+        public DateTime StartTime { get; set; }
+        [DataMember]
+        public string RequestedBy { get; set; }
+        [DataMember]
+        public string RequestedFor { get; set; }
+        
     }
 
     [DataContract]
