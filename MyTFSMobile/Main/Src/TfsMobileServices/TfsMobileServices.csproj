@@ -170,11 +170,13 @@
     <Compile Include="Controllers\BuildsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\ProjectsController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Controllers\HistoryController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\BaseRepository.cs" />
     <Compile Include="Models\Credentials.cs" />
     <Compile Include="Models\CredentialsAuth.cs" />
     <Compile Include="Models\ITfsServer.cs" />
@@ -182,6 +184,7 @@
     <Compile Include="Models\TfsHistoryRepository.cs" />
     <Compile Include="Models\TfsServiceFactory.cs" />
     <Compile Include="Models\TfsService.cs" />
+    <Compile Include="Models\TfsTeamProjectRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -241,10 +244,6 @@
     <ProjectReference Include="..\TfsMobile.Contracts\TfsMobile.Contracts.csproj">
       <Project>{0c7a5baf-dfba-4313-884f-baa0a1196d33}</Project>
       <Name>TfsMobile.Contracts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TfsMobile.Repositories.v1\TfsMobile.Repositories.v1.csproj">
-      <Project>{51C656D8-7516-42CB-87DF-F7A1B96C9295}</Project>
-      <Name>TfsMobile.Repositories.v1</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

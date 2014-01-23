@@ -1,23 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using Microsoft.TeamFoundation.Build.Client;
 using TfsMobile.Contracts;
+using WebGrease.Css.Extensions;
+
 
 namespace TfsMobileServices.Models
 {
-    public class TfsBuildsRepository
+    public class TfsBuildsRepository : BaseRepository
     {
-        public IEnumerable<BuildContract> GetMyBuilds(TfsService tf, string project, int fromDays)
+        public TfsBuildsRepository(Uri tfsUri, NetworkCredential cred):base(tfsUri,cred)
         {
-            using (var instance = tf.Connect())
+            
+        }
+        public IEnumerable<BuildContract> GetMyBuilds(string project, int fromDays)
+        {
+            using (var instance = Tf.Connect())
             {
                 var buildServer = (IBuildServer) instance.GetService(typeof (IBuildServer));
                 var buildSpec = GetBuildDetailSpec(buildServer, project, fromDays);
 
-                buildSpec.RequestedFor = (tf.UseLocalAccount)
+                buildSpec.RequestedFor = (Tf.UseLocalAccount)
                     ? instance.AuthorizedIdentity.DisplayName
-                    : tf.NetCredentials.UserName;
+                    : Tf.NetCredentials.UserName;
 
                 IBuildQueryResult details = buildServer.QueryBuilds(buildSpec);
                 IEnumerable<BuildContract> result = CreateBuildResults(details);
@@ -25,9 +32,9 @@ namespace TfsMobileServices.Models
             }
         }
 
-        public IEnumerable<BuildContract> GetBuildDefinitions(TfsService tf, string project)
+        public IEnumerable<BuildContract> GetBuildDefinitions(string project)
         {
-            using (var instance = tf.Connect())
+            using (var instance = Tf.Connect())
             {
                 var buildServer = (IBuildServer)instance.GetService(typeof(IBuildServer));
                 var buildSpec = GetBuildDetailSpec(buildServer, project, 365);
@@ -37,9 +44,9 @@ namespace TfsMobileServices.Models
             }
         }
 
-        public IEnumerable<BuildContract> GetTeamBuilds(TfsService tf, string project, int fromDays)
+        public IEnumerable<BuildContract> GetTeamBuilds(string project, int fromDays)
         {
-            using (var instance = tf.Connect())
+            using (var instance = Tf.Connect())
             {
                 var buildServer = (IBuildServer)instance.GetService(typeof(IBuildServer));
                 var buildSpec = GetBuildDetailSpec(buildServer, project, fromDays);
@@ -99,9 +106,9 @@ namespace TfsMobileServices.Models
         //            }).ToList();
         //}
                 
-        public void QueueBuild(TfsService tf, string teamProject, string buildName)
+        public void QueueBuild(string teamProject, string buildName)
         {
-            using (var tfsInstance = tf.Connect())
+            using (var tfsInstance = Tf.Connect())
             {
                 var buildServer = (IBuildServer)tfsInstance.GetService(typeof(IBuildServer));
                 var buildDef = buildServer.GetBuildDefinition(teamProject, buildName);

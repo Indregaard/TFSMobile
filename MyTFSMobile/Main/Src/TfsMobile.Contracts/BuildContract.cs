@@ -60,6 +60,12 @@ namespace TfsMobile.Contracts
 
     }
 
+    [DataContract]
+    public class TeamProjectContract
+    {
+        [DataMember]
+        public string Name { get; set; }
+    }
 
     [DataContract]
     public class TfsSettingsContract

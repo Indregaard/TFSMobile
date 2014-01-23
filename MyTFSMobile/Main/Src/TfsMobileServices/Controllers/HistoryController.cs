@@ -11,10 +11,8 @@ namespace TfsMobileServices.Controllers
         public IEnumerable<HistoryItemContract> Get(string project, int fromDays)
         {
             var handler = new AuthenticationHandler(Request.Headers);
-            var tfs = TfsServiceFactory.Get(handler.TfsUri, handler.NetCredentials);
-
-            var rep = new TfsHistoryRepository();
-            var res = rep.GetHistory(tfs, "Main", fromDays);
+            var rep = new TfsHistoryRepository(handler.TfsUri, handler.NetCredentials);
+            var res = rep.GetHistory("Main", fromDays);
             return res;
         }
 
@@ -23,10 +21,9 @@ namespace TfsMobileServices.Controllers
             
             Request.Headers.Add("tfsuri", "http://tfs.osiris.no:8080/tfs");
             var handler = new AuthenticationHandler(Request.Headers);
-            var tfs = TfsServiceFactory.Get(handler.TfsUri, handler.NetCredentials);
-
-            var rep = new TfsHistoryRepository();
-            var res = rep.GetHistory(tfs, "Main", 7);
+            
+            var rep = new TfsHistoryRepository(handler.TfsUri, handler.NetCredentials);
+            var res = rep.GetHistory("Main", 7);
             return res;
         }
     }
