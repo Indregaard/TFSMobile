@@ -18,7 +18,7 @@ namespace TfsMobile.TestClient
                 Console.WriteLine("Login success!!!");
 
                 Console.WriteLine("Builds:");
-                var rep = new BuildsRepository(LoginDetails(), false);
+                var rep = new BuildsRepository(LoginDetails());
                 var res = rep.GetBuilds(BuildDetailsDto.Default());
                 foreach (var buildContract in res)
                 {
@@ -49,7 +49,7 @@ namespace TfsMobile.TestClient
         private static bool CheckLogin()
         {
             //return true;
-            var rep = new LoginRepository(LoginDetails(), false);
+            var rep = new LoginRepository(LoginDetails());
             return rep.TryLogin();
         }
 

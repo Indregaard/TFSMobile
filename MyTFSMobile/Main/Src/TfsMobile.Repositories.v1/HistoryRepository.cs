@@ -14,7 +14,7 @@ namespace TfsMobile.Repositories.v1
 {
     public class HistoryRepository : BaseRepository
     {
-        public HistoryRepository(RequestTfsUserDto requestTfsUser, bool useLocalDefaultTfs) : base(requestTfsUser, useLocalDefaultTfs)
+        public HistoryRepository(RequestTfsUserDto requestTfsUser) : base(requestTfsUser)
         {
         }
 
@@ -60,9 +60,6 @@ namespace TfsMobile.Repositories.v1
         }
 
 
-        public static void Configure()
-        {
-            AutoMapperBootstrapper.Configure();
-        }
+      
     }
 }

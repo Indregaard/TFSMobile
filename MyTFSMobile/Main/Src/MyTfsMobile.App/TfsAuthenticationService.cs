@@ -74,7 +74,7 @@ namespace MyTfsMobile.App
 
         private void CreateLoginRepository(RequestTfsUserDto tfsUserDto)
         {
-            loginRepository = new LoginRepository(tfsUserDto, false);
+            loginRepository = new LoginRepository(tfsUserDto);
         }
     }
 }

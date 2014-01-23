@@ -13,8 +13,8 @@ namespace TfsMobile.Repositories.v1
 {
     public class LoginRepository : BaseRepository, ILoginRepository
     {
-        public LoginRepository(RequestTfsUserDto requestTfsUser, bool useLocalDefaultTfs)
-            : base(requestTfsUser, useLocalDefaultTfs)
+        public LoginRepository(RequestTfsUserDto requestTfsUser)
+            : base(requestTfsUser)
         {
 
         }

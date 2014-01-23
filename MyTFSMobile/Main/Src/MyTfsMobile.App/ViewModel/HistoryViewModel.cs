@@ -29,7 +29,7 @@ namespace MyTfsMobile.App.ViewModel
             HistoryItems.Clear();
 
             var tfsUserDto = SimpleIoc.Default.GetInstance<ITfsAuthenticationService>().CreateTfsUserDto();
-            var historyRepository = new HistoryRepository(tfsUserDto, false);
+            var historyRepository = new HistoryRepository(tfsUserDto);
             var historyResult = await historyRepository.GetHistoryAsync(new RequestHistoryDto() { FromDays = "20", TfsProject = "Main" });
 
             foreach (var historyItem in historyResult)

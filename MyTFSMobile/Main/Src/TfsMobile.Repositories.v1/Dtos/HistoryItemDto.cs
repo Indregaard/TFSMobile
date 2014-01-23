@@ -34,7 +34,12 @@ namespace TfsMobile.Repositories.v1.Dtos
     {
         internal static void Configure()
         {
-            Mapper.Initialize(cfg => cfg.AddProfile(new HistoryProfile()));
+            Mapper.Initialize(cfg =>
+            {
+                cfg.AddProfile(new HistoryProfile());
+                cfg.AddProfile(new TeamProjectProfile());
+            });
+            Mapper.AssertConfigurationIsValid();
         }
     }
 
@@ -43,7 +48,14 @@ namespace TfsMobile.Repositories.v1.Dtos
         protected override void Configure()
         {
             Mapper.CreateMap<HistoryItemContract, HistoryItemDto>();
-            Mapper.AssertConfigurationIsValid();
+        }
+    }
+
+    internal class TeamProjectProfile : Profile
+    {
+        protected override void Configure()
+        {
+            Mapper.CreateMap<TeamProjectContract, TeamProjectDto>();
         }
     }
 }

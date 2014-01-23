@@ -18,7 +18,7 @@ namespace TfsMobile.Repositories.v1
         
 
 
-        public BuildsRepository(RequestTfsUserDto requestTfsUser, bool useLocalDefaultTfs) : base(requestTfsUser,useLocalDefaultTfs)
+        public BuildsRepository(RequestTfsUserDto requestTfsUser) : base(requestTfsUser)
         {
            
         }
@@ -132,11 +132,7 @@ namespace TfsMobile.Repositories.v1
                 using (var client = new HttpClient(handler))
                 {
                     client.DefaultRequestHeaders.Add("tfsuri", RequestTfsUser.TfsUri.ToString());
-                    if (UseLocalDefaultTfs)
-                    {
-                        client.DefaultRequestHeaders.Add("uselocaldefault", "true");
-                    }
-
+                    
                     client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue(
                         "Basic",

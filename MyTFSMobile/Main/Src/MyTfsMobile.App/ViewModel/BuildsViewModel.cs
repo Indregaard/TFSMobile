@@ -68,7 +68,7 @@ namespace MyTfsMobile.App.ViewModel
             Messenger.Default.Send(true, "ShowLoadPopup");
 
             var tfsUserDto = Locator.TfsAuthenticationService.CreateTfsUserDto();
-            var buildsRepo = new BuildsRepository(tfsUserDto, false);
+            var buildsRepo = new BuildsRepository(tfsUserDto);
             var buildsResult = await buildsRepo.GetBuildsAsync(BuildDetailsDto.Default());
             var buildContracts = JsonConvert.DeserializeObject<List<BuildContract>>(buildsResult);
             FillBuildSection(buildContracts);
@@ -109,7 +109,7 @@ namespace MyTfsMobile.App.ViewModel
             if (!access) return;
 
             var tfsUserDto = Locator.TfsAuthenticationService.CreateTfsUserDto();
-            var buildsRepo = new BuildsRepository(tfsUserDto, false);
+            var buildsRepo = new BuildsRepository(tfsUserDto);
             var buildsResult = await buildsRepo.GetTeamBuildsAsync(BuildDetailsDto.Default());
             var buildContracts = JsonConvert.DeserializeObject<List<BuildContract>>(buildsResult);
             FillBuildSection(buildContracts);

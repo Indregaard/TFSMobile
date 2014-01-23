@@ -1,21 +1,19 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
 using TfsMobile.Contracts;
+using TfsMobile.Repositories.v1.Dtos;
 
 namespace TfsMobile.Repositories.v1
 {
     public class BaseRepository
     {
-        protected bool UseLocalDefaultTfs { get; set; }
+        
         protected RequestTfsUserDto RequestTfsUser { get; set; }
 
-        public BaseRepository(RequestTfsUserDto requestTfsUser, bool useLocalDefaultTfs)
+        public BaseRepository(RequestTfsUserDto requestTfsUser)
         {
             RequestTfsUser = requestTfsUser;
-            UseLocalDefaultTfs = useLocalDefaultTfs;
+            
         }
         protected NetworkCredential GetNetworkCredentials()
         {
@@ -28,6 +26,11 @@ namespace TfsMobile.Repositories.v1
             {
                 Credentials = GetNetworkCredentials()
             };
+        }
+
+        public static void Configure()
+        {
+            AutoMapperBootstrapper.Configure();
         }
     }
 }

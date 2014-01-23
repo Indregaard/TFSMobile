@@ -60,6 +60,7 @@
     <Compile Include="BaseRepository.cs" />
     <Compile Include="BuildsRepository.cs" />
     <Compile Include="Dtos\HistoryItemDto.cs" />
+    <Compile Include="Dtos\TeamProjectDto.cs" />
     <Compile Include="HistoryRepository.cs" />
     <Compile Include="Interfaces\ILoginRepository.cs" />
     <Compile Include="LoginRepository.cs" />
@@ -69,7 +70,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
-    <Compile Include="TfsAccountRepository.cs" />
+    <Compile Include="TeamProjectsRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="AdvancedREI.Net.Http.Compression">
