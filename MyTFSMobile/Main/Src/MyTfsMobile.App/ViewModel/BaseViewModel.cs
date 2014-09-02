@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight;
+﻿using System.Threading.Tasks;
+using GalaSoft.MvvmLight;
 
 namespace MyTfsMobile.App.ViewModel
 {
@@ -10,6 +11,11 @@ namespace MyTfsMobile.App.ViewModel
         public virtual void LoadData()
         {
            
+        }
+
+        protected async Task<bool> UserAuthenticatedAgainstTfs()
+        {
+            return await Locator.TfsAuthenticationService.CheckTfsLogin(Locator.MyTfsMobileSettings.TfsSettings);
         }
     }
 

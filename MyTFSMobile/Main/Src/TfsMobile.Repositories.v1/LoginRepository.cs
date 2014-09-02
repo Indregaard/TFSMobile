@@ -34,8 +34,6 @@ namespace TfsMobile.Repositories.v1
                         Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Format("{0}:{1}", RequestTfsUser.Username, RequestTfsUser.Password)))
                         );
 
-                    client.DefaultRequestHeaders.Add("user-agent", "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; WOW64; Trident/6.0)");
-
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                     client.MaxResponseContentBufferSize = 256000;
                     client.Timeout = TimeSpan.FromSeconds(10);

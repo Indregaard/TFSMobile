@@ -7,7 +7,7 @@ using TfsMobile.Repositories.v1;
 
 namespace MyTfsMobile.App.ViewModel
 {
-    public class HistoryViewModel : ViewModelBase
+    public class HistoryViewModel : BaseViewModel
     {
 
         public HistoryViewModel()
@@ -18,7 +18,7 @@ namespace MyTfsMobile.App.ViewModel
         public ObservableCollection<HistoryItemViewModel> HistoryItems { get; private set; }
 
         public bool IsDataLoaded { get; private set; }
-        public async void LoadData()
+        public override async void LoadData()
         {
             await GetMyHistory();
 
@@ -26,7 +26,9 @@ namespace MyTfsMobile.App.ViewModel
 
         private async Task GetMyHistory()
         {
+            return;
             HistoryItems.Clear();
+            if (!await UserAuthenticatedAgainstTfs()) return;
 
             var tfsUserDto = SimpleIoc.Default.GetInstance<ITfsAuthenticationService>().CreateTfsUserDto();
             var historyRepository = new HistoryRepository(tfsUserDto);

@@ -58,11 +58,7 @@ namespace MyTfsMobile.App.ViewModel
         private async Task GetMyBuilds()
         {
             PrepareBuildSection("My Builds");
-
-            var serviceAccessw = Locator.TfsAuthenticationService.CheckTfsLogin(Locator.MyTfsMobileSettings.TfsSettings);
-
-            var access = await serviceAccessw;
-            if (!access) return;
+            if (!await UserAuthenticatedAgainstTfs()) return;
 
 
             Messenger.Default.Send(true, "ShowLoadPopup");
@@ -101,12 +97,9 @@ namespace MyTfsMobile.App.ViewModel
 
         private async Task GetTeamBuilds()
         {
+            return;
             PrepareBuildSection("Team Builds");
-
-            var serviceAccessw = Locator.TfsAuthenticationService.CheckTfsLogin(Locator.MyTfsMobileSettings.TfsSettings);
-
-            var access = await serviceAccessw;
-            if (!access) return;
+            if (!await UserAuthenticatedAgainstTfs()) return;
 
             var tfsUserDto = Locator.TfsAuthenticationService.CreateTfsUserDto();
             var buildsRepo = new BuildsRepository(tfsUserDto);
