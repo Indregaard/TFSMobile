@@ -26,7 +26,6 @@ namespace MyTfsMobile.App.ViewModel
 
         private async Task GetMyHistory()
         {
-            return;
             HistoryItems.Clear();
             if (!await UserAuthenticatedAgainstTfs()) return;
 
