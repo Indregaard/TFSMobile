@@ -68,7 +68,7 @@ namespace MyTfsMobile.App
                 Username = TfsSettings.TfsUsername,
                 Password = TfsSettings.TfsPassword,
                 TfsUri = Uri.IsWellFormedUriString(TfsSettings.TfsServer, UriKind.Absolute) ? new Uri(TfsSettings.TfsServer) : null,
-                TfsMobileApiUri = new Uri("http://192.168.1.17/TfsMobileServices/api/")
+                TfsMobileApiUri = new Uri("http://localhost:3389/api")
             };
         }
 

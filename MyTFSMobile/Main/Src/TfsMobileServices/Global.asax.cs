@@ -22,6 +22,7 @@ namespace TfsMobileServices
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             //GlobalConfiguration.Configuration.MessageHandlers.Add(new BasicAuthenticationMessageHandler());
+            GlobalConfiguration.Configuration.EnsureInitialized(); 
         }
 
 

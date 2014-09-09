@@ -97,7 +97,6 @@ namespace MyTfsMobile.App.ViewModel
 
         private async Task GetTeamBuilds()
         {
-            return;
             PrepareBuildSection("Team Builds");
             if (!await UserAuthenticatedAgainstTfs()) return;
 
